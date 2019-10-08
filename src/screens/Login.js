@@ -17,6 +17,7 @@ export class Login extends Component {
     password: '',
     security: true,
     isValidEmail: false,
+    isValidPassword: false,
   };
 
   checkEmail(input) {
@@ -28,7 +29,17 @@ export class Login extends Component {
       this.setState({isValidEmail: false});
     }
 
-    this.setState({email: input});
+    this.setState({ email: input });
+  }
+
+  checkPassword(input) {
+    if (input.length < 1) {
+      this.setState({ isValidPassword: false });
+    } else {
+      this.setState({ isValidPassword: true });
+    }
+
+    this.setState({ password: input });
   }
 
   _changeIcon() {
@@ -36,6 +47,10 @@ export class Login extends Component {
   }
 
   render() {
+    const dataLogin = {
+      email: this.state.email,
+      password: this.state.password,
+    }
     return (
       <Container style={{backgroundColor: '#fafafa'}}>
         <View
@@ -62,6 +77,7 @@ export class Login extends Component {
                 placeholder="Password"
                 style={{fontSize: 15}}
                 secureTextEntry={this.state.security}
+                onChangeText={this.checkPassword.bind(this)}
               />
               <Icon
                 name={this.state.security ? 'eye' : 'eye-off'}
@@ -69,7 +85,7 @@ export class Login extends Component {
               />
             </Item>
           </Form>
-          <LoginButton isValid={this.state.isValidEmail} />
+          <LoginButton isValid={dataLogin} />
         </View>
       </Container>
     );
