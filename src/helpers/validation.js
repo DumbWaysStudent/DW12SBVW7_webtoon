@@ -1,0 +1,1 @@
+export const emailValidation = email => new RegExp(/^(?![_])[a-zA-Z_\.]+@[a-z]*(\.[a-z]{2,3})+$/).test(email);
