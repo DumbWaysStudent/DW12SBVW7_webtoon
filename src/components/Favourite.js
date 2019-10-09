@@ -22,7 +22,7 @@ const Favorite = props => {
           <TouchableWithoutFeedback
             key={idx}
             onPress={() =>
-              props.navigation.navigate('Details', {
+              props.navigation.navigate('DetailWebtoon', {
                 title: banner.title,
                 image: banner.image,
               })

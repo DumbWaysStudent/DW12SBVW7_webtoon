@@ -1,6 +1,5 @@
 import React from 'react';
-import {Icon} from 'native-base';
-// import Icon from 'react-native'
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {
   createAppContainer,
   createBottomTabNavigator,
@@ -13,7 +12,8 @@ import Login from './screens/Login';
 import ForYou from './screens/ForYou';
 import Favourite from './screens/Favourite';
 import Profile from './screens/Profile';
-import Details from './screens/Details';
+import DetailWebtoon from './screens/DetailWebtoon';
+import DetailEpisode from './screens/DetailEpisode';
 
 
 const PublicNavigation = createStackNavigator({
@@ -32,7 +32,7 @@ const BottomNavigation = createBottomTabNavigator(
       navigationOptions: {
         tabBarLabel: 'For You',
         tabBarIcon: ({tintColor}) => (
-          <Icon name="grid" color={tintColor} size={25} />
+          <Icon name="th-large" color={tintColor} size={25} />
         ),
       },
     },
@@ -50,7 +50,7 @@ const BottomNavigation = createBottomTabNavigator(
       navigationOptions: {
         tabBarLabel: 'Profile',
         tabBarIcon: ({tintColor}) => (
-          <Icon name="person" color={tintColor} size={25} />
+          <Icon name="user" color={tintColor} size={25} />
         ),
       },
     },
@@ -77,8 +77,11 @@ const PrivateNavigation = createStackNavigator({
       header: null,
     }
   },
-  Details: {
-    screen: Details,
+  DetailWebtoon: {
+    screen: DetailWebtoon,
+  },
+  DetailEpisode: {
+    screen: DetailEpisode,
   }
 });
 
