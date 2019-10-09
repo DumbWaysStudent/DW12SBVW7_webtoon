@@ -1,10 +1,17 @@
 import React from 'react';
-import {View, ScrollView, Image, StyleSheet, Text} from 'react-native';
+import {
+  View,
+  ScrollView,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+} from 'react-native';
 
 const Favorite = props => {
   return (
-    <View style={{ flex: 1, marginBottom: 10, backgroundColor: '#fff' }}>
-      <View style={{ paddingHorizontal: 12 }}>
+    <View style={{flex: 1, backgroundColor: '#fff'}}>
+      <View style={{paddingHorizontal: 12}}>
         <Text style={styles.textTitle}>Your Favourite</Text>
       </View>
       <ScrollView
@@ -12,14 +19,24 @@ const Favorite = props => {
         pagingEnabled
         showsHorizontalScrollIndicator={false}>
         {props.dataSource.map((banner, idx) => (
-          <View style={{marginHorizontal: 5, marginTop: 10 }} key={idx}>
-            <View style={{borderWidth: 1, borderColor: '#ccc'}}>
-              <Image style={styles.imageSize} source={{uri: banner.image}} />
+          <TouchableWithoutFeedback
+            key={idx}
+            onPress={() =>
+              props.navigation.navigate('Details', {
+                title: banner.title,
+                image: banner.image,
+              })
+            }>
+            <View style={{marginHorizontal: 5, marginTop: 10}}>
+              <View style={{borderWidth: 1, borderColor: '#ccc'}}>
+                <Image style={styles.imageSize} source={{uri: banner.image}} />
+              </View>
+              <Text
+                style={{padding: 5, fontWeight: 'bold', textAlign: 'center'}}>
+                {banner.title}
+              </Text>
             </View>
-            <Text style={{padding: 5, fontWeight: 'bold', textAlign: 'center'}}>
-              {banner.title}
-            </Text>
-          </View>
+          </TouchableWithoutFeedback>
         ))}
       </ScrollView>
     </View>

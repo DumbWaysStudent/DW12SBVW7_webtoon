@@ -1,5 +1,6 @@
 import React from 'react';
 import {Icon} from 'native-base';
+// import Icon from 'react-native'
 import {
   createAppContainer,
   createBottomTabNavigator,
@@ -12,6 +13,8 @@ import Login from './screens/Login';
 import ForYou from './screens/ForYou';
 import Favourite from './screens/Favourite';
 import Profile from './screens/Profile';
+import Details from './screens/Details';
+
 
 const PublicNavigation = createStackNavigator({
   Login: {
@@ -22,12 +25,11 @@ const PublicNavigation = createStackNavigator({
   },
 });
 
-const PrivateNavigation = createBottomTabNavigator(
+const BottomNavigation = createBottomTabNavigator(
   {
     ForYou: {
       screen: ForYou,
       navigationOptions: {
-        header: null,
         tabBarLabel: 'For You',
         tabBarIcon: ({tintColor}) => (
           <Icon name="grid" color={tintColor} size={25} />
@@ -37,7 +39,6 @@ const PrivateNavigation = createBottomTabNavigator(
     Favourite: {
       screen: Favourite,
       navigationOptions: {
-        header: null,
         tabBarLabel: 'Favourite',
         tabBarIcon: ({tintColor}) => (
           <Icon name="heart" color={tintColor} size={25} />
@@ -47,7 +48,6 @@ const PrivateNavigation = createBottomTabNavigator(
     Profile: {
       screen: Profile,
       navigationOptions: {
-        header: null,
         tabBarLabel: 'Profile',
         tabBarIcon: ({tintColor}) => (
           <Icon name="person" color={tintColor} size={25} />
@@ -70,8 +70,20 @@ const PrivateNavigation = createBottomTabNavigator(
   },
 );
 
+const PrivateNavigation = createStackNavigator({
+  BottomNavigation: {
+    screen: BottomNavigation,
+    navigationOptions: {
+      header: null,
+    }
+  },
+  Details: {
+    screen: Details,
+  }
+});
+
 const RootNav = createSwitchNavigator({
-  PublicNavigation: PublicNavigation,
+  // PublicNavigation: PublicNavigation,
   PrivateNavigation: PrivateNavigation,
 });
 

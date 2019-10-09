@@ -22,15 +22,22 @@ const banners = [{
 
 export class ForYou extends Component {
   render() {
+    const { navigation } = this.props;
     return (
-      <Container style={{ flex: 1, backgroundColor: '#fafafa' }}>
+      <Container style={{ flex: 1, backgroundColor: '#4cd137' }}>
         <ScrollView>
           <Content>
             <Banner dataSource={banners} />
           </Content>
           <Content>
-            <Favourite dataSource={banners} />
-            <All dataSource={banners} />
+            <Favourite
+              dataSource={banners}
+              navigation={navigation}
+            />
+            <All
+              dataSource={banners}
+              navigation={navigation}
+            />
           </Content>
         </ScrollView>
       </Container>

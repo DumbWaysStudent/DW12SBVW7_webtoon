@@ -20,7 +20,7 @@ export class Banner extends Component {
   }
 
   render() {
-    const {dataSource} = this.props;
+    const { dataSource } = this.props;
     return (
       <View>
         <SearchBar />
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   activeIndicators: {
-    backgroundColor: '#00b900',
+    backgroundColor: '#4cd137',
   },
 });
 
