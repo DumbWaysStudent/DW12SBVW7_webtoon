@@ -5,19 +5,16 @@ import { Container, Form, Item, Input, Text, Icon } from 'native-base';
 import LoginButton from '../components/LoginButton';
 
 // Helpers
-import {emailValidation} from '../helpers/validation';
+import { emailValidation } from '../helpers/validation';
 
 export class Login extends Component {
-  static navigationOptions = {
-    header: null,
-  };
-
   state = {
     email: '',
     password: '',
     security: true,
     isValidEmail: false,
     isValidPassword: false,
+    eyeColor: '#c3c3c3',
   };
 
   checkEmail(input) {
@@ -43,7 +40,18 @@ export class Login extends Component {
   }
 
   _changeIcon() {
-    this.setState({security: !this.state.security});
+    let eyeColor;
+    
+    if (this.state.security) {
+      eyeColor = '#555';
+    } else {
+      eyeColor = '#c3c3c3';
+    }
+
+    this.setState({
+      security: !this.state.security,
+      eyeColor,
+    });
   }
 
   render() {
@@ -52,18 +60,12 @@ export class Login extends Component {
       password: this.state.password,
     }
     return (
-      <Container style={{backgroundColor: '#fafafa'}}>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-            marginBottom: '5%',
-          }}>
+      <Container style={styles.container}>
+        <View style={styles.topWrapper}>
           <Text style={styles.title}>LOG IN</Text>
           <Text style={styles.subtitle}>Login with your account WEBTOON</Text>
         </View>
-        <View style={{flex: 2, paddingHorizontal: 20}}>
+        <View style={styles.bottomWrapper}>
           <Form>
             <Item rounded style={styles.form}>
               <Input
@@ -80,12 +82,16 @@ export class Login extends Component {
                 onChangeText={this.checkPassword.bind(this)}
               />
               <Icon
-                name={this.state.security ? 'eye' : 'eye-off'}
+                name={this.state.security ? 'eye-off' : 'eye'}
                 onPress={this._changeIcon.bind(this)}
+                style={{ color: this.state.eyeColor }}
               />
             </Item>
           </Form>
-          <LoginButton isValid={dataLogin} />
+          <LoginButton
+            isValid={dataLogin}
+            onPress={() => this.props.navigation.navigate('ForYou')}
+          />
         </View>
       </Container>
     );
@@ -93,21 +99,34 @@ export class Login extends Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#fafafa',
+  },
   title: {
     fontSize: 30,
     letterSpacing: 1,
     fontWeight: 'bold',
-    color: '#06d106',
+    color: '#00b900',
   },
   subtitle: {
     fontSize: 15,
     letterSpacing: 1,
-    color: '#06d106',
+    color: '#00b900',
   },
   form: {
     marginVertical: 10,
     paddingLeft: 10,
     paddingRight: 10,
+  },
+  topWrapper: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginBottom: '5%', 
+  },
+  bottomWrapper: {
+    flex: 2,
+    paddingHorizontal: 20,
   },
 });
 

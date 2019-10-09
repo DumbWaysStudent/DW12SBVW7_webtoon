@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
 
-import Login from './src/screens/Login';
+import RootNavigation from './src/RootNavigation';
 
 export class App extends Component {
   render() {
     return (
-      <Login />
+      <RootNavigation />
     );
   }
 }
