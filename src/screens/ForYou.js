@@ -24,7 +24,7 @@ export class ForYou extends Component {
   render() {
     const { navigation } = this.props;
     return (
-      <Container style={{ flex: 1, backgroundColor: '#4cd137' }}>
+      <Container style={{ flex: 1, backgroundColor: '#fff' }}>
         <ScrollView>
           <Content>
             <Banner dataSource={banners} />

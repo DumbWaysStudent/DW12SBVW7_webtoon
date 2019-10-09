@@ -24,17 +24,19 @@ export class Banner extends Component {
     return (
       <View>
         <SearchBar />
-        <Carousel
-          pageIndicatorStyle={styles.unactiveIndicators}
-          activePageIndicatorStyle={styles.activeIndicators}
-          pageIndicatorOffset={20}
-          autoplay
-          autoplayTimeout={5000}
-          loop
-          index={0}
-          pageSize={BannerWidth}>
-          {dataSource.map((banner, idx) => this.renderPage(banner.image, idx))}
-        </Carousel>
+        <View style={styles.bannerContainer}>
+          <Carousel
+            pageIndicatorStyle={styles.unactiveIndicators}
+            activePageIndicatorStyle={styles.activeIndicators}
+            pageIndicatorOffset={20}
+            autoplay
+            autoplayTimeout={5000}
+            loop
+            index={0}
+            pageSize={BannerWidth}>
+            {dataSource.map((banner, idx) => this.renderPage(banner.image, idx))}
+          </Carousel>
+        </View>
       </View>
     );
   }
@@ -42,14 +44,22 @@ export class Banner extends Component {
 
 const styles = StyleSheet.create({
   unactiveIndicators: {
-    backgroundColor: '#d0d0d0',
+    // backgroundColor: '#d0d0d0',
     width: 10,
     height: 10,
     borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#fff',
   },
   activeIndicators: {
-    backgroundColor: '#4cd137',
+    backgroundColor: '#32ff7e',
   },
+  bannerContainer: {
+    borderBottomWidth: 5,
+    borderBottomColor: '#e3e3e3',
+    borderTopWidth: 1,
+    borderTopColor: '#f4f4f4',
+  }
 });
 
 export default Banner;

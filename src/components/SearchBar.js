@@ -16,14 +16,15 @@ const SearchBar = props => {
 const styles = StyleSheet.create({
   container: {
     height: 80,
-    justifyContent: 'center',    
+    justifyContent: 'center',
+    paddingHorizontal: 10,
   },
   searchWrapper: {
     height: 50,
     backgroundColor: 'white',
     borderWidth: 1,
     borderColor: '#f0f0f0',
-    borderRadius: 10,
+    borderRadius: 20,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

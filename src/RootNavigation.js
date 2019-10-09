@@ -15,7 +15,6 @@ import Profile from './screens/Profile';
 import DetailWebtoon from './screens/DetailWebtoon';
 import DetailEpisode from './screens/DetailEpisode';
 
-
 const PublicNavigation = createStackNavigator({
   Login: {
     screen: Login,
@@ -64,7 +63,9 @@ const BottomNavigation = createBottomTabNavigator(
       },
       style: {
         backgroundColor: '#ffffff',
-        borderTopWidth: 0,
+        borderTopWidth: 0,        
+        elevation: 6,
+        paddingTop: 10,
       },
     },
   },
@@ -75,14 +76,14 @@ const PrivateNavigation = createStackNavigator({
     screen: BottomNavigation,
     navigationOptions: {
       header: null,
-    }
+    },
   },
   DetailWebtoon: {
     screen: DetailWebtoon,
   },
   DetailEpisode: {
     screen: DetailEpisode,
-  }
+  },
 });
 
 const RootNav = createSwitchNavigator({

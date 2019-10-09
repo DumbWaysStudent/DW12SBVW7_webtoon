@@ -22,7 +22,9 @@ const All = props => {
             })
           }>
           <View key={idx} style={styles.itemContainer}>
-            <Image style={styles.imageSize} source={{uri: banner.image}} />
+            <View style={{borderRightWidth:0.5,borderRightColor:'#bbb'}}>
+              <Image style={styles.imageSize} source={{uri: banner.image}} />
+            </View>
             <View style={{marginLeft: 25}}>
               <Text>{banner.title}</Text>
               <TouchableOpacity style={styles.favButton}>
@@ -39,11 +41,11 @@ const All = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 12,
     backgroundColor: '#fff',
   },
   textTitle: {
     marginVertical: 10,
+    paddingHorizontal: 12,
     fontSize: 18,
     fontWeight: 'bold',
   },
@@ -54,7 +56,8 @@ const styles = StyleSheet.create({
   itemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    borderTopWidth: 0.5,
+    borderTopColor: '#bbb',
   },
   favButton: {
     backgroundColor: '#4cd137',

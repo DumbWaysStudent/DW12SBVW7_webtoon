@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { Image, Dimensions, FlatList, Share } from 'react-native';
-import { Icon } from 'native-base';
+import React, {Component} from 'react';
+import {Image, Dimensions, FlatList, Share} from 'react-native';
+import {Icon} from 'native-base';
 
-const BannerWidth = Dimensions.get('window').width;
+const Width = Dimensions.get('window').width;
 const Height = Dimensions.get('window').height;
 const images = [
   'https://swebtoon-phinf.pstatic.net/20190123_235/1548235775159edGIC_JPEG/1548235775138143615.jpg?type=q90',
@@ -10,16 +10,22 @@ const images = [
   'https://swebtoon-phinf.pstatic.net/20190123_144/1548235775143HBeD2_JPEG/1548235775096143617.jpg?type=q90',
 ];
 
-function Item({images}) {
+function Item({ images, width, height }) {
   return (
     <Image
-      source={{uri: images}}
-      style={{width: BannerWidth, height: Height}}
+      source={{ uri: images }}
+      style={{ width, height, alignSelf: 'center' }}
+      resizeMode={width < height ? 'stretch' : 'center'}
     />
   );
 }
 
 export class DetailEpisode extends Component {
+  state = {
+    screenWidth: Width,
+    screenHeight: Height,
+  };
+
   static navigationOptions = ({navigation}) => {
     return {
       title: `Episode ${navigation.getParam('episode')}`,
@@ -46,11 +52,29 @@ export class DetailEpisode extends Component {
       ),
     };
   };
+
+  updateLayout = event => {
+    const { width, height } = event.nativeEvent.layout;
+    this.setState({
+      screenWidth: width,
+      screenHeight: height,
+    });
+  }
+
+
   render() {
     return (
       <FlatList
+        contentContainerStyle={{ backgroundColor: '#f0f0f0' }}
         data={images}
-        renderItem={({item}) => <Item images={item} />}
+        renderItem={({item}) => (
+          <Item
+            images={item}
+            width={this.state.screenWidth}
+            height={this.state.screenHeight}
+          />
+        )}
+        onLayout={this.updateLayout}
         keyExtractor={item => item}
       />
     );

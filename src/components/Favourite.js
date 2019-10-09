@@ -10,7 +10,7 @@ import {
 
 const Favorite = props => {
   return (
-    <View style={{flex: 1, backgroundColor: '#fff'}}>
+    <View style={{ flex: 1, borderBottomWidth: 5, borderBottomColor: '#e3e3e3' }}>
       <View style={{paddingHorizontal: 12}}>
         <Text style={styles.textTitle}>Your Favourite</Text>
       </View>
