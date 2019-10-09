@@ -13,11 +13,11 @@ const banners = [{
   title: 'Pasutri Gaje',
   image: 'https://swebtoon-phinf.pstatic.net/20190426_97/1556275077945LqnpT_JPEG/thumb_ipad.jpg'
 }, {
-  title: 'Young Mom',
-  image: 'https://swebtoon-phinf.pstatic.net/20190826_128/1566745786647tiaSe_JPEG/thumb_ipad.jpg'
+  title: 'The Weight of Our Sky',
+  image: 'https://swebtoon-phinf.pstatic.net/20191009_67/1570573083141kuCms_JPEG/The-Weight-of-Our-Sky-Mobile-Banner.jpg'
 }, {
-  title: 'Tower of God',
-  image: 'https://swebtoon-phinf.pstatic.net/20190318_291/1552868599909GoVLY_JPEG/10_EC8DB8EB84A4EC9DBC_ipad.jpg'
+  title: 'Lucid',
+  image: 'https://swebtoon-phinf.pstatic.net/20191004_287/15701423965927AeR3_JPEG/Lucid-Mobile-Banner.jpg'
 }];
 
 export class ForYou extends Component {

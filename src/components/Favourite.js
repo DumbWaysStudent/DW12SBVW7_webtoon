@@ -8,9 +8,11 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 
+import trunc from '../helpers/trunc';
+
 const Favorite = props => {
   return (
-    <View style={{ flex: 1, borderBottomWidth: 5, borderBottomColor: '#e3e3e3' }}>
+    <View style={{ flex: 1 }}>
       <View style={{paddingHorizontal: 12}}>
         <Text style={styles.textTitle}>Your Favourite</Text>
       </View>
@@ -27,14 +29,17 @@ const Favorite = props => {
                 image: banner.image,
               })
             }>
-            <View style={{marginHorizontal: 5, marginTop: 10}}>
-              <View style={{borderWidth: 1, borderColor: '#ccc'}}>
-                <Image style={styles.imageSize} source={{uri: banner.image}} />
+            <View style={{ flex: 1, marginHorizontal: 5, marginTop: 10, borderWidth: 1, borderColor: '#ccc', borderRadius: 5 }}>
+              <View>
+                <Image width={130} height={130} style={styles.imageSize} source={{uri: banner.image}} resizeMode='stretch' />
               </View>
-              <Text
-                style={{padding: 5, fontWeight: 'bold', textAlign: 'center'}}>
-                {banner.title}
-              </Text>
+              <View style={{ padding: 5 }}>
+                <Text
+                  style={{fontWeight: 'bold', fontSize: 14, flex: 1}}>
+                  {trunc(banner.title)}
+                </Text>
+                <Text style={{ color: '#bbb', fontSize: 11 }}>ORIGINAL</Text>
+              </View>
             </View>
           </TouchableWithoutFeedback>
         ))}

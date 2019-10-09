@@ -55,8 +55,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#32ff7e',
   },
   bannerContainer: {
-    borderBottomWidth: 5,
-    borderBottomColor: '#e3e3e3',
     borderTopWidth: 1,
     borderTopColor: '#f4f4f4',
   }

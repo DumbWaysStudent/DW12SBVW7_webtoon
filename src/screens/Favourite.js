@@ -24,7 +24,6 @@ const favourites = [{
 export class Favourite extends Component {
 
   Item = ({ favourites }) => {
-    console.log(favourites);
     return (
       <View style={{ flexDirection: 'row', marginVertical: 10, marginLeft: 10 }}>
         <View style={{ borderWidth: 1, borderColor: '#ccc' }}>

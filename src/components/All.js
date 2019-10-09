@@ -23,7 +23,7 @@ const All = props => {
           }>
           <View key={idx} style={styles.itemContainer}>
             <View style={{borderRightWidth:0.5,borderRightColor:'#bbb'}}>
-              <Image style={styles.imageSize} source={{uri: banner.image}} />
+              <Image style={styles.imageSize} source={{uri: banner.image}} resizeMode='stretch' />
             </View>
             <View style={{marginLeft: 25}}>
               <Text>{banner.title}</Text>
@@ -50,8 +50,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   imageSize: {
-    width: 130,
-    height: 130,
+    width: 150,
+    height: 140,
   },
   itemContainer: {
     flexDirection: 'row',
