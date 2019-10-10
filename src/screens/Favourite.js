@@ -27,7 +27,7 @@ export class Favourite extends Component {
     return (
       <View style={{ flexDirection: 'row', marginVertical: 10, marginLeft: 10 }}>
         <View style={{ borderWidth: 1, borderColor: '#ccc' }}>
-          <Image source={{ uri: favourites.image }} style={{ width: 130, height: 130 }} />
+          <Image source={{ uri: favourites.image }} style={{ width: 80, height: 80 }} />
         </View>
         <View style={{ alignSelf: 'center', marginLeft: 20 }}>
           <Text style={{ marginBottom:10, fontWeight: 'bold', fontSize: 15 }}>{favourites.title}</Text>

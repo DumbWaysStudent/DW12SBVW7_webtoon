@@ -7,8 +7,10 @@ import {
   createSwitchNavigator,
 } from 'react-navigation';
 
-// Screens
+// Public Route
 import Login from './screens/Login';
+
+// Private Route
 import ForYou from './screens/ForYou';
 import Favourite from './screens/Favourite';
 import DetailWebtoon from './screens/DetailWebtoon';
@@ -17,7 +19,11 @@ import DetailEpisode from './screens/DetailEpisode';
 // Profile
 import Profile from './screens/Profile';
 import EditProfile from './screens/EditProfile';
+
+// Webtoon CRUD
 import MyWebtoon from './screens/MyWebtoon';
+import CreateWebtoon from './screens/CreateWebtoon';
+import CreateEpisode from './screens/CreateEpisode';
 
 const PublicNavigation = createStackNavigator({
   Login: {
@@ -102,6 +108,18 @@ const PrivateNavigation = createStackNavigator({
     screen: MyWebtoon,
     navigationOptions: {
       title: 'My Webtoon'
+    }
+  },
+  CreateWebtoon: {
+    screen: CreateWebtoon,
+    navigationOptions: {
+      title: 'Create Webtoon',
+    }
+  },
+  CreateEpisode: {
+    screen: CreateEpisode,
+    navigationOptions: {
+      title: 'Create Episode',
     }
   }
 });

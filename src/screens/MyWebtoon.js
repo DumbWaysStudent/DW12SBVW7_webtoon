@@ -1,6 +1,8 @@
-import React, {Component} from 'react';
-import {Text, View, FlatList, Image} from 'react-native';
+import React, { Component } from 'react';
+import { Text, View, FlatList, Image, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
+import { green } from '../colorPallete';
 
 const myWebtoon = [
   {
@@ -42,8 +44,8 @@ export class MyWebtoon extends Component {
         <View style={{borderWidth: 1, borderColor: '#ccc'}}>
           <Image
             source={{uri: myWebtoon.image}}
-            style={{width: 130, height: 130}}
-            resizeMode='stretch'
+            style={{width: 80, height: 80}}
+            resizeMode="stretch"
           />
         </View>
         <View style={{alignSelf: 'center', marginLeft: 20}}>
@@ -66,19 +68,27 @@ export class MyWebtoon extends Component {
           renderItem={({item}) => <this.Item myWebtoon={item} />}
           keyExtractor={item => item.title}
         />
-        <View
-          style={{
-            alignItems: 'center',
-            width: 60,
-            position: 'absolute',
-            bottom: 5,
-            right: 5,
-          }}>
-          <Icon name="plus-circle" size={60} color="#4cd137" />
+        <View style={styles.iconContainer}>
+          <Icon
+            name="plus-circle"
+            size={60}
+            color={green}
+            onPress={() => this.props.navigation.navigate('CreateWebtoon')}
+          />
         </View>
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  iconContainer: {
+    alignItems: 'center',
+    width: 60,
+    position: 'absolute',
+    bottom: 5,
+    right: 5,
+  },
+});
 
 export default MyWebtoon;
