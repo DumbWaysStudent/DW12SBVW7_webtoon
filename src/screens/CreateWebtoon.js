@@ -7,6 +7,7 @@ import {
   FlatList,
   TextInput,
   TouchableOpacity,
+  TouchableHighlight,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -108,7 +109,7 @@ export class CreateWebtoon extends Component {
             keyExtractor={item => item.episode}
           />
         </View>
-        <TouchableOpacity
+        <TouchableHighlight
           style={{
             backgroundColor: green,
             padding: 10,
@@ -118,7 +119,7 @@ export class CreateWebtoon extends Component {
           <Text style={{textAlign: 'center', fontSize: 17, color: 'white'}}>
             + Add Episode
           </Text>
-        </TouchableOpacity>
+        </TouchableHighlight>
       </View>
     );
   }
