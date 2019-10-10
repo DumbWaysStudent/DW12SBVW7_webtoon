@@ -17,6 +17,7 @@ import DetailEpisode from './screens/DetailEpisode';
 // Profile
 import Profile from './screens/Profile';
 import EditProfile from './screens/EditProfile';
+import MyWebtoon from './screens/MyWebtoon';
 
 const PublicNavigation = createStackNavigator({
   Login: {
@@ -97,6 +98,12 @@ const PrivateNavigation = createStackNavigator({
   DetailEpisode: {
     screen: DetailEpisode,
   },
+  MyWebtoon: {
+    screen: MyWebtoon,
+    navigationOptions: {
+      title: 'My Webtoon'
+    }
+  }
 });
 
 const RootNav = createSwitchNavigator({

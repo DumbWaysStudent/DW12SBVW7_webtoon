@@ -27,7 +27,7 @@ export class Profile extends Component {
           <Picture />
           <Text style={{fontSize: 23, marginTop:20}}>Your Name</Text>
         </View>
-        <TouchableWithoutFeedback onPress={() => console.log('change screen')}>
+        <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('MyWebtoon')}>
           <View
             style={[
               styles.content,
