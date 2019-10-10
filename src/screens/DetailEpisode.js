@@ -15,7 +15,8 @@ function Item({ images, width, height }) {
     <Image
       source={{ uri: images }}
       style={{ width, height, alignSelf: 'center' }}
-      resizeMode={width < height ? 'stretch' : 'center'}
+      resizeMode='stretch'
+      // resizeMode={width < height ? 'stretch' : 'center'}
     />
   );
 }
@@ -55,6 +56,7 @@ export class DetailEpisode extends Component {
 
   updateLayout = event => {
     const { width, height } = event.nativeEvent.layout;
+    console.log(width, height)
     this.setState({
       screenWidth: width,
       screenHeight: height,

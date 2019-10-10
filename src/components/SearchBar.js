@@ -1,17 +1,46 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Icon, Input } from 'native-base';
+import { Input } from 'native-base';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const SearchBar = props => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.searchWrapper}>
-        <Input placeholder="Search" style={{fontSize: 15, width: '90%'}} />
-        <Icon ios="ios-search" android="md-search" style={styles.searchIcon} />
+// Color pallete
+import { green, lightGrey } from '../colorPallete';
+
+class SearchBar extends PureComponent {
+  state = {
+    input: '',
+  }
+
+  handleOnChangeText = input => {
+    this.setState({ input });
+  }
+
+  handleOnSearchSubmit() {
+    const input = this.state.input;
+    this.props.handleSearch(input);
+    this.setState({ input: '' });
+  }
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <View style={styles.searchWrapper}>
+          <Input
+            placeholder="Search"
+            value={this.state.input}
+            style={{fontSize: 13}}
+            onChangeText={this.handleOnChangeText}
+          />
+          <Icon
+            name="search"
+            style={styles.searchIcon}
+            onPress={this.handleOnSearchSubmit.bind(this)}
+          />
+        </View>
       </View>
-    </View>
-  );
-};
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -23,8 +52,8 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: 'white',
     borderWidth: 1,
-    borderColor: '#f0f0f0',
-    borderRadius: 20,
+    borderColor: lightGrey,
+    borderRadius: 5,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -32,7 +61,7 @@ const styles = StyleSheet.create({
   },
   searchIcon: {
     fontSize: 28,
-    color: '#00b900',
+    color: green,
   },
 });
 

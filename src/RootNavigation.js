@@ -6,6 +6,7 @@ import {
   createStackNavigator,
   createSwitchNavigator,
 } from 'react-navigation';
+import { green, lightGrey } from './colorPallete';
 
 // Public Route
 import Login from './screens/Login';
@@ -40,8 +41,8 @@ const ProfileNavigation = createStackNavigator({
     screen: EditProfile,
     navigationOptions: {
       header: null,
-    }
-  }
+    },
+  },
 });
 
 const BottomNavigation = createBottomTabNavigator(
@@ -76,14 +77,15 @@ const BottomNavigation = createBottomTabNavigator(
   },
   {
     tabBarOptions: {
-      activeTintColor: '#00b900',
-      inactiveTintColor: '#ccc',
+      activeTintColor: green,
+      inactiveTintColor: lightGrey,
       labelStyle: {
         fontSize: 12,
       },
       style: {
-        backgroundColor: '#ffffff',
-        borderTopWidth: 0,        
+        backgroundColor: 'white',
+        borderTopWidth: 0,
+        borderTopColor: 'black',
         elevation: 6,
         paddingTop: 10,
       },
@@ -107,21 +109,21 @@ const PrivateNavigation = createStackNavigator({
   MyWebtoon: {
     screen: MyWebtoon,
     navigationOptions: {
-      title: 'My Webtoon'
-    }
+      title: 'My Webtoon',
+    },
   },
   CreateWebtoon: {
     screen: CreateWebtoon,
     navigationOptions: {
       title: 'Create Webtoon',
-    }
+    },
   },
   CreateEpisode: {
     screen: CreateEpisode,
     navigationOptions: {
       title: 'Create Episode',
-    }
-  }
+    },
+  },
 });
 
 const RootNav = createSwitchNavigator({

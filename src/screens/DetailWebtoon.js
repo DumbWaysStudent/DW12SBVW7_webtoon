@@ -107,12 +107,12 @@ export class Detail extends Component {
     const {navigation} = this.props;
     const image = navigation.getParam('image');
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <View style={styles.bannerContainer}>
           <Image
             source={{uri: image}}
             style={{width: BannerWidth, height: BannerHeight}}
-            resizeMode="cover"
+            resizeMode='stretch'
           />
         </View>
         <FlatList
@@ -122,7 +122,7 @@ export class Detail extends Component {
           )}
           keyExtractor={item => item.episode}
         />
-      </View>
+      </ScrollView>
     );
   }
 }

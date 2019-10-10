@@ -21,21 +21,21 @@ const favourites = [{
   countFav: 5189,
 }];
 
-export class Favourite extends Component {
-
-  Item = ({ favourites }) => {
-    return (
-      <View style={{ flexDirection: 'row', marginVertical: 10, marginLeft: 10 }}>
-        <View style={{ borderWidth: 1, borderColor: '#ccc' }}>
-          <Image source={{ uri: favourites.image }} style={{ width: 80, height: 80 }} />
-        </View>
-        <View style={{ alignSelf: 'center', marginLeft: 20 }}>
-          <Text style={{ marginBottom:10, fontWeight: 'bold', fontSize: 15 }}>{favourites.title}</Text>
-          <Text style={{ color: '#aaa', fontSize: 12 }}>{favourites.countFav} Favourite</Text>
-        </View>
+function Item({ favourites }) {
+  return (
+    <View style={{ flexDirection: 'row', marginVertical: 10, marginLeft: 10 }}>
+      <View style={{ borderWidth: 1, borderColor: '#ccc' }}>
+        <Image source={{ uri: favourites.image }} style={{ width: 80, height: 80 }} />
       </View>
-    )
-  }
+      <View style={{ alignSelf: 'center', marginLeft: 20 }}>
+        <Text style={{ marginBottom:10, fontWeight: 'bold', fontSize: 15 }}>{favourites.title}</Text>
+        <Text style={{ color: '#aaa', fontSize: 12 }}>{favourites.countFav} Favourite</Text>
+      </View>
+    </View>
+  )
+}
+
+export class Favourite extends Component {
 
   render() {
     return (
@@ -43,7 +43,7 @@ export class Favourite extends Component {
         <SearchBar />
         <FlatList
           data={favourites}
-          renderItem={({ item }) => <this.Item favourites={item} />}
+          renderItem={({ item }) => <Item favourites={item} />}
           keyExtractor={item => item.title}
         />
       </View>

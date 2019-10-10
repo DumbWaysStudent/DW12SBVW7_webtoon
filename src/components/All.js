@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {
   View,
   Image,
@@ -8,67 +8,141 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 
-const All = props => {
+import { green, dark } from '../colorPallete';
+import objectClone from '../helpers/clone';
+
+import {webtoons} from '../__dummy__/data';
+
+
+function HorizontalCard({webtoon, navigation, handleFavouriteBtn}) {
+  const favouritedBtn = {
+    backgroundColor: '#fff',
+    borderColor: green,
+  };
+  const favouritedText = {
+    color: green,
+  };
   return (
-    <View style={styles.container}>
-      <Text style={styles.textTitle}>All Webtoons</Text>
-      {props.dataSource.map((banner, idx) => (
-        <TouchableWithoutFeedback
-          key={idx}
-          onPress={() =>
-            props.navigation.navigate('DetailWebtoon', {
-              title: banner.title,
-              image: banner.image,
-            })
-          }>
-          <View key={idx} style={styles.itemContainer}>
-            <View style={{borderRightWidth:0.5,borderRightColor:'#bbb'}}>
-              <Image style={styles.imageSize} source={{uri: banner.image}} resizeMode='stretch' />
-            </View>
-            <View style={{marginLeft: 25}}>
-              <Text>{banner.title}</Text>
-              <TouchableOpacity style={styles.favButton}>
-                <Text style={styles.textFavourite}>+ Favourite</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </TouchableWithoutFeedback>
-      ))}
-    </View>
+    <TouchableWithoutFeedback
+      onPress={() =>
+        navigation.navigate('DetailWebtoon', {
+          title: webtoon.title,
+          image: webtoon.url,
+        })
+      }>
+      <View style={styles.cardContainer}>
+        <View style={styles.imageContainer}>
+          <Image
+            style={styles.imageSize}
+            source={{uri: webtoon.url}}
+            resizeMode="stretch"
+          />
+        </View>
+        <View style={{marginLeft: 25}}>
+          <Text style={styles.titleCardText}>{webtoon.title}</Text>
+          <TouchableOpacity
+            style={[
+              styles.favButton,
+              webtoon.isFavourite ? favouritedBtn : null,
+            ]}
+            onPress={() => handleFavouriteBtn(webtoon.id)}
+          >
+            <Text
+              style={[
+                styles.textFavourite,
+                webtoon.isFavourite ? favouritedText : null,
+              ]}>
+              {webtoon.isFavourite ? '+ Favourited' : '+ Favourite'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </TouchableWithoutFeedback>
   );
-};
+}
+
+class All extends Component {
+
+  state = {
+    webtoons: this.props.dataSource,
+  }
+
+  handleFavouriteBtn = id => {
+    const newArray = objectClone(this.state.webtoons);
+    const webtoons = newArray.map(webtoon => {
+      const newObj = Object.assign({}, webtoon);
+      if (webtoon.id == id) {
+        newObj.isFavourite = !newObj.isFavourite;
+      }
+      return newObj;
+    });
+    this.setState({ webtoons });
+  }
+
+  render() {
+    return (
+      <View style={styles.mainContainer}>
+        <Text style={styles.textTitle}>All Webtoons</Text>
+        {this.state.webtoons.map(webtoon => (
+          <HorizontalCard
+            key={webtoon.id}
+            handleFavouriteBtn={this.handleFavouriteBtn}
+            navigation={this.props.navigation}
+            webtoon={{
+              url: webtoon.image,
+              title: webtoon.title,
+              id: webtoon.id,
+              isFavourite: webtoon.isFavourite,
+            }}
+          />
+        ))}
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
-  container: {
+  mainContainer: {
     flex: 1,
     backgroundColor: '#fff',
+    marginHorizontal: 10,
   },
   textTitle: {
     marginVertical: 10,
-    paddingHorizontal: 12,
     fontSize: 18,
     fontWeight: 'bold',
   },
   imageSize: {
-    width: 150,
-    height: 140,
+    width: 130,
+    height: 130,
   },
-  itemContainer: {
+  cardContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderTopWidth: 0.5,
-    borderTopColor: '#bbb',
+    marginVertical: 5,
+  },
+  imageContainer: {
+    borderRadius: 5,
+    overflow: 'hidden',
   },
   favButton: {
-    backgroundColor: '#4cd137',
+    backgroundColor: green,
     marginVertical: 10,
     alignItems: 'center',
-    width: 90,
+    width: 100,
     borderRadius: 5,
+    borderWidth: 2,
+    borderColor: green,
+  },
+  titleCardText: {
+    color: dark,
+    fontWeight: 'bold',
+    fontSize: 14,
   },
   textFavourite: {
-    padding: 5,
+    padding: 7,
     color: '#fff',
+    fontWeight: 'bold',
   },
 });
 

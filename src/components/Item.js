@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: 1,
     borderColor: '#ccc',
+    overflow: 'hidden',
   },
   detailContainer: {
     flex: 2,

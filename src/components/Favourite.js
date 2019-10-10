@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
   View,
   ScrollView,
@@ -8,56 +8,84 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 
+import { lightGrey, dark } from '../colorPallete';
 import trunc from '../helpers/trunc';
 
-const Favorite = props => {
+function VerticalCard({ navigation, favourite, checker }) {
+  let rightMargin = checker.index == checker.length - 1 ? 10 : 0;
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{paddingHorizontal: 12}}>
-        <Text style={styles.textTitle}>Your Favourite</Text>
+    <TouchableWithoutFeedback
+      onPress={() => navigation.navigate('DetailWebtoon', {
+        title:favourite.title,
+        image: favourite.coverImage,
+      })}
+    >
+      <View style={[styles.favCard, { marginRight: rightMargin }]}>
+        <Image
+          source={{uri: favourite.coverImage}}
+          style={{width: 140, height: 130}}
+          resizeMode='stretch'
+        />
+        <Text style={styles.favTitleText}>{trunc(favourite.title)}</Text>
+        <Text style={styles.favSubText}>ORIGINAL</Text>
       </View>
-      <ScrollView
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}>
-        {props.dataSource.map((banner, idx) => (
-          <TouchableWithoutFeedback
-            key={idx}
-            onPress={() =>
-              props.navigation.navigate('DetailWebtoon', {
-                title: banner.title,
-                image: banner.image,
-              })
-            }>
-            <View style={{ flex: 1, marginHorizontal: 5, marginTop: 10, borderWidth: 1, borderColor: '#ccc', borderRadius: 5 }}>
-              <View>
-                <Image width={130} height={130} style={styles.imageSize} source={{uri: banner.image}} resizeMode='stretch' />
-              </View>
-              <View style={{ padding: 5 }}>
-                <Text
-                  style={{fontWeight: 'bold', fontSize: 14, flex: 1}}>
-                  {trunc(banner.title)}
-                </Text>
-                <Text style={{ color: '#bbb', fontSize: 11 }}>ORIGINAL</Text>
-              </View>
-            </View>
-          </TouchableWithoutFeedback>
-        ))}
-      </ScrollView>
-    </View>
+    </TouchableWithoutFeedback>
   );
-};
+}
+
+class Favourite extends Component {
+  render() {
+    const len = this.props.favourites.length;
+    return (
+      <View style={{flex: 1}}>
+        <Text style={styles.textTitle}>Your Favourite</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {this.props.favourites.map((favourite, idx) => (
+            <VerticalCard
+              key={favourite.id}
+              favourite={favourite}
+              checker={{index: idx, length:len}}
+              navigation={this.props.navigation}
+            />
+          ))}
+        </ScrollView>
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   textTitle: {
-    marginTop: 20,
     fontSize: 18,
+    padding: 10,
     fontWeight: 'bold',
+    color: dark,
   },
   imageSize: {
     width: 130,
     height: 130,
   },
+  favCard: {
+    marginLeft: 10,
+    width: 140,
+    height: 190,
+    borderWidth: 0.5,
+    borderColor: lightGrey,
+    borderRadius: 5,
+    overflow: 'hidden',
+  },
+  favTitleText: {
+    color: dark,
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginTop: 5,
+    paddingHorizontal: 10,
+  },
+  favSubText: {
+    fontSize: 12,
+    paddingHorizontal: 10,
+    color: '#b0b0b0',
+  },
 });
 
-export default Favorite;
+export default Favourite;
