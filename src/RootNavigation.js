@@ -11,9 +11,12 @@ import {
 import Login from './screens/Login';
 import ForYou from './screens/ForYou';
 import Favourite from './screens/Favourite';
-import Profile from './screens/Profile';
 import DetailWebtoon from './screens/DetailWebtoon';
 import DetailEpisode from './screens/DetailEpisode';
+
+// Profile
+import Profile from './screens/Profile';
+import EditProfile from './screens/EditProfile';
 
 const PublicNavigation = createStackNavigator({
   Login: {
@@ -22,6 +25,16 @@ const PublicNavigation = createStackNavigator({
       header: null,
     },
   },
+});
+
+const ProfileNavigation = createStackNavigator({
+  Profile: Profile,
+  EditProfile: {
+    screen: EditProfile,
+    navigationOptions: {
+      header: null,
+    }
+  }
 });
 
 const BottomNavigation = createBottomTabNavigator(
@@ -45,7 +58,7 @@ const BottomNavigation = createBottomTabNavigator(
       },
     },
     Profile: {
-      screen: Profile,
+      screen: ProfileNavigation,
       navigationOptions: {
         tabBarLabel: 'Profile',
         tabBarIcon: ({tintColor}) => (
