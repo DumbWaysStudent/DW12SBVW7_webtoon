@@ -5,7 +5,6 @@ import {
   StyleSheet,
   TextInput,
   FlatList,
-  TouchableOpacity,
   TouchableHighlight,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -47,8 +46,6 @@ export class CreateEpisode extends Component {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         const source = {uri: response.uri};
-        // You can also display the image using data:
-        // const source_data = { uri: 'data:image/jpeg;base64,' + response.data };
         this.setState({
           imgSource: source,
         });

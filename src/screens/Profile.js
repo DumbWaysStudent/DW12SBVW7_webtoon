@@ -4,15 +4,18 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Picture from '../components/Picture';
 
+import { dark, green } from '../colorPallete';
+
 export class Profile extends Component {
   static navigationOptions = ({navigation}) => {
     return {
       title: 'Profile',
+      headerTintColor: dark,
       headerRight: (
         <Icon
           name="pencil"
           size={25}
-          color="#009b00"
+          color={green}
           style={{marginRight: 20}}
           onPress={() => navigation.navigate('EditProfile')}
         />
@@ -25,16 +28,22 @@ export class Profile extends Component {
       <View style={{flex: 1}}>
         <View style={styles.profile}>
           <Picture />
-          <Text style={{fontSize: 23, marginTop:20}}>Your Name</Text>
+          <Text style={styles.yourName}>Your Name</Text>
         </View>
-        <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('MyWebtoon')}>
+        <TouchableWithoutFeedback
+          onPress={() => this.props.navigation.navigate('MyWebtoon')}
+        >
           <View
             style={[
               styles.content,
               {flexDirection: 'row', justifyContent: 'space-between'},
             ]}>
             <Text style={styles.textContent}>My Webtoon Creation</Text>
-            <Icon name="chevron-right" color="#ccc" size={25} />
+            <Icon
+              name="chevron-right"
+              color="#ccc"
+              size={25}
+            />
           </View>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback onPress={() => console.log('logout')}>
@@ -52,6 +61,11 @@ export class Profile extends Component {
 }
 
 const styles = StyleSheet.create({
+  yourName: {
+    color: dark,
+    fontSize: 25,
+    marginTop:20,
+  },
   profile: {
     paddingVertical: 40,
     alignItems: 'center',

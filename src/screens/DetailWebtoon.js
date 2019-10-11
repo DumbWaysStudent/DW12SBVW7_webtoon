@@ -6,15 +6,21 @@ import {
   StyleSheet,
   Image,
   Dimensions,
-  ScrollView,
   Share,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {Icon} from 'native-base';
+import { Header } from 'react-navigation';
+import { Icon } from 'native-base';
 
 const BannerWidth = Dimensions.get('window').width;
 const BannerHeight = 250;
 const details = [
+  {
+    episode: '6',
+    image:
+      'https://swebtoon-phinf.pstatic.net/20180830_36/1535615172886xSese_JPEG/1535615172834143667.jpg?type=q90',
+    published: '8 January 2019',
+  },
   {
     episode: '5',
     image:
@@ -61,6 +67,7 @@ function Item({detail, navigation}) {
       }>
       <View
         style={{
+          flex: 1,
           borderBottomWidth: 1,
           borderBottomColor: '#bbb',
           flexDirection: 'row',
@@ -77,22 +84,26 @@ function Item({detail, navigation}) {
 
 export class Detail extends Component {
   static navigationOptions = ({navigation}) => {
+    const image = navigation.getParam('image');
     return {
       title: navigation.getParam('title'),
       headerStyle: {
-        backgroundColor: '#fff',
-        elevation: 0,
-        shadowOpacity: 0,
+        backgroundColor: 'transparent',        
       },
       headerTitleStyle: {
         fontWeight: 'bold',
       },
-      headerTintColor: '#4b4b4b',
+      headerTintColor: '#ccc',
+      headerBackground: (
+        <View style={{width: BannerWidth, height: BannerHeight}}>
+          <Image source={{uri: image}} style={StyleSheet.absoluteFill} />
+        </View>
+      ),
       headerRight: (
         <Icon
           name="share"
           size={25}
-          style={{marginRight: 15, color: '#4b4b4b'}}
+          style={{marginRight: 15, color: '#ccc'}}
           onPress={() =>
             Share.share({
               message: 'Webtoon aing yeuh!',
@@ -104,17 +115,11 @@ export class Detail extends Component {
   };
 
   render() {
-    const {navigation} = this.props;
-    const image = navigation.getParam('image');
+    const { navigation } = this.props;
+    const headerHeight = Header.HEIGHT;
     return (
-      <ScrollView style={styles.container}>
-        <View style={styles.bannerContainer}>
-          <Image
-            source={{uri: image}}
-            style={{width: BannerWidth, height: BannerHeight}}
-            resizeMode='stretch'
-          />
-        </View>
+      <View style={styles.container}>
+        <View style={{ width: BannerWidth, height: BannerHeight - headerHeight }}></View>
         <FlatList
           data={details}
           renderItem={({item}) => (
@@ -122,16 +127,14 @@ export class Detail extends Component {
           )}
           keyExtractor={item => item.episode}
         />
-      </ScrollView>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
+    flex: 1,    
   },
   bannerContainer: {
     borderBottomWidth: 1,

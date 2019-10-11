@@ -8,7 +8,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 
-import { green, dark } from '../colorPallete';
+import { green, dark, lightGrey } from '../colorPallete';
 import objectClone from '../helpers/clone';
 
 import {webtoons} from '../__dummy__/data';
@@ -123,6 +123,8 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     borderRadius: 5,
+    borderWidth: 0.5,
+    borderColor: lightGrey,
     overflow: 'hidden',
   },
   favButton: {

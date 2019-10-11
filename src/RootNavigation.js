@@ -25,6 +25,7 @@ import EditProfile from './screens/EditProfile';
 import MyWebtoon from './screens/MyWebtoon';
 import CreateWebtoon from './screens/CreateWebtoon';
 import CreateEpisode from './screens/CreateEpisode';
+import EditWebtoon from './screens/EditWebtoon';
 
 const PublicNavigation = createStackNavigator({
   Login: {
@@ -115,8 +116,8 @@ const PrivateNavigation = createStackNavigator({
   CreateWebtoon: {
     screen: CreateWebtoon,
     navigationOptions: {
-      title: 'Create Webtoon',
-    },
+      title: 'Create Webtoon'
+    }    
   },
   CreateEpisode: {
     screen: CreateEpisode,
@@ -124,6 +125,12 @@ const PrivateNavigation = createStackNavigator({
       title: 'Create Episode',
     },
   },
+  EditWebtoon: {
+    screen: EditWebtoon,
+    navigationOptions: {
+      title: 'Edit Webtoon',
+    }
+  }
 });
 
 const RootNav = createSwitchNavigator({

@@ -3,7 +3,6 @@ import {
   Text,
   View,
   StyleSheet,
-  TouchableWithoutFeedback,
   TextInput,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -44,9 +43,12 @@ export class EditProfile extends Component {
       <View style={{flex: 1}}>
         <View style={styles.header}>
           <Text style={{fontSize: 18}}>Edit Profile</Text>
-          <TouchableWithoutFeedback onPress={() => console.log('save image')}>
-            <Icon name="check" size={25} color="#009b00" />
-          </TouchableWithoutFeedback>
+          <Icon
+            name="check"
+            size={25}
+            color="#009b00"
+            onPress={() => this.props.navigation.pop()}
+          />
         </View>
         <View style={styles.profile}>
           <Picture avatarSource={this.state.avatarSource} />

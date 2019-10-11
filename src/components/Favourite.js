@@ -17,12 +17,12 @@ function VerticalCard({ navigation, favourite, checker }) {
     <TouchableWithoutFeedback
       onPress={() => navigation.navigate('DetailWebtoon', {
         title:favourite.title,
-        image: favourite.coverImage,
+        image: favourite.image,
       })}
     >
       <View style={[styles.favCard, { marginRight: rightMargin }]}>
         <Image
-          source={{uri: favourite.coverImage}}
+          source={{uri: favourite.image}}
           style={{width: 140, height: 130}}
           resizeMode='stretch'
         />
