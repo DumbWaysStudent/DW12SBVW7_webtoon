@@ -19,7 +19,7 @@ export const SmallHorizontalCard = ({
   eventTrigger,
 }) => {
   const {image, title, name} = data;
-  console.log(data.name, '===>')
+  // console.log(data.name, '===>')
   const navigate = () => navigation.navigate(route, {title, image, name});
   let subTitle;
 
