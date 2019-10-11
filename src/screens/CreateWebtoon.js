@@ -54,7 +54,7 @@ const dummyData = [
 ];
 
 export class CreateWebtoon extends Component {
-  static navigationOptions = ({navigation}) => {
+  static navigationOptions = ({ navigation }) => {
     return {
       headerRight: (
         <Icon
@@ -62,7 +62,7 @@ export class CreateWebtoon extends Component {
           size={25}
           color="#009b00"
           style={{marginRight: 20}}
-          onPress={() => console.log('add webtoon')}
+          onPress={() => navigation.pop()}
         />
       ),
     };
@@ -88,7 +88,7 @@ export class CreateWebtoon extends Component {
               <SmallHorizontalCard
                 data={item}
                 navigation={navigation}
-                route="EditWebtoon"
+                route="EditEpisode"
               />
             )}
             keyExtractor={item => item.title}
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   addBtn: {
     backgroundColor: green,
     padding: 10,
-    marginTop: 5,
+    marginVertical: 5,
     marginHorizontal: 10,
     borderRadius: 5,
   },

@@ -14,13 +14,13 @@ import { green, lightGrey } from '../colorPallete';
 
 // Components
 // import Item from '../components/Item';
-import { SmallHorizontalCard } from '../components/Card';
+import {SmallHorizontalCard} from '../components/Card';
 
 // Dummy Data
-import { episodes } from '../__dummy__/data';
+import {episodes} from '../__dummy__/data';
 
 export class CreateEpisode extends Component {
-  static navigationOptions = ({ navigation }) => {
+  static navigationOptions = ({navigation}) => {
     return {
       headerRight: (
         <Icon
@@ -28,7 +28,7 @@ export class CreateEpisode extends Component {
           size={25}
           color="#009b00"
           style={{marginRight: 20}}
-          onPress={() => console.log('add episode')}
+          onPress={() => console.log('edit episode')}
         />
       ),
     };
@@ -36,8 +36,14 @@ export class CreateEpisode extends Component {
 
   state = {
     episodes: episodes,
+    title: '',
     imgSource: null,
   };
+
+  componentDidMount() {
+    const title = this.props.navigation.getParam('title');
+    this.setState({ title });
+  }
 
   handleUploadImage = () => {
     ImagePicker.showImagePicker(response => {
@@ -56,36 +62,34 @@ export class CreateEpisode extends Component {
     });
   };
 
-  handleDeleteImage = id => {
-    console.log('delete image with id ' + id);
-  };
-
   render() {
-    const { navigation } = this.props;
+    const {navigation} = this.props;
     return (
       <View style={styles.mainContainer}>
         <Text style={styles.textTitle}>Name</Text>
-        <TextInput style={styles.titleInput} />
+        <TextInput value={this.state.title} style={styles.titleInput} />
         <View style={{flex: 1}}>
           <Text style={styles.textTitle}>Add Images</Text>
           <FlatList
             showsVerticalScrollIndicator={false}
             data={this.state.episodes}
-            renderItem={({ item }) => (
-              <SmallHorizontalCard
-                data={item}
-                navigation={navigation}
-                button={true}
-                eventTrigger={this.handleDeleteImage}
-              />
+            renderItem={({item}) => (
+              <SmallHorizontalCard data={item} navigation={navigation} />
             )}
             keyExtractor={item => item.name}
           />
-          <TouchableHighlight
-            style={styles.button}
-            onPress={this.handleUploadImage}>
-            <Text style={styles.btnText}> + Image </Text>
-          </TouchableHighlight>
+          <View style={{flexDirection: 'row'}}>
+            <TouchableHighlight
+              style={[styles.button, {flex: 1}]}
+              onPress={this.handleUploadImage}>
+              <Text style={styles.btnText}> + Image </Text>
+            </TouchableHighlight>
+            <TouchableHighlight
+              style={[styles.button, {flex: 1, backgroundColor: 'red'}]}
+              onPress={() => console.log('delete episode')}>
+              <Text style={styles.btnText}>Delete Episode</Text>
+            </TouchableHighlight>
+          </View>
         </View>
       </View>
     );
