@@ -17,7 +17,7 @@ import Favourite from './screens/Favourite';
 import DetailWebtoon from './screens/DetailWebtoon';
 import DetailEpisode from './screens/DetailEpisode';
 
-// Profile
+// Profile Stack
 import Profile from './screens/Profile';
 import EditProfile from './screens/EditProfile';
 
@@ -141,7 +141,7 @@ const PrivateNavigation = createStackNavigator({
 });
 
 const RootNav = createSwitchNavigator({
-  // PublicNavigation: PublicNavigation,
+  PublicNavigation: PublicNavigation,
   PrivateNavigation: PrivateNavigation,
 });
 

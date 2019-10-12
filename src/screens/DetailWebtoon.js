@@ -16,12 +16,6 @@ const BannerWidth = Dimensions.get('window').width;
 const BannerHeight = 250;
 const details = [
   {
-    episode: '6',
-    image:
-      'https://swebtoon-phinf.pstatic.net/20180830_36/1535615172886xSese_JPEG/1535615172834143667.jpg?type=q90',
-    published: '8 January 2019',
-  },
-  {
     episode: '5',
     image:
       'https://swebtoon-phinf.pstatic.net/20180830_36/1535615172886xSese_JPEG/1535615172834143667.jpg?type=q90',
@@ -93,7 +87,7 @@ export class Detail extends Component {
       headerTitleStyle: {
         fontWeight: 'bold',
       },
-      headerTintColor: '#ccc',
+      headerTintColor: '#fff',
       headerBackground: (
         <View style={{width: BannerWidth, height: BannerHeight}}>
           <Image source={{uri: image}} style={StyleSheet.absoluteFill} />
@@ -103,7 +97,7 @@ export class Detail extends Component {
         <Icon
           name="share"
           size={25}
-          style={{marginRight: 15, color: '#ccc'}}
+          style={{marginRight: 15, color: '#fff'}}
           onPress={() =>
             Share.share({
               message: 'Webtoon aing yeuh!',

@@ -13,11 +13,15 @@ export class Favourite extends Component {
     favourites: favourites,
   };
 
+  handleSearch = title => {
+    console.log(title);
+  };
+
   render() {
     const {navigation} = this.props;
     return (
       <View style={{flex: 1}}>
-        <SearchBar />
+        <SearchBar handleSearch={this.handleSearch} />
         <FlatList
           data={this.state.favourites}
           renderItem={({item}) => (

@@ -70,6 +70,12 @@ export const favourites = [
       'https://swebtoon-phinf.pstatic.net/20180517_245/1526523689921yBvud_JPEG/thumb_ipad.jpg',
     favouriteCount: 14045,
   },
+  {
+    id: 3,
+    title: 'Tower of God',
+    image:
+      'https://i0.wp.com/ticgamesnetwork.com/wp-content/uploads/2019/08/Tower-of-God-TICGN.jpg',
+  },
 ];
 
 export const myWebtoon = [

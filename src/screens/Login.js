@@ -56,14 +56,14 @@ export class Login extends Component {
 
   render() {
     const dataLogin = {
-      email: this.state.email,
-      password: this.state.password,
+      email: this.state.isValidEmail,
+      password: this.state.isValidPassword,
     }
     return (
       <Container style={styles.container}>
         <View style={styles.topWrapper}>
           <Text style={styles.title}>LOG IN</Text>
-          <Text style={styles.subtitle}>Login with your account WEBTOON</Text>
+          <Text style={styles.subtitle}>Login with your account SANSTOON</Text>
         </View>
         <View style={styles.bottomWrapper}>
           <Form>

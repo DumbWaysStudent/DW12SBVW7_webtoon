@@ -82,7 +82,7 @@ class All extends Component {
   render() {
     return (
       <View style={styles.mainContainer}>
-        <Text style={styles.textTitle}>All Webtoons</Text>
+        <Text style={styles.textTitle}>All Sanstoon</Text>
         {this.state.webtoons.map(webtoon => (
           <HorizontalCard
             key={webtoon.id}

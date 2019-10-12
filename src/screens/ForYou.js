@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, YellowBox } from 'react-native';
 import { Content, Container, Text } from 'native-base';
+
+// Ignore Yellow Warnings
+YellowBox.ignoreWarnings(['Warning: ']);
 
 // Components
 import SearchBar from '../components/SearchBar';
