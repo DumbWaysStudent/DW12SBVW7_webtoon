@@ -11,8 +11,6 @@ import {
 import { green, dark, lightGrey } from '../colorPallete';
 import objectClone from '../helpers/clone';
 
-import {webtoons} from '../__dummy__/data';
-
 
 function HorizontalCard({webtoon, navigation, handleFavouriteBtn}) {
   const favouritedBtn = {
@@ -35,7 +33,6 @@ function HorizontalCard({webtoon, navigation, handleFavouriteBtn}) {
           <Image
             style={styles.imageSize}
             source={{uri: webtoon.url}}
-            resizeMode="stretch"
           />
         </View>
         <View style={{marginLeft: 25}}>
@@ -52,7 +49,7 @@ function HorizontalCard({webtoon, navigation, handleFavouriteBtn}) {
                 styles.textFavourite,
                 webtoon.isFavourite ? favouritedText : null,
               ]}>
-              {webtoon.isFavourite ? '+ Favourited' : '+ Favourite'}
+              {webtoon.isFavourite ? '✓ Favorite' : '+ Favorite'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -113,8 +110,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   imageSize: {
-    width: 130,
-    height: 130,
+    width: 100,
+    height: 100,
   },
   cardContainer: {
     flexDirection: 'row',
@@ -144,7 +141,7 @@ const styles = StyleSheet.create({
   textFavourite: {
     padding: 7,
     color: '#fff',
-    fontWeight: 'bold',
+    fontSize: 13,
   },
 });
 

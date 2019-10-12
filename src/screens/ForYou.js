@@ -13,6 +13,7 @@ import All from '../components/All';
 
 // Dummy Data
 import { recomended, favourites, webtoons, user } from '../__dummy__/data';
+import { dark } from '../colorPallete';
 
 const banners = [
   {
@@ -93,8 +94,8 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 23,
     fontWeight: 'bold',
-    color: 'white',
-    backgroundColor: '#4cd137',
+    color: dark,
+    backgroundColor: 'white',
   },
 });
 
