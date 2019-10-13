@@ -24,7 +24,6 @@ function VerticalCard({ navigation, favourite, checker }) {
         <Image
           source={{uri: favourite.image}}
           style={{width: 140, height: 130}}
-          resizeMode='stretch'
         />
         <Text style={styles.favTitleText}>{trunc(favourite.title)}</Text>
         <Text style={styles.favSubText}>ORIGINAL</Text>
@@ -38,7 +37,7 @@ class Favourite extends Component {
     const len = this.props.favourites.length;
     return (
       <View style={{flex: 1}}>
-        <Text style={styles.textTitle}>Your Favourite</Text>
+        <Text style={styles.textTitle}>Your Favorite</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {this.props.favourites.map((favourite, idx) => (
             <VerticalCard

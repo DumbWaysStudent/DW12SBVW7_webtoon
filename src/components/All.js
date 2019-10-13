@@ -139,9 +139,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   textFavourite: {
-    padding: 7,
+    padding: 6,
     color: '#fff',
-    fontSize: 13,
+    fontSize: 11,
+    fontWeight: 'bold',
   },
 });
 

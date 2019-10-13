@@ -8,7 +8,7 @@ YellowBox.ignoreWarnings(['Warning: ']);
 // Components
 import SearchBar from '../components/SearchBar';
 import Banner from '../components/Banner';
-import Favourite from '../components/Favourite';
+import Favorite from '../components/Favorite';
 import All from '../components/All';
 
 // Dummy Data
@@ -77,10 +77,10 @@ export class ForYou extends Component {
           <Content>
             <SearchBar handleSearch={this.handleSearch} />
             <Text style={styles.recomended}>Recomended For You</Text>
-            <Banner recomended={this.state.recomended} />
+            <Banner recomended={this.state.recomended} navigation={this.props.navigation} />
           </Content>
           <Content>
-            <Favourite navigation={navigation} favourites={favourites} />
+            <Favorite navigation={navigation} favourites={favourites} />
             <All navigation={navigation} dataSource={banners} />
           </Content>
         </ScrollView>

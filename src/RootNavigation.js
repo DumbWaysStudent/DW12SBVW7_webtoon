@@ -141,7 +141,7 @@ const PrivateNavigation = createStackNavigator({
 });
 
 const RootNav = createSwitchNavigator({
-  PublicNavigation: PublicNavigation,
+  // PublicNavigation: PublicNavigation,
   PrivateNavigation: PrivateNavigation,
 });
 

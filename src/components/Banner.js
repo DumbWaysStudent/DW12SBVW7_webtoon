@@ -18,16 +18,20 @@ export class Banner extends Component {
     bannerHeight: 250,
   };
 
-  renderImage(image, index) {
+  renderImage(webtoon, index) {
+    console.log(webtoon)
     return (
       <TouchableWithoutFeedback
-        onPress={() => console.log('change screen')}
+        onPress={() => this.props.navigation.navigate('DetailWebtoon', {
+          title: webtoon.title,
+          image: webtoon.bannerImage
+        })}
         key={index}
       >
         <View>
           <Image
             style={{width: BannerWidth, height: BannerHeight}}
-            source={{uri: image}}
+            source={{uri: webtoon.bannerImage}}
           />
         </View>
       </TouchableWithoutFeedback>
@@ -47,7 +51,7 @@ export class Banner extends Component {
         index={0}
         pageSize={BannerWidth}>
         {recomended.map((webtoon, idx) =>
-          this.renderImage(webtoon.bannerImage, idx),
+          this.renderImage(webtoon, idx),
         )}
       </Carousel>
     );

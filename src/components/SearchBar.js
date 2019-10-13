@@ -21,7 +21,7 @@ class SearchBar extends PureComponent {
     this.setState({ input: '' });
   }
 
-  render() {
+  render() {    
     return (
       <View style={styles.container}>
         <View style={styles.searchWrapper}>
