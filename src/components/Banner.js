@@ -18,8 +18,7 @@ export class Banner extends Component {
     bannerHeight: 250,
   };
 
-  renderImage(webtoon, index) {
-    console.log(webtoon)
+  renderImage(webtoon, index) {    
     return (
       <TouchableWithoutFeedback
         onPress={() => this.props.navigation.navigate('DetailWebtoon', {

@@ -104,6 +104,9 @@ const PrivateNavigation = createStackNavigator({
   },
   DetailWebtoon: {
     screen: DetailWebtoon,
+    navigationOptions: {
+      header: null,
+    }
   },
   DetailEpisode: {
     screen: DetailEpisode,
