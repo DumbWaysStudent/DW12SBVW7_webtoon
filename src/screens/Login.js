@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, AsyncStorage } from 'react-native';
 import { Container, Form, Item, Input, Text, Icon } from 'native-base';
+import axios from 'axios';
 
 import LoginButton from '../components/LoginButton';
 
@@ -16,6 +17,29 @@ export class Login extends Component {
     isValidPassword: false,
     eyeColor: '#c3c3c3',
   };
+
+  handleSubmitLogin = () => {
+    
+    // axios({
+    //   method: 'POST',
+    //   url: 'https://192.168.1.51:3000/api/v1/user/login',
+    //   data: {
+    //     email: this.state.email,
+    //     password: this.state.password,
+    //   },
+    // })
+    // .then(({ data }) => {
+    //   if (data) {
+    //     AsyncStorage.setItem('token', data.token);
+    //     this.props.navigation.navigate('ForYou');
+    //   } else {
+
+    //   }
+    // })
+    // .catch(err => console.error(err));
+    
+    this.props.navigation.navigate('ForYou');
+  }
 
   checkEmail(input) {
     const isTrue = emailValidation(input);
@@ -90,7 +114,7 @@ export class Login extends Component {
           </Form>
           <LoginButton
             isValid={dataLogin}
-            onPress={() => this.props.navigation.navigate('ForYou')}
+            onPress={this.handleSubmitLogin}
           />
         </View>
       </Container>

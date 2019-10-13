@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import RootNavigation from './src/RootNavigation';
 
 export class App extends Component {
-  render() {
+  render() {    
     return (
       <RootNavigation />
     );
