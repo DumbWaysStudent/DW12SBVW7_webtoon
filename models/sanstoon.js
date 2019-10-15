@@ -13,15 +13,18 @@ module.exports = (sequelize, DataTypes) => {
   );
   Sanstoon.associate = function(models) {
     // associations can be defined here
+    Sanstoon.hasMany(models.Episode, {
+      as: 'Episode',
+      foreignKey: 'sanstoon_id'
+    });
+    Sanstoon.belongsTo(models.User, {
+      as: 'author',
+      foreignKey: 'created_by',
+    });
     Sanstoon.belongsToMany(models.User, {
       through: 'Favorites',
       as: 'isFavorite',
       foreignKey: 'sanstoonId',
-    });
-    
-    Sanstoon.belongsTo(models.User, {
-      as: 'author',
-      foreignKey: 'created_by',
     });
   };
   return Sanstoon;

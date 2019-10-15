@@ -1,4 +1,4 @@
-const { Sanstoon, User, Favorite, Episode } = require('../models');
+const { Sanstoon, User, Favorite, Episode, Page } = require('../models');
 
 exports.findAllSanstoon = async (req, res) => {
   try {
@@ -21,8 +21,8 @@ exports.findAllSanstoon = async (req, res) => {
       ],
     });
 
-    const payload = data.map(item => {
-      const objData = {
+    const sanstoons = data.map(item => {
+      const objSanstoon = {
         title: item.title,
         genre: item.genre,
         image: item.image,
@@ -31,9 +31,9 @@ exports.findAllSanstoon = async (req, res) => {
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
       };
-      return objData;
+      return objSanstoon;
     });
-    res.json(payload);
+    res.json(sanstoons);
   } catch (error) {
     res.status(500).json(error);
   }
@@ -45,6 +45,7 @@ exports.findAllEpisode = async (req, res) => {
       include: [
         {
           model: Sanstoon,
+          attributes: ['id','title', 'genre'],
           where: { id: req.params.sanstoonId },
         },
       ],
@@ -64,3 +65,36 @@ exports.findAllEpisode = async (req, res) => {
     res.status(500).json(error);
   }
 };
+
+exports.findAllPages = async(req, res) => {
+  try {
+    const data = await Page.findAll({
+      include: [
+        {
+          model: Episode,
+          attributes: ['id', 'title'],
+          where: { id: req.params.episodeId },
+          include: [
+            {
+              model: Sanstoon,
+              attributes: ['id','title', 'genre'],
+              where: { id: req.params.sanstoonId }
+            }
+          ]
+        },
+      ],
+    });
+    const pages = data.map(item => {
+      const objPages = {
+        page: item.page,
+        image: item.image,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt,
+      };
+      return objPages;
+    })
+    res.json(pages);
+  } catch (error) {
+    res.status(500).json(error); 
+  }
+}
