@@ -1,6 +1,7 @@
 const routes = require('express').Router();
-const { findAll } = require('../controllers/sanstoon');
+const { findAllSanstoon, findAllEpisode } = require('../controllers/sanstoon');
 
-routes.get('/', findAll);
+routes.get('/', findAllSanstoon);
+routes.get('/:sanstoonId/episodes', findAllEpisode);
 
 module.exports = routes;
