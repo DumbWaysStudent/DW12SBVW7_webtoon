@@ -109,3 +109,16 @@ exports.updateUserToon = async (req, res) => {
     res.status(500).json(error);
   }
 }
+
+exports.deleteUserToon = async (req, res) => {
+  try {
+    if (req.authorize_user.id == req.params.userId) {
+      const data = await Sanstoon.destroy({ where: { id: req.params.sanstoonId }});
+      res.json({ id: req.params.sanstoonId });
+    } else {
+      res.status(401).json({ auth: 'You dont have permission to access this route!' });
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+}
