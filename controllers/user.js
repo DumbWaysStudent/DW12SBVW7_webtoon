@@ -58,36 +58,6 @@ exports.createToon = async (req, res) => {
   }
 };
 
-exports.findAllUserEpisode = async (req, res) => {
-  try {
-    if (req.authorize_user.id == req.params.userId) {
-      const data = await Episode.findAll({
-        include: [
-          {
-            model: Sanstoon,
-            attributes: ['id', 'title', 'genre'],
-            where: { id: req.params.sanstoonId },
-          },
-        ],
-      });
-      const episodes = data.map(item => {
-        const objEpisode = {
-          title: item.title,
-          image: item.image,
-          createdAt: item.createdAt,
-          updatedAt: item.updatedAt,
-        };
-        return objEpisode;
-      });
-      res.json(episodes);
-    } else {
-      res.status(401).json({ auth: 'You dont have permission to access this route!' });
-    }
-  } catch (error) {
-    res.status(500).json(error);
-  }
-};
-
 exports.updateUserToon = async (req, res) => {
   try {
     if (req.authorize_user.id == req.params.userId) {
