@@ -22,11 +22,6 @@ module.exports = {
         name: 'John Mey',
         email: 'jhon_mey@mail.com',
         password: '12345'
-      },
-      {
-        name: 'Eaeaea',
-        email: 'eaea@mail.com',
-        password: '12345'
       }
   ], {});
   },

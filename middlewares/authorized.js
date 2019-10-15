@@ -5,7 +5,7 @@ exports.authorization = (req, res, next) => {
   try {
     if (auth) {
       const decoded = jwt.verify(auth, process.env.KEY);
-      req.authroize_user = decoded;
+      req.authorize_user = decoded;
       next();
     } else {
       res.status(401).json({ auth: 'Unauthorized' });

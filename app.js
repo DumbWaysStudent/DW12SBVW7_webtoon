@@ -7,12 +7,14 @@ const port = process.env.PORT || 3000;
 // routes
 const indexRoutes = require('./routes/index');
 const sanstoonRoutes = require('./routes/sanstoon');
+const userRoutes = require('./routes/user');
 
 app.use(express.json());
 
 app.group('/api/v1', routes => {
   routes.use('/', indexRoutes);
   routes.use('/sanstoons', sanstoonRoutes);
+  routes.use('/user', userRoutes);
 });
 
 app.listen(port, () => console.log('App listening on port', port));
