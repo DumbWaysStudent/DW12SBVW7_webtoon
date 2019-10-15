@@ -1,5 +1,5 @@
 const routes = require('express').Router();
-const { register, login } = require('../controllers/user');
+const { register, login } = require('../controllers/auth');
 
 routes.get('/', (req, res) => {
   res.json({ msg: 'Connected to Express' });
