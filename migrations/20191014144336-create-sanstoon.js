@@ -17,10 +17,6 @@ module.exports = {
       image: {
         type: Sequelize.STRING
       },
-      is_favorite: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false
-      },
       favorite_count: {
         type: Sequelize.INTEGER,
         defaultValue: 0

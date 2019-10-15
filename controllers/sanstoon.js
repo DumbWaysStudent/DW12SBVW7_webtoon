@@ -1,31 +1,36 @@
-const { Sanstoon, User } = require('../models');
+const { Sanstoon, User, Favorite } = require('../models');
 
-exports.findAll = (req, res) => {
-  Sanstoon.findAll({
+exports.findAll = async (req, res) => {
+  let data = await Sanstoon.findAll({
     include: [
       {
         model: User,
         as: 'author',
+        attributes: ['name'],
+      },
+      {
+        model: User,
+        as: 'isFavorite',
+        attributes: ['id', 'email'],
+        through: {
+          model: Favorite,
+          where: { userId: 2 } // userId whos login
+        },
       },
     ],
-  })
-    .then(response => {
-      const payload = [];
-      response.forEach(item => {
-        const data = {
-          title: item.title,
-          genre: item.genre,
-          isFavorite: item.is_favorite,
-          image: item.image,
-          createdAt: item.createdAt,
-          updatedAt: item.updatedAt,
-          author: item.author.name,
-        };
-        payload.push(data);
-      });
-      res.json(payload);
-    })
-    .catch(err => {
-      res.status(500).json(err);
-    });
+  });
+  
+  const payload = data.map(item => {
+    const objData = {
+      title: item.title,
+      genre: item.genre,
+      image: item.image,
+      author: item.author.name,
+      isFavorite: item.isFavorite.length ? true : false,
+      createdAt: item.createdAt,
+      updatedAt: item.updatedAt
+    }
+    return objData;
+  });
+  res.json(payload);
 };

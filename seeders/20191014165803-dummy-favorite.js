@@ -12,21 +12,14 @@ module.exports = {
         isBetaMember: false
       }], {});
     */
-    return queryInterface.bulkInsert('Users', [
+    return queryInterface.bulkInsert('Favorites', [
       {
-        name: 'John Doe',
-        email: 'jhon_doe@mail.com',
-        password: '12345'
+        userId: 1,
+        sanstoonId: 1
       },
       {
-        name: 'John Mey',
-        email: 'jhon_mey@mail.com',
-        password: '12345'
-      },
-      {
-        name: 'Eaeaea',
-        email: 'eaea@mail.com',
-        password: '12345'
+        userId: 2,
+        sanstoonId: 1
       }
   ], {});
   },
@@ -39,6 +32,6 @@ module.exports = {
       Example:
       return queryInterface.bulkDelete('People', null, {});
     */
-    return queryInterface.bulkDelete('Users', null, {});
+    return queryInterface.bulkDelete('Favorites', null, {});
   }
 };
