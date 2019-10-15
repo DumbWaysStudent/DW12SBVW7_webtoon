@@ -15,6 +15,7 @@ exports.findAllSanstoon = async (req, res) => {
           attributes: ['id', 'email'],
           through: {
             model: Favorite,
+            attributes: [],
             where: { userId: req.authorize_user.id }, // id authorized user
           },
         },
