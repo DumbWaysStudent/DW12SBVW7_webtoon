@@ -68,3 +68,16 @@ exports.updateEpisode = async (req, res) => {
     res.status(500).json(error);
   }
 }
+
+exports.deleteEpisode = async (req, res) => {
+  try {
+    if (req.authorize_user.id == req.params.userId) {
+      await Episode.destroy({ where: { id: req.params.episodeId }});
+      res.json({ id: req.params.episodeId });
+    } else {
+      res.status(401).json({ auth: 'You dont have permission to access this route!' });
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+}
