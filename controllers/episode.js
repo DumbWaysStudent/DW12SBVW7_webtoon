@@ -47,3 +47,24 @@ exports.createEpisode = async (req, res) => {
     res.status(500).json(error);
   }
 }
+
+exports.updateEpisode = async (req, res) => {
+  try {
+    if (req.authorize_user.id == req.params.userId) {
+      const episode = {
+        title: req.body.title,
+        image: 'https://i.pinimg.com/originals/1b/33/19/1b33195fbe69f9cfbe74585e97ff6eb4.jpg',
+        sanstoon_id: req.params.sanstoonId
+      };
+      const data = await Episode.update(episode, { where: { id: req.params.episodeId } });
+      if (data) {
+        const updatedData = await Episode.findOne({ where: { id: req.params.episodeId } });
+        res.json(updatedData);
+      }
+    } else {
+      res.status(401).json({ auth: 'You dont have permission to access this route!' });
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+}
