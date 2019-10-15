@@ -10,6 +10,7 @@ exports.register = (req, res) => {
   })
     .then(response => {
       const payload = {
+        id: response.id,
         email: response.email,
         name: response.name,
         imageUrl: response.imageUrl,
@@ -40,6 +41,7 @@ exports.login = (req, res) => {
         const validate = compare(req.body.password, response.password);
         if (validate) {
           const payload = {
+            id: response.id,
             email: response.email,
             name: response.name,
             imageUrl: response.imageUrl,

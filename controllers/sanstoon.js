@@ -15,7 +15,7 @@ exports.findAllSanstoon = async (req, res) => {
           attributes: ['id', 'email'],
           through: {
             model: Favorite,
-            where: { userId: 2 }, // userId whos login
+            where: { userId: req.authroize_user.id }, // id authorized user
           },
         },
       ],
@@ -33,7 +33,14 @@ exports.findAllSanstoon = async (req, res) => {
       };
       return objSanstoon;
     });
-    res.json(sanstoons);
+
+    if (req.query.hasOwnProperty('is_favorite')) {
+      const favorite = sanstoons.filter(item => item.isFavorite == true);
+      res.json(favorite); // Send all favorite sanstoons
+    } else {
+      res.json(sanstoons); // Send all sanstoons
+    }
+
   } catch (error) {
     res.status(500).json(error);
   }
@@ -45,7 +52,7 @@ exports.findAllEpisode = async (req, res) => {
       include: [
         {
           model: Sanstoon,
-          attributes: ['id','title', 'genre'],
+          attributes: ['id', 'title', 'genre'],
           where: { id: req.params.sanstoonId },
         },
       ],
@@ -66,7 +73,7 @@ exports.findAllEpisode = async (req, res) => {
   }
 };
 
-exports.findAllPages = async(req, res) => {
+exports.findAllPages = async (req, res) => {
   try {
     const data = await Page.findAll({
       include: [
@@ -77,10 +84,10 @@ exports.findAllPages = async(req, res) => {
           include: [
             {
               model: Sanstoon,
-              attributes: ['id','title', 'genre'],
-              where: { id: req.params.sanstoonId }
-            }
-          ]
+              attributes: ['id', 'title', 'genre'],
+              where: { id: req.params.sanstoonId },
+            },
+          ],
         },
       ],
     });
@@ -92,9 +99,9 @@ exports.findAllPages = async(req, res) => {
         updatedAt: item.updatedAt,
       };
       return objPages;
-    })
+    });
     res.json(pages);
   } catch (error) {
-    res.status(500).json(error); 
+    res.status(500).json(error);
   }
-}
+};
