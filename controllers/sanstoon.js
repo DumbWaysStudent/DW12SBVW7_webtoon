@@ -37,6 +37,9 @@ exports.findAllSanstoon = async (req, res) => {
     if (req.query.hasOwnProperty('is_favorite')) {
       const favorite = sanstoons.filter(item => item.isFavorite == true);
       res.json(favorite); // Send all favorite sanstoons
+    } else if (req.query.hasOwnProperty('title')) {
+      const searchTitle = sanstoons.filter(item => item.title.toLowerCase() == req.query.title.toLowerCase());
+      res.json(searchTitle); // Send all sanstoons with query search by title
     } else {
       res.json(sanstoons); // Send all sanstoons
     }
