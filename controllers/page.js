@@ -29,3 +29,20 @@ exports.findAllUserPages = async (req, res) => {
     res.status(500).json(error);
   }
 };
+
+exports.createPage = async (req, res) => {
+  try {
+    if (req.authorize_user.id == req.params.userId) {
+      const page = {
+        page: req.body.page,
+        image: 'https://swebtoon-phinf.pstatic.net/20140617_248/1403004901360ABk5x_JPEG/tower_000.jpg',
+        episode_id: req.params.episodeId
+      }
+      const data = await Page.create(page);
+      res.json(data);
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+

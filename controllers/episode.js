@@ -46,7 +46,7 @@ exports.createEpisode = async (req, res) => {
   } catch (error) {
     res.status(500).json(error);
   }
-}
+};
 
 exports.updateEpisode = async (req, res) => {
   try {
@@ -67,7 +67,7 @@ exports.updateEpisode = async (req, res) => {
   } catch (error) {
     res.status(500).json(error);
   }
-}
+};
 
 exports.deleteEpisode = async (req, res) => {
   try {
@@ -80,4 +80,4 @@ exports.deleteEpisode = async (req, res) => {
   } catch (error) {
     res.status(500).json(error);
   }
-}
+};
