@@ -14,3 +14,13 @@ exports.authenticate = (req, res, next) => {
     res.status(403).json({ auth: 'invalid token' });
   }
 };
+
+exports.authorize = (req, res, next) => {
+  if (req.authorize_user.id == req.params.userId) {
+    next();
+  } else {
+    res
+      .status(401)
+      .json({ auth: 'You dont have permission to access this route!' });
+  }
+};
