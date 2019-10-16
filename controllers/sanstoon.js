@@ -25,6 +25,7 @@ exports.findAllSanstoon = async (req, res) => {
     const sanstoons = data
       .map(item => {
         const objSanstoon = {
+          id: item.id,
           title: item.title,
           genre: item.genre,
           image: item.image,

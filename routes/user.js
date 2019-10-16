@@ -5,7 +5,6 @@ const { findAllUserToon, createToon, updateUserToon, deleteUserToon } = require(
 const { findAllUserEpisode, createEpisode, updateEpisode, deleteEpisode } = require('../controllers/episode');
 const { findAllUserPages, createPage, deletePage } = require('../controllers/page');
 
-
 // Sanstoon
 routes.get('/:userId/sanstoons', authenticate, authorize, findAllUserToon);
 routes.post('/:userId/sanstoon', authenticate, authorize, createToon);
