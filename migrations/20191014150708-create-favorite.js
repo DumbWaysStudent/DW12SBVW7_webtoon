@@ -6,39 +6,39 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       userId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Users',
-          key: 'id'
+          key: 'id',
         },
         onDelete: 'cascade',
-        onUpdate: 'cascade'
+        onUpdate: 'cascade',
       },
       sanstoonId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Sanstoons',
-          key: 'id'
+          key: 'id',
         },
         onDelete: 'cascade',
-        onUpdate: 'cascade'
+        onUpdate: 'cascade',
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: new Date()
+        defaultValue: new Date(),
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: new Date()
-      }
+        defaultValue: new Date(),
+      },
     });
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('Favorites');
-  }
+  },
 };

@@ -1,8 +1,11 @@
 const routes = require('express').Router();
-const { findAllSanstoon, findAllEpisode, findAllPages } = require('../controllers/sanstoon');
-const authorization = require('../middlewares/authorized').authorization;
+const authenticate = require('../middlewares/auth').authenticate;
 
-routes.get('/', authorization, findAllSanstoon);
+const { findAllSanstoon } = require('../controllers/sanstoon');
+const { findAllEpisode } = require('../controllers/episode');
+const { findAllPages } = require('../controllers/page');
+
+routes.get('/', authenticate, findAllSanstoon);
 routes.get('/:sanstoonId/episodes', findAllEpisode);
 routes.get('/:sanstoonId/episode/:episodeId', findAllPages);
 

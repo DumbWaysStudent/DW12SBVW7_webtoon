@@ -12,16 +12,24 @@ module.exports = {
         isBetaMember: false
       }], {});
     */
-    return queryInterface.bulkInsert('Favorites', [
-      {
-        userId: 1,
-        sanstoonId: 1
-      },
-      {
-        userId: 2,
-        sanstoonId: 1
-      }
-  ], {});
+    return queryInterface.bulkInsert(
+      'Favorites',
+      [
+        {
+          userId: 1,
+          sanstoonId: 1,
+        },
+        {
+          userId: 1,
+          sanstoonId: 2,
+        },
+        {
+          userId: 2,
+          sanstoonId: 1,
+        },
+      ],
+      {},
+    );
   },
 
   down: (queryInterface, Sequelize) => {
@@ -33,5 +41,5 @@ module.exports = {
       return queryInterface.bulkDelete('People', null, {});
     */
     return queryInterface.bulkDelete('Favorites', null, {});
-  }
+  },
 };

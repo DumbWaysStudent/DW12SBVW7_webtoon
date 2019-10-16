@@ -17,10 +17,6 @@ module.exports = {
       image: {
         type: Sequelize.STRING
       },
-      favorite_count: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0
-      },
       created_by: {
         type: Sequelize.INTEGER,
         references: {

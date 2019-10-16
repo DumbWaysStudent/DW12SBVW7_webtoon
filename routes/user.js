@@ -1,11 +1,11 @@
 const routes = require('express').Router();
-const authorization = require('../middlewares/authorized').authorization;
+const authenticate = require('../middlewares/auth').authenticate;
 
-const { findAllUserToon, createToon, updateUserToon, deleteUserToon } = require('../controllers/user');
+const { findAllUserToon, createToon, updateUserToon, deleteUserToon } = require('../controllers/sanstoon');
 const { findAllUserEpisode, createEpisode, updateEpisode, deleteEpisode } = require('../controllers/episode');
 const { findAllUserPages, createPage, deletePage } = require('../controllers/page');
 
-routes.use(authorization);
+routes.use(authenticate);
 
 // Sanstoon
 routes.get('/:userId/sanstoons', findAllUserToon);

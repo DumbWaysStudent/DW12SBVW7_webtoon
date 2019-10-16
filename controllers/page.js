@@ -1,4 +1,38 @@
-const { User, Sanstoon, Favorite, Episode, Page } = require('../models');
+const { Sanstoon, Episode, Page } = require('../models');
+
+exports.findAllPages = async (req, res) => {
+  try {
+    const data = await Page.findAll({
+      include: [
+        {
+          model: Episode,
+          attributes: ['id', 'title'],
+          where: { id: req.params.episodeId },
+          include: [
+            {
+              model: Sanstoon,
+              attributes: ['id', 'title', 'genre'],
+              where: { id: req.params.sanstoonId },
+            },
+          ],
+        },
+      ],
+    });
+
+    const pages = data.map(item => {
+      const objPages = {
+        page: item.page,
+        image: item.image,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt,
+      };
+      return objPages;
+    });
+    res.json(pages);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
 
 exports.findAllUserPages = async (req, res) => {
   try {

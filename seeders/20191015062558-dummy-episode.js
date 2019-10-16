@@ -12,18 +12,24 @@ module.exports = {
         isBetaMember: false
       }], {});
     */
-    return queryInterface.bulkInsert('Episodes', [
-      {
-        title: 'Ep. 1',
-        image: 'https://swebtoon-phinf.pstatic.net/20181017_245/1539764585755Y622w_PNG/thumb_1539764560109146619.png',
-        sanstoon_id: 1,
-      },
-      {
-        title: 'Ep. 2',
-        image: 'https://swebtoon-phinf.pstatic.net/20181018_161/1539842731258qSbir_PNG/thumb_1539842676363146629.png',
-        sanstoon_id: 1,
-      }
-  ], {});
+    return queryInterface.bulkInsert(
+      'Episodes',
+      [
+        {
+          title: 'Ep. 1',
+          image:
+            'https://swebtoon-phinf.pstatic.net/20140617_248/1403004901360ABk5x_JPEG/tower_000.jpg',
+          sanstoon_id: 1,
+        },
+        {
+          title: 'Ep. 2',
+          image:
+            'https://swebtoon-phinf.pstatic.net/20140617_295/14030049099507m9Vb_JPEG/tower_001.jpg',
+          sanstoon_id: 1,
+        },
+      ],
+      {},
+    );
   },
 
   down: (queryInterface, Sequelize) => {
@@ -34,6 +40,6 @@ module.exports = {
       Example:
       return queryInterface.bulkDelete('People', null, {});
     */
-   return queryInterface.bulkDelete('Episodes', null, {});
-  }
+    return queryInterface.bulkDelete('Episodes', null, {});
+  },
 };

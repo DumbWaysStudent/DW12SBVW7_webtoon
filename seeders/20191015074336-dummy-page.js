@@ -12,23 +12,30 @@ module.exports = {
         isBetaMember: false
       }], {});
     */
-    return queryInterface.bulkInsert('Pages', [
-      {
-        page: 1,
-        image: 'https://swebtoon-phinf.pstatic.net/20181022_21/1540186270989s9r5s_JPEG/1540186270951146618.jpg',
-        episode_id: 1
-      },
-      {
-        page: 2,
-        image: 'https://swebtoon-phinf.pstatic.net/20181022_158/1540186271082bpGaO_JPEG/1540186271043146611.jpg',
-        episode_id: 1
-      },
-      {
-        page: 3,
-        image: 'https://swebtoon-phinf.pstatic.net/20181022_150/1540186271089G0Qwc_JPEG/1540186271070146613.jpg',
-        episode_id: 1
-      }
-  ], {});
+    return queryInterface.bulkInsert(
+      'Pages',
+      [
+        {
+          page: 1,
+          image:
+            'https://swebtoon-phinf.pstatic.net/20141216_300/14186577318388F1Hj_JPEG/14186577317869515.jpg',
+          episode_id: 1,
+        },
+        {
+          page: 2,
+          image:
+            'https://swebtoon-phinf.pstatic.net/20141216_297/1418657731844vhrIu_JPEG/14186577317939513.jpg',
+          episode_id: 1,
+        },
+        {
+          page: 3,
+          image:
+            'https://swebtoon-phinf.pstatic.net/20141216_199/1418657731838lN86V_JPEG/14186577317859517.jpg',
+          episode_id: 1,
+        },
+      ],
+      {},
+    );
   },
 
   down: (queryInterface, Sequelize) => {
@@ -40,5 +47,5 @@ module.exports = {
       return queryInterface.bulkDelete('People', null, {});
     */
     return queryInterface.bulkDelete('Pages', null, {});
-  }
+  },
 };

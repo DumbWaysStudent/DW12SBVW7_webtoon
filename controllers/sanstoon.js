@@ -12,7 +12,7 @@ exports.findAllSanstoon = async (req, res) => {
         {
           model: User,
           as: 'isFavorite',
-          attributes: ['id', 'email'],
+          attributes: ['id', 'name'],
           through: {
             model: Favorite,
             attributes: [],
@@ -22,89 +22,153 @@ exports.findAllSanstoon = async (req, res) => {
       ],
     });
 
-    const sanstoons = data.map(item => {
-      const objSanstoon = {
-        title: item.title,
-        genre: item.genre,
-        image: item.image,
-        author: item.author.name,
-        isFavorite: item.isFavorite.length ? true : false,
-        createdAt: item.createdAt,
-        updatedAt: item.updatedAt,
-      };
-      return objSanstoon;
-    });
-
-    if (req.query.hasOwnProperty('is_favorite')) {
-      const favorite = sanstoons.filter(item => item.isFavorite == true);
-      res.json(favorite); // Send all favorite sanstoons
-    } else if (req.query.hasOwnProperty('title')) {
-      const searchTitle = sanstoons.filter(item => item.title.toLowerCase() == req.query.title.toLowerCase());
-      res.json(searchTitle); // Send all sanstoons with query search by title
-    } else {
-      res.json(sanstoons); // Send all sanstoons
-    }
-
+    const sanstoons = data
+      .map(item => {
+        const objSanstoon = {
+          title: item.title,
+          genre: item.genre,
+          image: item.image,
+          author: item.author.name,
+          isFavorite: item.isFavorite.length ? true : false,
+          favoriteCount: item.isFavorite.length,
+          createdAt: item.createdAt,
+          updatedAt: item.updatedAt,
+        };
+        return objSanstoon;
+      })
+      .filter(item => {
+        const queryTitle = req.query.title;
+        const title = item.title;
+        if (
+          req.query.hasOwnProperty('is_favorite') &&
+          req.query['is_favorite'] == 'true' &&
+          req.query.hasOwnProperty('title')
+        ) {
+          return (
+            item.isFavorite == true &&
+            new RegExp('.*' + queryTitle + '.*').test(title.toLowerCase())
+          );
+        } else if (req.query.hasOwnProperty('title')) {
+          return new RegExp('.*' + queryTitle + '.*').test(title.toLowerCase());
+        } else if (
+          req.query.hasOwnProperty('is_favorite') &&
+          req.query['is_favorite'] == 'true'
+        ) {
+          return item.isFavorite == true;
+        } else {
+          return item;
+        }
+      });
+    res.json(sanstoons);
   } catch (error) {
     res.status(500).json(error);
   }
 };
 
-exports.findAllEpisode = async (req, res) => {
+exports.findAllUserToon = async (req, res) => {
   try {
-    const data = await Episode.findAll({
-      include: [
-        {
-          model: Sanstoon,
-          attributes: ['id', 'title', 'genre'],
-          where: { id: req.params.sanstoonId },
-        },
-      ],
-    });
-
-    const episodes = data.map(item => {
-      const objEpisode = {
-        title: item.title,
-        image: item.image,
-        createdAt: item.createdAt,
-        updatedAt: item.updatedAt,
-      };
-      return objEpisode;
-    });
-    res.json(episodes);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-};
-
-exports.findAllPages = async (req, res) => {
-  try {
-    const data = await Page.findAll({
-      include: [
-        {
-          model: Episode,
-          attributes: ['id', 'title'],
-          where: { id: req.params.episodeId },
-          include: [
-            {
-              model: Sanstoon,
-              attributes: ['id', 'title', 'genre'],
-              where: { id: req.params.sanstoonId },
+    if (req.authorize_user.id == req.params.userId) {
+      const data = await Sanstoon.findAll({
+        include: [
+          {
+            model: User,
+            as: 'isFavorite',
+            attributes: ['id', 'email'],
+            through: {
+              model: Favorite,
+              attributes: [],
+              where: { userId: req.authorize_user.id }, // id authorized user
             },
-          ],
-        },
-      ],
-    });
-    const pages = data.map(item => {
-      const objPages = {
-        page: item.page,
-        image: item.image,
-        createdAt: item.createdAt,
-        updatedAt: item.updatedAt,
+          },
+        ],
+        where: { created_by: req.params.userId },
+      });
+      const userToons = data.map(item => {
+        const userToon = {
+          title: item.title,
+          genre: item.genre,
+          image: item.image,
+          isFavorite: item.isFavorite.length ? true : false,
+          createdAt: item.createdAt,
+          updatedAt: item.updatedAt,
+          created_by: item.created_by,
+        };
+        return userToon;
+      });
+      res.json(userToons);
+    } else {
+      res
+        .status(401)
+        .json({ auth: 'You dont have permission to access this route!' });
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+exports.createToon = async (req, res) => {
+  try {
+    if (req.authorize_user.id == req.params.userId) {
+      const toon = {
+        title: req.body.title,
+        genre: req.body.genre,
+        image:
+          'https://i.pinimg.com/originals/1b/33/19/1b33195fbe69f9cfbe74585e97ff6eb4.jpg',
+        created_by: req.authorize_user.id,
       };
-      return objPages;
-    });
-    res.json(pages);
+      const data = await Sanstoon.create(toon);
+      res.status(201).json(data);
+    } else {
+      res
+        .status(401)
+        .json({ auth: 'You dont have permission to access this route!' });
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+exports.updateUserToon = async (req, res) => {
+  try {
+    if (req.authorize_user.id == req.params.userId) {
+      const toon = {
+        title: req.body.title,
+        genre: req.body.genre,
+        image:
+          'https://i.pinimg.com/originals/1b/33/19/1b33195fbe69f9cfbe74585e97ff6eb4.jpg',
+        created_by: req.authorize_user.id,
+      };
+      const data = await Sanstoon.update(toon, {
+        where: { id: req.params.sanstoonId },
+      });
+      if (data) {
+        const updatedData = await Sanstoon.findOne({
+          where: { id: req.params.sanstoonId },
+        });
+        res.json(updatedData);
+      }
+    } else {
+      res
+        .status(401)
+        .json({ auth: 'You dont have permission to access this route!' });
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+exports.deleteUserToon = async (req, res) => {
+  try {
+    if (req.authorize_user.id == req.params.userId) {
+      const data = await Sanstoon.destroy({
+        where: { id: req.params.sanstoonId },
+      });
+      res.json({ id: req.params.sanstoonId });
+    } else {
+      res
+        .status(401)
+        .json({ auth: 'You dont have permission to access this route!' });
+    }
   } catch (error) {
     res.status(500).json(error);
   }
