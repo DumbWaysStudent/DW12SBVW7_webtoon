@@ -16,7 +16,6 @@ exports.findAllSanstoon = async (req, res) => {
           through: {
             model: Favorite,
             attributes: [],
-            where: { userId: req.authorize_user.id }, // id authorized user
           },
         },
       ],
@@ -30,7 +29,7 @@ exports.findAllSanstoon = async (req, res) => {
           genre: item.genre,
           image: item.image,
           author: item.author.name,
-          isFavorite: item.isFavorite.length ? true : false,
+          isFavorite: item.isFavorite.some(v => v.id == req.authorize_user.id),
           favoriteCount: item.isFavorite.length,
           createdAt: item.createdAt,
           updatedAt: item.updatedAt,
@@ -68,27 +67,33 @@ exports.findAllSanstoon = async (req, res) => {
 
 exports.findAllUserToon = async (req, res) => {
   try {
-    const data = await Sanstoon.findAll({
+    let data = await Sanstoon.findAll({
       include: [
         {
           model: User,
+          as: 'author',
+          attributes: ['name'],
+        },
+        {
+          model: User,
           as: 'isFavorite',
-          attributes: ['id', 'email'],
+          attributes: ['id', 'name'],
           through: {
             model: Favorite,
             attributes: [],
-            where: { userId: req.authorize_user.id }, // id authorized user
           },
         },
       ],
-      where: { created_by: req.params.userId },
     });
+
     const userToons = data.map(item => {
       const userToon = {
+        id: item.id,
         title: item.title,
         genre: item.genre,
         image: item.image,
-        isFavorite: item.isFavorite.length ? true : false,
+        isFavorite: item.isFavorite.some(v => v.id == req.authorize_user.id),
+        favoriteCount: item.isFavorite.length,
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
         created_by: item.created_by,

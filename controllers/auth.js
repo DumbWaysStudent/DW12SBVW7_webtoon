@@ -9,16 +9,16 @@ exports.register = (req, res) => {
     name: req.body.name,
   })
     .then(response => {
-      const payload = {
+      const dataUser = {
         id: response.id,
         email: response.email,
         name: response.name,
         imageUrl: response.imageUrl,
       };
-      const token = jwt.sign(payload, process.env.KEY);
+      const token = jwt.sign(dataUser, process.env.KEY);
       res.status(201).json({
         token,
-        payload,
+        dataUser,
       });
     })
     .catch(err => {
@@ -40,16 +40,16 @@ exports.login = (req, res) => {
       if (response) {
         const validate = compare(req.body.password, response.password);
         if (validate) {
-          const payload = {
+          const dataUser = {
             id: response.id,
             email: response.email,
             name: response.name,
             imageUrl: response.imageUrl,
           };
-          const token = jwt.sign(payload, process.env.KEY);
+          const token = jwt.sign(dataUser, process.env.KEY);
           res.json({
             token,
-            payload,
+            dataUser,
           });
         } else {
           res.status(400).json({ message: 'Wrong email/password' });
