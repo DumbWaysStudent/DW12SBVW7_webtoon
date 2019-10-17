@@ -7,8 +7,8 @@ import {
   ToastAndroid,
 } from 'react-native';
 import {Content, Container, Text} from 'native-base';
+import {NavigationEvents} from 'react-navigation';
 import axios from '../helpers/axios';
-// import objectClone from '../helpers/clone';
 
 // Ignore Yellow Warnings
 YellowBox.ignoreWarnings(['Warning: ']);
@@ -27,7 +27,11 @@ export class ForYou extends Component {
     favorites: null,
   };
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.fetchAllToons();
+  }
+
+  fetchAllToons = async () => {
     const token = await AsyncStorage.getItem('token');
 
     const {data} = await axios({
@@ -44,10 +48,9 @@ export class ForYou extends Component {
       sanstoons: data,
       favorites,
     });
-  }
+  };
 
   handleFavorite = async (status, id) => {
-    
     const token = await AsyncStorage.getItem('token');
     const method = status ? 'DELETE' : 'POST';
     const message = status
@@ -78,6 +81,10 @@ export class ForYou extends Component {
     const {navigation} = this.props;
     return (
       <Container style={{flex: 1, backgroundColor: '#fff'}}>
+        <NavigationEvents
+          onDidFocus={this.fetchAllToons}
+          onDidBlur={() => this.setState({sanstoons: null, favorites: null})}
+        />
         <ScrollView showsVerticalScrollIndicator={false}>
           <Content>
             <SearchBar handleSearch={this.handleSearch} />

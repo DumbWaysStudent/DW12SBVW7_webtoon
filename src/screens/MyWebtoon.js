@@ -1,24 +1,53 @@
 import React, {Component} from 'react';
-import {Text, View, FlatList, Image, StyleSheet} from 'react-native';
+import {
+  Text,
+  View,
+  FlatList,
+  Image,
+  StyleSheet,
+  AsyncStorage,
+} from 'react-native';
+import {NavigationEvents} from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { green } from '../colorPallete';
+import axios from '../helpers/axios';
+
+import {green} from '../colorPallete';
 
 // Components
 import {SmallHorizontalCard} from '../components/Card';
 
-// Dummy Data
-import { myWebtoon } from '../__dummy__/data';
-
 export class MyWebtoon extends Component {
-
   state = {
-    myWebtoon: myWebtoon,
+    myWebtoon: [],
+  };
+
+  componentDidMount() {
+    this.fetchMyToons();
+  }
+
+  fetchMyToons = async () => {
+    const token = await AsyncStorage.getItem('token');
+    const dataUser = await AsyncStorage.getItem('dataUser');
+    const user = JSON.parse(dataUser);
+
+    const {data} = await axios({
+      method: 'GET',
+      url: `/user/${user.id}/sanstoons`,
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    this.setState({myWebtoon: data});
   }
 
   render() {
     const {navigation} = this.props;
     return (
       <View style={{flex: 1}}>
+        <NavigationEvents
+          onDidFocus={this.fetchMyToons}
+        />
         <FlatList
           contentContainerStyle={{marginTop: 20}}
           data={this.state.myWebtoon}

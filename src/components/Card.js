@@ -30,13 +30,19 @@ export const SmallHorizontalCard = ({
     </TouchableOpacity>
   );
 
-  if (data.favoriteCount) {
+  if (text == 'Favorite(s)') {
     subTitle = data.favoriteCount;
-  } else if (data.totalEpisode) {
-    subTitle = data.totalEpisode;
-  } else if (data.createdAt) {
-    subTitle = data.createdAt;
+  } else if (text == 'Episode(s)') {
+    subTitle = data.episodes;
   }
+
+  // if (data.favoriteCount) {
+  //   subTitle = data.favoriteCount;
+  // } else if (data.episodes) {
+  //   subTitle = data.episodes;
+  // } else if (data.createdAt) {
+  //   subTitle = data.createdAt;
+  // }
 
   return (
     <TouchableWithoutFeedback onPress={route ? navigate : null}>
