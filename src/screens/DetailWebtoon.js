@@ -54,7 +54,9 @@ export class DetailWebtoon extends Component {
             <TouchableWithoutFeedback
               onPress={() =>
                 this.props.navigation.navigate('DetailEpisode', {
-                  episode: episode.episode,
+                  title: episode.title,
+                  santoonId: this.props.navigation.getParam('id'),
+                  episodeId: episode.id,
                 })
               }>
               <View key={i} style={styles.card}>

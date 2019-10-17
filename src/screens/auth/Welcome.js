@@ -18,9 +18,9 @@ export class Welcome extends Component {
             style={styles.button}>
             <Text style={styles.buttonText}>Login with Email</Text>
           </TouchableOpacity>
-          <Text style={styles.divider}> ────── OR Register Account ────── </Text>
+          <Text style={styles.divider}>────── OR Register Account ──────</Text>
           <TouchableOpacity
-            // onPress={() => this.props.navigation.navigate('Login')}
+            onPress={() => console.log('register screen')}
             style={styles.button}>
             <Text style={styles.buttonText}>Register an Account</Text>
           </TouchableOpacity>
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',  
+    alignItems: 'center',
   },
   title: {
     fontSize: 23,
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   divider: {
-    color: '#b0b0b0',    
+    color: '#b0b0b0',
   },
 });
 

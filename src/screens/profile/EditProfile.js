@@ -12,6 +12,15 @@ export class EditProfile extends Component {
     name: '',
   };
 
+  async componentDidMount() {
+    const dataUser = await AsyncStorage.getItem('dataUser');
+    const user = JSON.parse(dataUser);
+    this.setState({
+      name: user.name,
+      image: user.imageUrl,
+    });
+  }
+
   handleUploadPhoto = () => {
     ImagePicker.showImagePicker(response => {
       // Same code as in above section!
@@ -54,6 +63,7 @@ export class EditProfile extends Component {
           <TextInput
             style={styles.nameInput}
             placeholder="Your Name"
+            value={this.state.name}
             onChange={input => this.setState({name: input})}
           />
         </View>

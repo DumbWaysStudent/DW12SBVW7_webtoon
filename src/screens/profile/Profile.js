@@ -1,5 +1,11 @@
-import React, { Component } from 'react';
-import { Text, View, StyleSheet, TouchableWithoutFeedback, AsyncStorage } from 'react-native';
+import React, {Component} from 'react';
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  AsyncStorage,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Picture from '../../components/Picture';
@@ -25,14 +31,14 @@ export class Profile extends Component {
   state = {
     name: '',
     image: null,
-  }
+  };
 
   async componentDidMount() {
     const dataUser = await AsyncStorage.getItem('dataUser');
     const user = JSON.parse(dataUser);
     this.setState({
       name: user.name,
-      image: user.imageUrl
+      image: user.imageUrl,
     });
   }
 
@@ -42,7 +48,7 @@ export class Profile extends Component {
       await AsyncStorage.removeItem('token');
       this.props.navigation.navigate('Login');
     }
-  }
+  };
 
   render() {
     return (

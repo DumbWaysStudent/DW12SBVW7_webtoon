@@ -31,7 +31,7 @@ export class Login extends Component {
       await AsyncStorage.setItem('dataUser', JSON.stringify(data.dataUser));
 
       this.props.navigation.navigate('ForYou');
-    } catch (error) {      
+    } catch (error) {
       console.error(error);
     }
   };
@@ -53,7 +53,7 @@ export class Login extends Component {
     } else {
       this.setState({isValidPassword: true});
     }
-    
+
     this.setState({password: input});
   }
 
