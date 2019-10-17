@@ -1,5 +1,11 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, YellowBox, AsyncStorage, ToastAndroid} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  YellowBox,
+  AsyncStorage,
+  ToastAndroid,
+} from 'react-native';
 import {Content, Container, Text} from 'native-base';
 import axios from '../helpers/axios';
 // import objectClone from '../helpers/clone';
@@ -13,7 +19,7 @@ import Banner from '../components/Banner';
 import Favorite from '../components/Favorite';
 import AllSanstoon from '../components/AllSanstoon';
 
-import { dark } from '../colorPallete';
+import {dark} from '../colorPallete';
 
 export class ForYou extends Component {
   state = {
@@ -26,7 +32,7 @@ export class ForYou extends Component {
 
     const {data} = await axios({
       method: 'GET',
-      url: '/api/v1/sanstoons',
+      url: '/sanstoons',
       headers: {
         Authorization: token,
       },
@@ -43,10 +49,12 @@ export class ForYou extends Component {
   handleFavorite = async (status, id) => {
     const token = await AsyncStorage.getItem('token');
     const method = status ? 'DELETE' : 'POST';
-    const message = status ? 'Removed from My Favorite' : 'Added to My Favorite';
+    const message = status
+      ? 'Removed from My Favorite'
+      : 'Added to My Favorite';
     const {data} = await axios({
       method,
-      url: `/api/v1/sanstoons/${id}/favorite`,
+      url: `/sanstoons/${id}/favorite`,
       headers: {
         Authorization: token,
       },
@@ -63,9 +71,7 @@ export class ForYou extends Component {
     });
   };
 
-  handleSearch = title => {
-    
-  };
+  handleSearch = title => {};
 
   render() {
     const {navigation} = this.props;

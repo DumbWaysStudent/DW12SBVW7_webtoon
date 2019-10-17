@@ -4,7 +4,7 @@ import RootNavigation from './src/RootNavigation';
 
 export class App extends Component {
   render() {    
-    return (      
+    return (
       <RootNavigation />
     );
   }

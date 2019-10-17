@@ -32,7 +32,6 @@ function VerticalCard({navigation, favorite, checker}) {
 }
 
 class Favourite extends Component {
-
   state = {
     favorites: null,
   };
@@ -41,31 +40,47 @@ class Favourite extends Component {
     const {favorites} = this.props;
     const len = favorites ? favorites.length : null;
 
-    const card = (
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {favorites
-          ? favorites.map((favorite, idx) => (
-              <VerticalCard
-                key={favorite.id}
-                favorite={favorite}
-                checker={{index: idx, length: len}}
-                navigation={this.props.navigation}
-              />
-            ))
-          : null}
-      </ScrollView>
-    );
+    let renderContent;
 
-    const loading = (
-      <View style={{height: 190, alignSelf: 'center'}}>
-        <BallIndicator color={green} />
-      </View>
-    );
+    if (favorites == null) {
+      renderContent = (
+        <View style={{height: 190, alignSelf: 'center'}}>
+          <BallIndicator color={green} />
+        </View>
+      );
+    } else if (favorites.length) {
+      renderContent = (
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {favorites
+            ? favorites.map((favorite, idx) => (
+                <VerticalCard
+                  key={favorite.id}
+                  favorite={favorite}
+                  checker={{index: idx, length: len}}
+                  navigation={this.props.navigation}
+                />
+              ))
+            : null}
+        </ScrollView>
+      );
+    } else if (!favorites.length) {
+      renderContent = (
+        <View
+          style={[
+            styles.favCard,
+            {justifyContent: 'center', alignItems: 'center'},
+          ]}>
+          <Text style={[styles.favSubText, {textAlign: 'center'}]}>
+            You don't have any favorited comic.
+          </Text>
+        </View>
+      );
+    }
 
     return (
       <View style={{flex: 1}}>
         <Text style={styles.textTitle}>Your Favorites</Text>
-        {favorites ? card : loading}
+        {renderContent}
       </View>
     );
   }

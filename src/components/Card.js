@@ -30,8 +30,8 @@ export const SmallHorizontalCard = ({
     </TouchableOpacity>
   );
 
-  if (data.favouriteCount) {
-    subTitle = data.favouriteCount;
+  if (data.favoriteCount) {
+    subTitle = data.favoriteCount;
   } else if (data.totalEpisode) {
     subTitle = data.totalEpisode;
   } else if (data.createdAt) {

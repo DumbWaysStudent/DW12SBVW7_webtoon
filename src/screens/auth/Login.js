@@ -21,13 +21,14 @@ export class Login extends Component {
     try {
       const {data} = await axios({
         method: 'POST',
-        url: '/api/v1/login',
+        url: '/login',
         data: {
           email: this.state.email,
           password: this.state.password,
         },
       });
       await AsyncStorage.setItem('token', data.token);
+      await AsyncStorage.setItem('dataUser', JSON.stringify(data.dataUser));
 
       this.props.navigation.navigate('ForYou');
     } catch (error) {      
