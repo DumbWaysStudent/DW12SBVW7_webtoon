@@ -9,10 +9,8 @@ import {
 } from 'react-native';
 
 import { green, dark, lightGrey } from '../colorPallete';
-import objectClone from '../helpers/clone';
 
-
-function HorizontalCard({webtoon, navigation, handleFavouriteBtn}) {
+function HorizontalCard({sanstoon, navigation, handleFavorite}) {
   const favouritedBtn = {
     backgroundColor: '#fff',
     borderColor: green,
@@ -20,36 +18,33 @@ function HorizontalCard({webtoon, navigation, handleFavouriteBtn}) {
   const favouritedText = {
     color: green,
   };
+
   return (
     <TouchableWithoutFeedback
       onPress={() =>
         navigation.navigate('DetailWebtoon', {
-          title: webtoon.title,
-          image: webtoon.url,
+          title: sanstoon.title,
+          image: sanstoon.image,
         })
       }>
       <View style={styles.cardContainer}>
         <View style={styles.imageContainer}>
-          <Image
-            style={styles.imageSize}
-            source={{uri: webtoon.url}}
-          />
+          <Image style={styles.imageSize} source={{uri: sanstoon.image}} />
         </View>
         <View style={{marginLeft: 25}}>
-          <Text style={styles.titleCardText}>{webtoon.title}</Text>
+          <Text style={styles.titleCardText}>{sanstoon.title}</Text>
           <TouchableOpacity
             style={[
               styles.favButton,
-              webtoon.isFavourite ? favouritedBtn : null,
+              sanstoon.isFavorite ? favouritedBtn : null,
             ]}
-            onPress={() => handleFavouriteBtn(webtoon.id)}
-          >
+            onPress={() => handleFavorite(sanstoon.isFavorite, sanstoon.id)}>
             <Text
               style={[
                 styles.textFavourite,
-                webtoon.isFavourite ? favouritedText : null,
+                sanstoon.isFavorite ? favouritedText : null,
               ]}>
-              {webtoon.isFavourite ? '✓ Favorite' : '+ Favorite'}
+              {sanstoon.isFavorite ? '✓ Favorite' : '+ Favorite'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -58,41 +53,23 @@ function HorizontalCard({webtoon, navigation, handleFavouriteBtn}) {
   );
 }
 
-class All extends Component {
-
-  state = {
-    webtoons: this.props.dataSource,
-  }
-
-  handleFavouriteBtn = id => {
-    const newArray = objectClone(this.state.webtoons);
-    const webtoons = newArray.map(webtoon => {
-      const newObj = Object.assign({}, webtoon);
-      if (webtoon.id == id) {
-        newObj.isFavourite = !newObj.isFavourite;
-      }
-      return newObj;
-    });
-    this.setState({ webtoons });
-  }
-
+class AllSanstoon extends Component {
   render() {
+    const {sanstoons} = this.props;
     return (
       <View style={styles.mainContainer}>
-        <Text style={styles.textTitle}>All Sanstoon</Text>
-        {this.state.webtoons.map(webtoon => (
-          <HorizontalCard
-            key={webtoon.id}
-            handleFavouriteBtn={this.handleFavouriteBtn}
-            navigation={this.props.navigation}
-            webtoon={{
-              url: webtoon.image,
-              title: webtoon.title,
-              id: webtoon.id,
-              isFavourite: webtoon.isFavourite,
-            }}
-          />
-        ))}
+        <Text style={styles.textTitle}>All Mangas</Text>
+        {sanstoons &&
+          sanstoons.map(sanstoon => {
+            return (
+              <HorizontalCard
+                key={sanstoon.id}
+                handleFavorite={this.props.handleFavorite}
+                navigation={this.props.navigation}
+                sanstoon={sanstoon}
+              />
+            );
+          })}
       </View>
     );
   }
@@ -146,4 +123,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default All;
+export default AllSanstoon;

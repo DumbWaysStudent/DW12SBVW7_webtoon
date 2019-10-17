@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, AsyncStorage } from 'react-native';
-import { Container, Form, Item, Input, Text, Icon } from 'native-base';
-import axios from 'axios';
+import React, {Component} from 'react';
+import {StyleSheet, View, AsyncStorage} from 'react-native';
+import {Container, Form, Item, Input, Text, Icon} from 'native-base';
 
-import LoginButton from '../components/LoginButton';
+import axios from '../../helpers/axios';
+import {emailValidation} from '../../helpers/validation';
 
-// Helpers
-import { emailValidation } from '../helpers/validation';
+import LoginButton from '../../components/LoginButton';
 
 export class Login extends Component {
   state = {
@@ -18,54 +17,47 @@ export class Login extends Component {
     eyeColor: '#c3c3c3',
   };
 
-  handleSubmitLogin = () => {
-    
-    // axios({
-    //   method: 'POST',
-    //   url: 'https://192.168.1.51:3000/api/v1/user/login',
-    //   data: {
-    //     email: this.state.email,
-    //     password: this.state.password,
-    //   },
-    // })
-    // .then(({ data }) => {
-    //   if (data) {
-    //     AsyncStorage.setItem('token', data.token);
-    //     this.props.navigation.navigate('ForYou');
-    //   } else {
+  handleSubmitLogin = async () => {
+    try {
+      const {data} = await axios({
+        method: 'POST',
+        url: '/api/v1/login',
+        data: {
+          email: this.state.email,
+          password: this.state.password,
+        },
+      });
+      await AsyncStorage.setItem('token', data.token);
 
-    //   }
-    // })
-    // .catch(err => console.error(err));
-    
-    this.props.navigation.navigate('ForYou');
-  }
+      this.props.navigation.navigate('ForYou');
+    } catch (error) {      
+      console.error(error);
+    }
+  };
 
   checkEmail(input) {
     const isTrue = emailValidation(input);
-
     if (isTrue) {
       this.setState({isValidEmail: true});
     } else {
       this.setState({isValidEmail: false});
     }
 
-    this.setState({ email: input });
+    this.setState({email: input});
   }
 
   checkPassword(input) {
     if (input.length < 1) {
-      this.setState({ isValidPassword: false });
+      this.setState({isValidPassword: false});
     } else {
-      this.setState({ isValidPassword: true });
+      this.setState({isValidPassword: true});
     }
-
-    this.setState({ password: input });
+    
+    this.setState({password: input});
   }
 
-  _changeIcon() {
+  changeIcon() {
     let eyeColor;
-    
     if (this.state.security) {
       eyeColor = '#555';
     } else {
@@ -82,12 +74,13 @@ export class Login extends Component {
     const dataLogin = {
       email: this.state.isValidEmail,
       password: this.state.isValidPassword,
-    }
+    };
+
     return (
       <Container style={styles.container}>
         <View style={styles.topWrapper}>
           <Text style={styles.title}>LOG IN</Text>
-          <Text style={styles.subtitle}>Login with your account SANSTOON</Text>
+          <Text style={styles.subtitle}>Login with your account SANTOON</Text>
         </View>
         <View style={styles.bottomWrapper}>
           <Form>
@@ -107,15 +100,12 @@ export class Login extends Component {
               />
               <Icon
                 name={this.state.security ? 'eye-off' : 'eye'}
-                onPress={this._changeIcon.bind(this)}
-                style={{ color: this.state.eyeColor }}
+                onPress={this.changeIcon.bind(this)}
+                style={{color: this.state.eyeColor}}
               />
             </Item>
           </Form>
-          <LoginButton
-            isValid={dataLogin}
-            onPress={this.handleSubmitLogin}
-          />
+          <LoginButton isValid={dataLogin} onPress={this.handleSubmitLogin} />
         </View>
       </Container>
     );
@@ -146,7 +136,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    marginBottom: '5%', 
+    marginBottom: '5%',
   },
   bottomWrapper: {
     flex: 2,

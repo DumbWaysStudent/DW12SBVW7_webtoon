@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {
+  Text,
   Image,
   View,
   Dimensions,
@@ -7,10 +8,11 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import Carousel from 'react-native-banner-carousel';
+import { BallIndicator } from 'react-native-indicators';
+
+import { green } from '../colorPallete';
 
 const dim = Dimensions.get('window');
-const BannerWidth = Dimensions.get('window').width;
-const BannerHeight = 250;
 
 export class Banner extends Component {
   state = {
@@ -18,19 +20,28 @@ export class Banner extends Component {
     bannerHeight: 250,
   };
 
-  renderImage(webtoon, index) {    
+  renderLoading() {
+    return (
+      <View style={{ width: this.state.bannerWidth, height: this.state.bannerHeight, justifyContent: 'center' }}>
+        <BallIndicator color={green} />
+      </View>
+    );
+  }
+
+  renderImage(sanstoon, index) {
     return (
       <TouchableWithoutFeedback
-        onPress={() => this.props.navigation.navigate('DetailWebtoon', {
-          title: webtoon.title,
-          image: webtoon.bannerImage
-        })}
-        key={index}
-      >
+        onPress={() =>
+          this.props.navigation.navigate('DetailWebtoon', {
+            title: sanstoon.title,
+            image: sanstoon.image,
+          })
+        }
+        key={index}>
         <View>
           <Image
-            style={{width: BannerWidth, height: BannerHeight}}
-            source={{uri: webtoon.bannerImage}}
+            style={{width: this.state.bannerWidth, height: this.state.bannerHeight}}
+            source={{uri: sanstoon.image}}
           />
         </View>
       </TouchableWithoutFeedback>
@@ -38,7 +49,7 @@ export class Banner extends Component {
   }
 
   render() {
-    const {recomended} = this.props;
+    const {sanstoons} = this.props;
     return (
       <Carousel
         pageIndicatorStyle={styles.unactiveIndicators}
@@ -48,10 +59,10 @@ export class Banner extends Component {
         autoplayTimeout={5000}
         loop
         index={0}
-        pageSize={BannerWidth}>
-        {recomended.map((webtoon, idx) =>
-          this.renderImage(webtoon, idx),
-        )}
+        pageSize={this.state.bannerWidth}>
+        {sanstoons
+          ? sanstoons.map((sanstoon, idx) => this.renderImage(sanstoon, idx))
+          : this.renderLoading()}
       </Carousel>
     );
   }

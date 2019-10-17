@@ -8,12 +8,16 @@ import {
 } from 'react-navigation';
 import { green, lightGrey } from './colorPallete';
 
-// Public Route
-import Login from './screens/Login';
+// Splash Screen
+import SplashScreen from './screens/SplashScreen';
+
+// Auth Route
+import Welcome from './screens/auth/Welcome';
+import Login from './screens/auth/Login';
 
 // Private Route
 import ForYou from './screens/ForYou';
-import Favourite from './screens/Favourite';
+import Favorite from './screens/Favorite';
 import DetailWebtoon from './screens/DetailWebtoon';
 import DetailEpisode from './screens/DetailEpisode';
 
@@ -28,7 +32,13 @@ import CreateEpisode from './screens/CreateEpisode';
 import EditWebtoon from './screens/EditWebtoon';
 import EditEpisode from './screens/EditEpisode';
 
-const PublicNavigation = createStackNavigator({
+const AuthStack = createStackNavigator({
+  Welcome: {
+    screen: Welcome,
+    navigationOptions: {
+      header: null,
+    }
+  },
   Login: {
     screen: Login,
     navigationOptions: {
@@ -58,10 +68,10 @@ const BottomNavigation = createBottomTabNavigator(
         ),
       },
     },
-    Favourite: {
-      screen: Favourite,
+    Favorite: {
+      screen: Favorite,
       navigationOptions: {
-        tabBarLabel: 'Favourite',
+        tabBarLabel: 'Favorites',
         tabBarIcon: ({tintColor}) => (
           <Icon name="heart" color={tintColor} size={25} />
         ),
@@ -144,7 +154,8 @@ const PrivateNavigation = createStackNavigator({
 });
 
 const RootNav = createSwitchNavigator({
-  // PublicNavigation: PublicNavigation,
+  SplashScreen: SplashScreen,
+  AuthStack: AuthStack,
   PrivateNavigation: PrivateNavigation,
 });
 

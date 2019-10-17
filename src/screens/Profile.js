@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
-import {Text, View, StyleSheet, TouchableWithoutFeedback} from 'react-native';
+import React, { Component } from 'react';
+import { Text, View, StyleSheet, TouchableWithoutFeedback, AsyncStorage } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Picture from '../components/Picture';
 
-import { dark, green } from '../colorPallete';
+import {dark, green} from '../colorPallete';
 
 export class Profile extends Component {
   static navigationOptions = ({navigation}) => {
@@ -23,6 +23,14 @@ export class Profile extends Component {
     };
   };
 
+  handleLogout = async () => {
+    let token = await AsyncStorage.getItem('token');
+    if (token) {
+      await AsyncStorage.removeItem('token');
+      this.props.navigation.navigate('Login');
+    }
+  }
+
   render() {
     return (
       <View style={{flex: 1}}>
@@ -31,29 +39,25 @@ export class Profile extends Component {
           <Text style={styles.yourName}>Your Name</Text>
         </View>
         <TouchableWithoutFeedback
-          onPress={() => this.props.navigation.navigate('MyWebtoon')}
-        >
+          onPress={() => this.props.navigation.navigate('MyWebtoon')}>
           <View
             style={[
               styles.content,
               {flexDirection: 'row', justifyContent: 'space-between'},
             ]}>
             <Text style={styles.textContent}>My Webtoon Creation</Text>
-            <Icon
-              name="chevron-right"
-              color="#ccc"
-              size={25}
-            />
+            <Icon name="chevron-right" color="#ccc" size={25} />
           </View>
         </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => console.log('logout')}>
-          <Text
+        <TouchableWithoutFeedback onPress={() => this.handleLogout()}>
+          <View
             style={[
-              styles.textContent,
-              {padding: 10, borderColor: '#d3d3d3', borderWidth: 1},
+              styles.content,
+              {flexDirection: 'row', justifyContent: 'space-between'},
             ]}>
-            Log Out
-          </Text>
+            <Text style={[styles.textContent]}>Log Out</Text>
+            <Icon name="chevron-right" color="#ccc" size={25} />
+          </View>
         </TouchableWithoutFeedback>
       </View>
     );
@@ -64,7 +68,7 @@ const styles = StyleSheet.create({
   yourName: {
     color: dark,
     fontSize: 25,
-    marginTop:20,
+    marginTop: 20,
   },
   profile: {
     paddingVertical: 40,
@@ -84,7 +88,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderColor: '#d3d3d3',
     borderWidth: 1,
-    marginBottom: 1,
+    marginVertical: 5,
   },
   textContent: {
     fontSize: 18,

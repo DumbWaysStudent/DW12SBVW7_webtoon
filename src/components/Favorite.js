@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   View,
   ScrollView,
@@ -7,47 +7,65 @@ import {
   Text,
   TouchableWithoutFeedback,
 } from 'react-native';
+import {BallIndicator} from 'react-native-indicators';
 
-import { lightGrey, dark } from '../colorPallete';
+import {lightGrey, dark, green} from '../colorPallete';
 import trunc from '../helpers/trunc';
 
-function VerticalCard({ navigation, favourite, checker }) {
+function VerticalCard({navigation, favorite, checker}) {
   let rightMargin = checker.index == checker.length - 1 ? 10 : 0;
   return (
     <TouchableWithoutFeedback
-      onPress={() => navigation.navigate('DetailWebtoon', {
-        title:favourite.title,
-        image: favourite.image,
-      })}
-    >
-      <View style={[styles.favCard, { marginRight: rightMargin }]}>
-        <Image
-          source={{uri: favourite.image}}
-          style={{width: 140, height: 130}}
-        />
-        <Text style={styles.favTitleText}>{trunc(favourite.title)}</Text>
-        <Text style={styles.favSubText}>ORIGINAL</Text>
+      onPress={() =>
+        navigation.navigate('DetailWebtoon', {
+          title: favorite.title,
+          image: favorite.image,
+        })
+      }>
+      <View style={[styles.favCard, {marginRight: rightMargin}]}>
+        <Image source={{uri: favorite.image}} style={styles.imageSize} />
+        <Text style={styles.favTitleText}>{trunc(favorite.title)}</Text>
+        <Text style={styles.favSubText}>{favorite.author}</Text>
       </View>
     </TouchableWithoutFeedback>
   );
 }
 
 class Favourite extends Component {
+
+  state = {
+    favorites: null,
+  };
+
   render() {
-    const len = this.props.favourites.length;
+    const {favorites} = this.props;
+    const len = favorites ? favorites.length : null;
+
+    const card = (
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        {favorites
+          ? favorites.map((favorite, idx) => (
+              <VerticalCard
+                key={favorite.id}
+                favorite={favorite}
+                checker={{index: idx, length: len}}
+                navigation={this.props.navigation}
+              />
+            ))
+          : null}
+      </ScrollView>
+    );
+
+    const loading = (
+      <View style={{height: 190, alignSelf: 'center'}}>
+        <BallIndicator color={green} />
+      </View>
+    );
+
     return (
       <View style={{flex: 1}}>
-        <Text style={styles.textTitle}>Your Favorite</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {this.props.favourites.map((favourite, idx) => (
-            <VerticalCard
-              key={favourite.id}
-              favourite={favourite}
-              checker={{index: idx, length:len}}
-              navigation={this.props.navigation}
-            />
-          ))}
-        </ScrollView>
+        <Text style={styles.textTitle}>Your Favorites</Text>
+        {favorites ? card : loading}
       </View>
     );
   }
@@ -61,7 +79,7 @@ const styles = StyleSheet.create({
     color: dark,
   },
   imageSize: {
-    width: 130,
+    width: 140,
     height: 130,
   },
   favCard: {

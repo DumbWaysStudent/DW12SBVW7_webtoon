@@ -30,6 +30,7 @@ class SearchBar extends PureComponent {
             value={this.state.input}
             style={{fontSize: 13}}
             onChangeText={this.handleOnChangeText}
+            returnKeyLabel="done"
           />
           <Icon
             name="search"
