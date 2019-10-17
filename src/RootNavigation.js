@@ -22,8 +22,8 @@ import DetailWebtoon from './screens/DetailWebtoon';
 import DetailEpisode from './screens/DetailEpisode';
 
 // Profile Stack
-import Profile from './screens/Profile';
-import EditProfile from './screens/EditProfile';
+import Profile from './screens/profile/Profile';
+import EditProfile from './screens/profile/EditProfile';
 
 // Webtoon CRUD
 import MyWebtoon from './screens/MyWebtoon';

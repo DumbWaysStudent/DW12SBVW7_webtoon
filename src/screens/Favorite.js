@@ -45,8 +45,18 @@ export class Favourite extends Component {
     );
   }
 
-  handleSearch = title => {
-    console.log(title);
+  handleSearch = async title => {
+    const token = await AsyncStorage.getItem('token');
+
+    const {data} = await axios({
+      method: 'GET',
+      url: `/sanstoons?is_favorite=true&title=${title}`,
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    this.setState({favorites: data});
   };
 
   render() {

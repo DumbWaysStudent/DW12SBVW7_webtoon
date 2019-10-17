@@ -33,8 +33,10 @@ export class Banner extends Component {
       <TouchableWithoutFeedback
         onPress={() =>
           this.props.navigation.navigate('DetailWebtoon', {
+            id: sanstoon.id,
             title: sanstoon.title,
             image: sanstoon.image,
+            genre: sanstoon.genre,
           })
         }
         key={index}>

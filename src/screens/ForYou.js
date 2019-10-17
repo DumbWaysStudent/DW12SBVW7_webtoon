@@ -47,13 +47,14 @@ export class ForYou extends Component {
   }
 
   handleFavorite = async (status, id) => {
+    
     const token = await AsyncStorage.getItem('token');
     const method = status ? 'DELETE' : 'POST';
     const message = status
       ? 'Removed from My Favorite'
       : 'Added to My Favorite';
     const {data} = await axios({
-      method,
+      method: method,
       url: `/sanstoons/${id}/favorite`,
       headers: {
         Authorization: token,

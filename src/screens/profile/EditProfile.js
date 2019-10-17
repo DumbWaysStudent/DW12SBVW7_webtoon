@@ -1,18 +1,15 @@
 import React, {Component} from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  TextInput,
-} from 'react-native';
+import {Text, View, StyleSheet, TextInput, AsyncStorage} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ImagePicker from 'react-native-image-picker';
+import axios from '../../helpers/axios';
 
-import Picture from '../components/Picture';
+import Picture from '../../components/Picture';
 
 export class EditProfile extends Component {
   state = {
     avatarSource: null,
+    name: '',
   };
 
   handleUploadPhoto = () => {
@@ -26,13 +23,12 @@ export class EditProfile extends Component {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        const source = {uri: response.uri};
-
-        // You can also display the image using data:
-        // const source_data = { uri: 'data:image/jpeg;base64,' + response.data };
-
-        this.setState({
-          avatarSource: source,
+        const data = new FormData();
+        data.append('name', 'avatar');
+        data.append('fileData', {
+          uri: response.uri,
+          type: response.type,
+          name: response.fileName,
         });
       }
     });
@@ -55,7 +51,11 @@ export class EditProfile extends Component {
           <View style={styles.camera}>
             <Icon name="camera" size={20} onPress={this.handleUploadPhoto} />
           </View>
-          <TextInput style={styles.nameInput} placeholder="Your Name" />
+          <TextInput
+            style={styles.nameInput}
+            placeholder="Your Name"
+            onChange={input => this.setState({name: input})}
+          />
         </View>
       </View>
     );
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginVertical: 40,
     borderWidth: 2,
-    borderRadius: 25,
+    borderRadius: 5,
     borderColor: '#ccc',
   },
 });

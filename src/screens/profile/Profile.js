@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { Text, View, StyleSheet, TouchableWithoutFeedback, AsyncStorage } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import Picture from '../components/Picture';
-
-import {dark, green} from '../colorPallete';
+import Picture from '../../components/Picture';
+import {dark, green} from '../../colorPallete';
 
 export class Profile extends Component {
   static navigationOptions = ({navigation}) => {
@@ -23,6 +22,20 @@ export class Profile extends Component {
     };
   };
 
+  state = {
+    name: '',
+    image: null,
+  }
+
+  async componentDidMount() {
+    const dataUser = await AsyncStorage.getItem('dataUser');
+    const user = JSON.parse(dataUser);
+    this.setState({
+      name: user.name,
+      image: user.imageUrl
+    });
+  }
+
   handleLogout = async () => {
     let token = await AsyncStorage.getItem('token');
     if (token) {
@@ -35,8 +48,8 @@ export class Profile extends Component {
     return (
       <View style={{flex: 1}}>
         <View style={styles.profile}>
-          <Picture />
-          <Text style={styles.yourName}>Your Name</Text>
+          <Picture image={this.state.image} />
+          <Text style={styles.yourName}>{this.state.name}</Text>
         </View>
         <TouchableWithoutFeedback
           onPress={() => this.props.navigation.navigate('MyWebtoon')}>

@@ -8,97 +8,83 @@ import {
   StyleSheet,
   Share,
   TouchableWithoutFeedback,
+  Dimensions,
 } from 'react-native';
-
+import axios from '../helpers/axios';
+import convertDate from '../helpers/date';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {BallIndicator} from 'react-native-indicators';
+
+import {green} from '../colorPallete';
 
 const HEADER_MAX_HEIGHT = 250;
 const HEADER_MIN_HEIGHT = 50;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-const details = [
-  {
-    episode: '7',
-    image:
-      'https://swebtoon-phinf.pstatic.net/20180830_36/1535615172886xSese_JPEG/1535615172834143667.jpg?type=q90',
-    published: '8 January 2019',
-  },
-  {
-    episode: '6',
-    image:
-      'https://swebtoon-phinf.pstatic.net/20180830_36/1535615172886xSese_JPEG/1535615172834143667.jpg?type=q90',
-    published: '8 January 2019',
-  },
-  {
-    episode: '5',
-    image:
-      'https://swebtoon-phinf.pstatic.net/20180830_36/1535615172886xSese_JPEG/1535615172834143667.jpg?type=q90',
-    published: '8 January 2019',
-  },
-  {
-    episode: '4',
-    image:
-      'https://swebtoon-phinf.pstatic.net/20180827_132/1535380329264w7rd9_JPEG/1535380329232143659.jpg?type=q90',
-    published: '28 December 2018',
-  },
-  {
-    episode: '3',
-    image:
-      'https://swebtoon-phinf.pstatic.net/20180820_103/1534768339463nG720_JPEG/1534768339426143643.jpg?type=q90',
-    published: '21 December 2018',
-  },
-  {
-    episode: '2',
-    image:
-      'https://swebtoon-phinf.pstatic.net/20180815_26/1534307033273c3ku7_PNG/thumb_1534307013586143634.png?type=q90',
-    published: '15 December 2018',
-  },
-  {
-    episode: '1',
-    image:
-      'https://swebtoon-phinf.pstatic.net/20180816_264/15343831943986uGfh_JPEG/1534383194362143623.jpg?type=q90',
-    published: '8 December 2018',
-  },
-  {
-    episode: '0',
-    image:
-      'https://swebtoon-phinf.pstatic.net/20180816_60/1534383160207RqTJG_JPEG/1534383160169143610.jpg?type=q90',
-    published: '1 December 2018',
-  },
-];
-
 export class DetailWebtoon extends Component {
   state = {
     scrollY: new Animated.Value(0),
+    episodes: null,
   };
 
-  renderEpisode() {
-    return (
-      <View style={styles.scrollViewContent}>
-        {details.map((detail, i) => (
-          <TouchableWithoutFeedback
-            onPress={() =>
-              this.props.navigation.navigate('DetailEpisode', {
-                episode: detail.episode,
-              })
-            }>
-            <View key={i} style={styles.card}>
-              <Image
-                source={{uri: detail.image}}
-                style={{height: 80, width: 80}}
-              />
-              <View style={{marginLeft: 15, justifyContent: 'space-evenly'}}>
-                <Text style={{fontSize: 15}}>EPISODE {detail.episode}</Text>
-                <Text style={{fontSize: 12, color: '#bbb'}}>
-                  {detail.published}
-                </Text>
-              </View>
-            </View>
-          </TouchableWithoutFeedback>
-        ))}
-      </View>
-    );
+  async componentDidMount() {
+    const id = this.props.navigation.getParam('id');
+    const {data} = await axios({
+      method: 'GET',
+      url: `/sanstoons/${id}/episodes`,
+    });
+
+    this.setState({episodes: data});
   }
+
+  renderEpisode = () => {
+    const {episodes} = this.state;
+
+    let renderContent;
+    if (episodes == null) {
+      renderContent = (
+        <View style={styles.bottomContainer}>
+          <BallIndicator color={green} />
+        </View>
+      );
+    } else if (episodes.length) {
+      renderContent = (
+        <View>
+          {episodes.map((episode, i) => (
+            <TouchableWithoutFeedback
+              onPress={() =>
+                this.props.navigation.navigate('DetailEpisode', {
+                  episode: episode.episode,
+                })
+              }>
+              <View key={i} style={styles.card}>
+                <Image
+                  source={{uri: episode.image}}
+                  style={{height: 80, width: 80}}
+                />
+                <View style={{marginLeft: 15, justifyContent: 'space-evenly'}}>
+                  <Text style={{fontSize: 16}}>{episode.title}</Text>
+                  <Text style={{fontSize: 12, color: '#bbb'}}>
+                    {convertDate(new Date(episode.createdAt))}
+                  </Text>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          ))}
+        </View>
+      );
+    } else if (!episodes.length) {
+      renderContent = (
+        <View style={styles.bottomContainer}>
+          <Text style={{fontSize: 13}}>
+            The creator not yet published any episode.
+          </Text>
+        </View>
+      );
+    }
+
+    return <View style={styles.scrollViewContent}>{renderContent}</View>;
+  };
 
   render() {
     const headerHeight = this.state.scrollY.interpolate({
@@ -209,6 +195,14 @@ const styles = StyleSheet.create({
     width: null,
     height: HEADER_MAX_HEIGHT,
     resizeMode: 'cover',
+  },
+  bottomContainer: {
+    flex: 1,
+    width: Dimensions.get('window').width,
+    height:
+      Dimensions.get('window').height - (HEADER_MAX_HEIGHT + HEADER_MIN_HEIGHT),
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

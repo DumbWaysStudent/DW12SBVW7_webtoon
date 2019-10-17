@@ -18,8 +18,8 @@ export const SmallHorizontalCard = ({
   button,
   eventTrigger,
 }) => {
-  const {image, title, name} = data;  
-  const navigate = () => navigation.navigate(route, {title, image, name});
+  const {image, title, name, id, genre} = data;  
+  const navigate = () => navigation.navigate(route, {title, image, name, id, genre});
   let subTitle;
 
   const renderDeleteButton = (

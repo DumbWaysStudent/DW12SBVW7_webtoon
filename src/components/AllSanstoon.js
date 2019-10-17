@@ -23,8 +23,10 @@ function HorizontalCard({sanstoon, navigation, handleFavorite}) {
     <TouchableWithoutFeedback
       onPress={() =>
         navigation.navigate('DetailWebtoon', {
+          id: sanstoon.id,
           title: sanstoon.title,
           image: sanstoon.image,
+          genre: sanstoon.genre,
         })
       }>
       <View style={styles.cardContainer}>

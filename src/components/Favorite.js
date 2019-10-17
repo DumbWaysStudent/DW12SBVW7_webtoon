@@ -18,8 +18,10 @@ function VerticalCard({navigation, favorite, checker}) {
     <TouchableWithoutFeedback
       onPress={() =>
         navigation.navigate('DetailWebtoon', {
+          id: favorite.id,
           title: favorite.title,
           image: favorite.image,
+          genre: sanstoon.genre,
         })
       }>
       <View style={[styles.favCard, {marginRight: rightMargin}]}>

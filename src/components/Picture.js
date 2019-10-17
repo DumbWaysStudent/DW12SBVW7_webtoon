@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 export class Picture extends Component {
   render() {
-    console.log(this.props.avatarSource);
+    // console.log(this.props.avatarSource, '===> picture component');
     return (
       <View style={styles.profile}>
         <View style={styles.profileImage}>
