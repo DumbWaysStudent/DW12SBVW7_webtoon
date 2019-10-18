@@ -10,6 +10,7 @@ const sanstoonRoutes = require('./routes/sanstoon');
 const userRoutes = require('./routes/user');
 
 app.use(express.json());
+app.use('/uploads', express.static('uploads'));
 
 app.group('/api/v1', routes => {
   routes.use('/', indexRoutes);

@@ -46,10 +46,14 @@ exports.findAllSanstoon = async (req, res) => {
         ) {
           return (
             item.isFavorite == true &&
-            new RegExp('.*' + queryTitle + '.*').test(title.toLowerCase())
+            new RegExp('.*' + queryTitle.toLowerCase() + '.*').test(
+              title.toLowerCase(),
+            )
           );
         } else if (req.query.hasOwnProperty('title')) {
-          return new RegExp('.*' + queryTitle + '.*').test(title.toLowerCase());
+          return new RegExp('.*' + queryTitle.toLowerCase() + '.*').test(
+            title.toLowerCase(),
+          );
         } else if (
           req.query.hasOwnProperty('is_favorite') &&
           req.query['is_favorite'] == 'true'
@@ -83,7 +87,14 @@ exports.findAllUserToon = async (req, res) => {
             attributes: [],
           },
         },
+        {
+          model: Episode,
+          as: 'Episode',
+        },
       ],
+      where: {
+        created_by: req.authorize_user.id,
+      },
     });
 
     const userToons = data.map(item => {
@@ -94,6 +105,7 @@ exports.findAllUserToon = async (req, res) => {
         image: item.image,
         isFavorite: item.isFavorite.some(v => v.id == req.authorize_user.id),
         favoriteCount: item.isFavorite.length,
+        episodes: item.Episode.length + '',
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
         created_by: item.created_by,
@@ -108,11 +120,14 @@ exports.findAllUserToon = async (req, res) => {
 
 exports.createToon = async (req, res) => {
   try {
+    const noImage =
+    'https://smart-akis.com/SFCPPortal/app/img/picture-not-available.jpg';
+    const imageUrl = req.file.path ? req.file.path : noImage;
+
     const toon = {
       title: req.body.title,
       genre: req.body.genre,
-      image:
-        'https://i.pinimg.com/originals/1b/33/19/1b33195fbe69f9cfbe74585e97ff6eb4.jpg',
+      image: imageUrl,
       created_by: req.authorize_user.id,
     };
     const data = await Sanstoon.create(toon);
@@ -127,8 +142,7 @@ exports.updateUserToon = async (req, res) => {
     const toon = {
       title: req.body.title,
       genre: req.body.genre,
-      image:
-        'https://i.pinimg.com/originals/1b/33/19/1b33195fbe69f9cfbe74585e97ff6eb4.jpg',
+      image: req.file.path,
       created_by: req.authorize_user.id,
     };
     const data = await Sanstoon.update(toon, {

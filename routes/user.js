@@ -1,13 +1,20 @@
 const routes = require('express').Router();
 const { authenticate, authorize } = require('../middlewares/auth');
+const images = require('../helpers/images');
 
 const { findAllUserToon, createToon, updateUserToon, deleteUserToon } = require('../controllers/sanstoon');
 const { findAllUserEpisode, createEpisode, updateEpisode, deleteEpisode } = require('../controllers/episode');
 const { findAllUserPages, createPage, deletePage } = require('../controllers/page');
 
+const { editProfile, findOne } = require('../controllers/user');
+
+// Profile
+routes.get('/:userId/profile', findOne);
+routes.put('/:userId/profile', authenticate, authorize, images.upload.single('img'), editProfile);
+
 // Sanstoon
 routes.get('/:userId/sanstoons', authenticate, authorize, findAllUserToon);
-routes.post('/:userId/sanstoon', authenticate, authorize, createToon);
+routes.post('/:userId/sanstoon', authenticate, authorize, images.upload.single('img'), createToon);
 routes.put('/:userId/sanstoon/:sanstoonId', authenticate, authorize, updateUserToon);
 routes.delete('/:userId/sanstoon/:sanstoonId', authenticate, authorize, deleteUserToon);
 

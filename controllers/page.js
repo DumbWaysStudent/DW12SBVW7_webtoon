@@ -21,6 +21,7 @@ exports.findAllPages = async (req, res) => {
 
     const pages = data.map(item => {
       const objPages = {
+        id: item.id,
         page: item.page,
         image: item.image,
         createdAt: item.createdAt,

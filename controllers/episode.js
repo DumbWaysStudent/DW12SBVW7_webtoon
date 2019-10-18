@@ -10,10 +10,12 @@ exports.findAllEpisode = async (req, res) => {
           where: { id: req.params.sanstoonId },
         },
       ],
+      order: [['id', 'DESC']],
     });
 
     const episodes = data.map(item => {
       const objEpisode = {
+        id: item.id,
         sanstoon_title: item.Sanstoon.title,
         title: item.title,
         image: item.image,
@@ -38,6 +40,7 @@ exports.findAllUserEpisode = async (req, res) => {
           where: { id: req.params.sanstoonId },
         },
       ],
+      order: [['id', 'DESC']],
     });
     const episodes = data.map(item => {
       const objEpisode = {
