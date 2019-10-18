@@ -21,7 +21,7 @@ export class Login extends Component {
     try {
       const {data} = await axios({
         method: 'POST',
-        url: '/login',
+        url: '/api/v1/login',
         data: {
           email: this.state.email,
           password: this.state.password,

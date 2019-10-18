@@ -32,22 +32,20 @@ export class MyWebtoon extends Component {
 
     const {data} = await axios({
       method: 'GET',
-      url: `/user/${user.id}/sanstoons`,
+      url: `/api/v1/user/${user.id}/sanstoons`,
       headers: {
         Authorization: token,
       },
     });
 
     this.setState({myWebtoon: data});
-  }
+  };
 
   render() {
     const {navigation} = this.props;
     return (
       <View style={{flex: 1}}>
-        <NavigationEvents
-          onDidFocus={this.fetchMyToons}
-        />
+        <NavigationEvents onDidFocus={this.fetchMyToons} />
         <FlatList
           contentContainerStyle={{marginTop: 20}}
           data={this.state.myWebtoon}

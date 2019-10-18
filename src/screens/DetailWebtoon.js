@@ -31,7 +31,7 @@ export class DetailWebtoon extends Component {
     const id = this.props.navigation.getParam('id');
     const {data} = await axios({
       method: 'GET',
-      url: `/sanstoons/${id}/episodes`,
+      url: `api/v1/sanstoons/${id}/episodes`,
     });
 
     this.setState({episodes: data});

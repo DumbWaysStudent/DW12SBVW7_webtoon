@@ -119,7 +119,7 @@ export const episodes = [
     id: 1,
     name: 'image_1',
     image:
-      'https://swebtoon-phinf.pstatic.net/20190123_235/1548235775159edGIC_JPEG/1548235775138143615.jpg',
+      'http://192.168.1.51:3000/uploads/img-1571370112029.jpg',
   },
   {
     id: 2,

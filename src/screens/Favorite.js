@@ -24,7 +24,7 @@ export class Favourite extends Component {
 
     const {data} = await axios({
       method: 'GET',
-      url: `/sanstoons?is_favorite=true`,
+      url: `/api/v1/sanstoons?is_favorite=true`,
       headers: {
         Authorization: token,
       },
@@ -50,7 +50,7 @@ export class Favourite extends Component {
 
     const {data} = await axios({
       method: 'GET',
-      url: `/sanstoons?is_favorite=true&title=${title}`,
+      url: `/api/v1/sanstoons?is_favorite=true&title=${title}`,
       headers: {
         Authorization: token,
       },

@@ -64,7 +64,7 @@ export class DetailEpisode extends Component {
 
     const {data} = await axios({
       method: 'GET',
-      url: `/sanstoons/${santoonId}/episode/${episodeId}`,
+      url: `/api/v1/sanstoons/${santoonId}/episode/${episodeId}`,
     });
 
     this.setState({pages: data});

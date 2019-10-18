@@ -8,39 +8,59 @@ import Picture from '../../components/Picture';
 
 export class EditProfile extends Component {
   state = {
-    avatarSource: null,
     name: '',
+    image: '',
+    dataImage: null,
   };
 
-  async componentDidMount() {
-    const dataUser = await AsyncStorage.getItem('dataUser');
-    const user = JSON.parse(dataUser);
+  componentDidMount() {
+    const name = this.props.navigation.getParam('name');
+    const image = this.props.navigation.getParam('image');
     this.setState({
-      name: user.name,
-      image: user.imageUrl,
+      name,
+      image,
     });
   }
 
-  handleUploadPhoto = () => {
+  handleImagePicker = () => {
     ImagePicker.showImagePicker(response => {
-      // Same code as in above section!
-      // console.log(response);
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        const data = new FormData();
-        data.append('name', 'avatar');
-        data.append('fileData', {
+      if (response.uri) {
+        const dataImage = {
           uri: response.uri,
           type: response.type,
           name: response.fileName,
-        });
+        };
+
+        this.setState({image: response.uri, dataImage});
       }
     });
+  };
+
+  handleUpload = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const dataUser = await AsyncStorage.getItem('dataUser');
+      const user = JSON.parse(dataUser);
+
+      const data = new FormData();
+      data.append('name', this.state.name);
+      if (this.state.dataImage) data.append('img', this.state.dataImage);
+
+      const response = await axios({
+        method: 'PUT',
+        url: `/api/v1/user/${user.id}/profile`,
+        data,
+        headers: {
+          Authorization: token,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      if (response.status == 200) {
+          this.props.navigation.pop();
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   render() {
@@ -52,19 +72,19 @@ export class EditProfile extends Component {
             name="check"
             size={25}
             color="#009b00"
-            onPress={() => this.props.navigation.pop()}
+            onPress={this.handleUpload}
           />
         </View>
         <View style={styles.profile}>
-          <Picture avatarSource={this.state.avatarSource} />
+          <Picture image={this.state.image} />
           <View style={styles.camera}>
-            <Icon name="camera" size={20} onPress={this.handleUploadPhoto} />
+            <Icon name="camera" size={20} onPress={this.handleImagePicker} />
           </View>
           <TextInput
             style={styles.nameInput}
             placeholder="Your Name"
             value={this.state.name}
-            onChange={input => this.setState({name: input})}
+            onChangeText={input => this.setState({name: input})}
           />
         </View>
       </View>

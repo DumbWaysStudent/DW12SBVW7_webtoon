@@ -36,7 +36,7 @@ export class ForYou extends Component {
 
     const {data} = await axios({
       method: 'GET',
-      url: '/sanstoons',
+      url: '/api/v1/sanstoons',
       headers: {
         Authorization: token,
       },
@@ -58,7 +58,7 @@ export class ForYou extends Component {
       : 'Added to My Favorite';
     const {data} = await axios({
       method: method,
-      url: `/sanstoons/${id}/favorite`,
+      url: `/api/v1/sanstoons/${id}/favorite`,
       headers: {
         Authorization: token,
       },

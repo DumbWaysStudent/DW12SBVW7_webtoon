@@ -7,12 +7,19 @@ import {
   AsyncStorage,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import axios from '../../helpers/axios';
+import {NavigationEvents} from 'react-navigation';
 
 import Picture from '../../components/Picture';
 import {dark, green} from '../../colorPallete';
 
+import { API } from 'react-native-dotenv';
+
+
 export class Profile extends Component {
   static navigationOptions = ({navigation}) => {
+    const name = navigation.getParam('name');
+    const image = navigation.getParam('image');
     return {
       title: 'Profile',
       headerTintColor: dark,
@@ -22,7 +29,12 @@ export class Profile extends Component {
           size={25}
           color={green}
           style={{marginRight: 20}}
-          onPress={() => navigation.navigate('EditProfile')}
+          onPress={() =>
+            navigation.navigate('EditProfile', {
+              name,
+              image,
+            })
+          }
         />
       ),
     };
@@ -30,17 +42,36 @@ export class Profile extends Component {
 
   state = {
     name: '',
-    image: null,
+    image: '',
   };
 
   async componentDidMount() {
     const dataUser = await AsyncStorage.getItem('dataUser');
     const user = JSON.parse(dataUser);
+    this.props.navigation.setParams({
+      name: user.name,
+      image: API + '/' + user.imageUrl,
+    });
     this.setState({
       name: user.name,
-      image: user.imageUrl,
+      image: user.image,
     });
   }
+
+  fetchUser = async () => {
+    const dataUser = await AsyncStorage.getItem('dataUser');
+    const user = JSON.parse(dataUser);
+    const {data} = await axios({
+      method: 'GET',
+      url: `/api/v1/user/${user.id}/profile`,
+    });
+    const setImage = data.imageUrl ? API + '/' + data.imageUrl : '';
+    this.setState({
+      name: data.name,
+      image: setImage,
+    });
+    await AsyncStorage.setItem('dataUser', JSON.stringify(data.dataUser));
+  };
 
   handleLogout = async () => {
     let token = await AsyncStorage.getItem('token');
@@ -53,6 +84,7 @@ export class Profile extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
+        <NavigationEvents onDidFocus={this.fetchUser} />
         <View style={styles.profile}>
           <Picture image={this.state.image} />
           <Text style={styles.yourName}>{this.state.name}</Text>

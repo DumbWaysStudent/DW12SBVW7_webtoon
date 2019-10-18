@@ -4,19 +4,17 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 export class Picture extends Component {
   render() {
-    // console.log(this.props.avatarSource, '===> picture component');
+    const {image} = this.props;
+    let renderImage;
+    if (image) {
+      renderImage = <Image source={{uri: image}} style={styles.profilePic} />;
+    } else {
+      renderImage = <Icon name="user" color="#ccc" size={140} />;
+    }
+
     return (
       <View style={styles.profile}>
-        <View style={styles.profileImage}>
-          {this.props.avatarSource ? (
-            <Image
-              source={this.props.avatarSource}
-              style={styles.profilePic}
-            />
-          ) : (
-            <Icon name="user" color="#ccc" size={140} />
-          )}
-        </View>
+        <View style={styles.profileImage}>{renderImage}</View>
       </View>
     );
   }
@@ -38,12 +36,12 @@ const styles = StyleSheet.create({
     height: 150,
   },
   profilePic: {
-   width: 150,
-   height: 150,
-   borderRadius: 100,
-   borderWidth: 2,
-  borderColor: 'gray',
-  }
+    width: 150,
+    height: 150,
+    borderRadius: 100,
+    borderWidth: 2,
+    borderColor: 'gray',
+  },
 });
 
 export default Picture;
