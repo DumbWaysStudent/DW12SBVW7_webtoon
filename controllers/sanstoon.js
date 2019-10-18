@@ -1,6 +1,9 @@
 const { Sanstoon, User, Favorite, Episode, Page } = require('../models');
+const noImage =
+  'https://smart-akis.com/SFCPPortal/app/img/picture-not-available.jpg';
 
-exports.findAllSanstoon = async (req, res) => {
+exports.findAllToons = async (req, res) => {
+  const isLogin = req.authorize_user ? true : false; // check status login
   try {
     let data = await Sanstoon.findAll({
       include: [
@@ -23,14 +26,29 @@ exports.findAllSanstoon = async (req, res) => {
 
     const sanstoons = data
       .map(item => {
+        /**
+         * CASE : LOGIN
+         * ============
+         * If user login, check id user who currently login on isFavorite columns,
+         * if there's id user on isFavorite array, then assign the value true
+         * else assign the value to false
+         *
+         * CASE : NOT LOGIN
+         * =============
+         * Set isFavorite to false if user not login.
+         */
+        const isFavorite = isLogin
+          ? item.isFavorite.some(v => v.id == req.authorize_user.id)
+          : false;
         const objSanstoon = {
           id: item.id,
           title: item.title,
           genre: item.genre,
           image: item.image,
           author: item.author.name,
-          isFavorite: item.isFavorite.some(v => v.id == req.authorize_user.id),
           favoriteCount: item.isFavorite.length,
+          isFavorite,
+          isLogin,
           createdAt: item.createdAt,
           updatedAt: item.updatedAt,
         };
@@ -75,11 +93,6 @@ exports.findAllUserToon = async (req, res) => {
       include: [
         {
           model: User,
-          as: 'author',
-          attributes: ['name'],
-        },
-        {
-          model: User,
           as: 'isFavorite',
           attributes: ['id', 'name'],
           through: {
@@ -106,9 +119,9 @@ exports.findAllUserToon = async (req, res) => {
         isFavorite: item.isFavorite.some(v => v.id == req.authorize_user.id),
         favoriteCount: item.isFavorite.length,
         episodes: item.Episode.length + '',
+        created_by: item.created_by,
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
-        created_by: item.created_by,
       };
       return userToon;
     });
@@ -120,8 +133,6 @@ exports.findAllUserToon = async (req, res) => {
 
 exports.createToon = async (req, res) => {
   try {
-    const noImage =
-    'https://smart-akis.com/SFCPPortal/app/img/picture-not-available.jpg';
     const imageUrl = req.file.path ? req.file.path : noImage;
 
     const toon = {

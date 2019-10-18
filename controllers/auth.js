@@ -58,7 +58,7 @@ exports.login = (req, res) => {
         res.status(400).json({ message: 'Wrong email/password' });
       }
     })
-    .catch(err => {
-      res.status(500).json({ error: err });
+    .catch(error => {
+      res.status(500).json({ error });
     });
 };

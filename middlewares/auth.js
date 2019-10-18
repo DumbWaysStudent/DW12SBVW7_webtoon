@@ -2,17 +2,16 @@ const jwt = require('jsonwebtoken');
 
 exports.authenticate = (req, res, next) => {
   const auth = req.headers.authorization;
-  try {
-    if (auth) {
+
+  if (req.headers.authorization) {
+    try {
       const decoded = jwt.verify(auth, process.env.KEY);
       req.authorize_user = decoded;
-      next();
-    } else {
-      res.status(401).json({ auth: 'Unauthorized' });
+    } catch (error) {
+      res.status(401).json({ auth: 'invalid token' });
     }
-  } catch (error) {
-    res.status(403).json({ auth: 'invalid token' });
   }
+  next();
 };
 
 exports.authorize = (req, res, next) => {
