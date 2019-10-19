@@ -156,9 +156,9 @@ exports.updateUserToon = async (req, res) => {
       where: { id: req.params.santoonId },
     });
     if (findToon.createdBy !== req.authorize_user.id) {
-      res
+      return res
         .status(401)
-        .json({ error: 'You dont have permission to access this link!' });
+        .json({ error: 'Permission denied!' });
     }
     const toon = {
       title: req.body.title,
@@ -187,9 +187,9 @@ exports.deleteUserToon = async (req, res) => {
       where: { id: req.params.santoonId },
     });
     if (findToon.createdBy !== req.authorize_user.id) {
-      res
+      return res
         .status(401)
-        .json({ error: 'You dont have permission to access this link!' });
+        .json({ error: 'Permission denied!' });
     }
     await Santoon.destroy({
       where: { id: req.params.santoonId },
