@@ -62,7 +62,6 @@ exports.findAllUserEpisode = async (req, res) => {
     });
     res.json(episodes);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: 'Something went wrong, please try again!' });
   }
 };
@@ -74,7 +73,7 @@ exports.createEpisode = async (req, res) => {
       where: { id: req.params.santoonId },
     });
     if (validateToon.createdBy !== req.authorize_user.id) {
-      return res.status(401).json({ error: 'Permission denied!' });
+      return res.status(401).json({ error: 'Access Denied!' });
     }
     const episode = {
       title: req.body.title,
@@ -82,59 +81,43 @@ exports.createEpisode = async (req, res) => {
       santoonId: req.params.santoonId,
     };
     const data = await Episode.create(episode);
-    res.status(201).json({
-      success: 'Episode created!',
-      data,
-    });
+    res.status(201).json(data);
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong, please try again!' });
   }
 };
 
 exports.updateEpisode = async (req, res) => {
-  const imageUrl = req.file ? req.file.path : noImage;
   try {
-    const validateEpisode = await Episode.findOne({
-      where: { id: req.params.episodeId },
+    const validate = await Episode.findOne({
+      where: {
+        id: req.params.episodeId,
+        santoonId: req.params.santoonId,
+      },
       include: {
         model: Santoon,
         where: {
-          id: req.params.santoonId,
           createdBy: req.authorize_user.id,
         },
       },
     });
-    if (!validateEpisode) {
-      return res.status(400).json({ error: 'Invalid' });
+    if (!validate) {
+      return res.status(401).json({ error: 'Access Denied' });
     }
-    
+
     const episode = {
       title: req.body.title,
-      image: imageUrl,
+      image: req.file ? req.file.path : validate.image,
       santoonId: req.params.santoonId,
     };
 
     await Episode.update(episode, {
       where: { id: req.params.episodeId },
-      include: {
-        model: Santoon,
-        where: {
-          id: req.params.santoonId,
-          createdBy: req.authorize_user.id,
-        },
-      },
     });
-    const returnUpdated = await Episode.findOne({
+    const data = await Episode.findOne({
       where: { id: req.params.episodeId },
     });
-    if (!returnUpdated) {
-      return res.status(400).json({ error: 'Not found!' });
-    } else {
-      return res.json({
-        success: 'Episode updated!',
-        returnUpdated,
-      });
-    }
+    res.json(data);
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong, please try again!' });
   }
@@ -142,33 +125,25 @@ exports.updateEpisode = async (req, res) => {
 
 exports.deleteEpisode = async (req, res) => {
   try {
-    const validateEpisode = await Episode.findOne({
-      where: { id: req.params.episodeId },
+    const validate = await Episode.findOne({
+      where: {
+        id: req.params.episodeId,
+        santoonId: req.params.santoonId,
+      },
       include: {
         model: Santoon,
         where: {
-          id: req.params.santoonId,
           createdBy: req.authorize_user.id,
         },
       },
     });
-    if (!validateEpisode) {
+    if (!validate) {
       return res.status(400).json({ error: 'Invalid' });
     }
     await Episode.destroy({
       where: { id: req.params.episodeId },
-      include: {
-        model: Santoon,
-        where: {
-          id: req.params.santoonId,
-          createdBy: req.authorize_user.id,
-        },
-      },
     });
-    res.json({
-      id: req.params.episodeId,
-      success: 'Episode deleted!',
-    });
+    res.json({ id: req.params.episodeId });
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong, please try again!' });
   }

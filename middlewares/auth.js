@@ -16,6 +16,6 @@ exports.authorize = (req, res, next) => {
   } else {
     res
       .status(401)
-      .json({ auth: 'You dont have permission to access this route!' });
+      .json({ error: 'Access Denied!' });
   }
 };

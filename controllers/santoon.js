@@ -3,7 +3,7 @@ const noImage =
   'https://smart-akis.com/SFCPPortal/app/img/picture-not-available.jpg';
 
 exports.findAllToons = async (req, res) => {
-  const isLogin = req.authorize_user ? true : false; // check status login
+  const isLogin = req.authorize_user ? true : false;
   try {
     const data = await Santoon.findAll({
       include: [
@@ -24,19 +24,20 @@ exports.findAllToons = async (req, res) => {
       ],
     });
 
+    /**
+     * CASE : LOGIN
+     * ============
+     * If user login, check id user who currently login on isFavorite column,
+     * if there's id user on isFavorite lists, then assign the value true
+     * else assign the value to false
+     *
+     * CASE : NOT LOGIN
+     * =============
+     * Set isFavorite to false if user not login.
+     */
+
     const santoons = data
       .map(item => {
-        /**
-         * CASE : LOGIN
-         * ============
-         * If user login, check id user who currently login on isFavorite columns,
-         * if there's id user on isFavorite array, then assign the value true
-         * else assign the value to false
-         *
-         * CASE : NOT LOGIN
-         * =============
-         * Set isFavorite to false if user not login.
-         */
         const isFavorite = isLogin
           ? item.isFavorite.some(v => v.id == req.authorize_user.id)
           : false;
@@ -81,6 +82,7 @@ exports.findAllToons = async (req, res) => {
           return item;
         }
       });
+
     res.json(santoons);
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong, please try again!' });
@@ -125,6 +127,7 @@ exports.findAllUserToon = async (req, res) => {
       };
       return userToon;
     });
+
     res.json(userToons);
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong, please try again!' });
@@ -141,10 +144,7 @@ exports.createToon = async (req, res, next) => {
       createdBy: req.authorize_user.id,
     };
     const data = await Santoon.create(toon);
-    res.status(201).json({
-      success: `Toon's created!`,
-      data,
-    });
+    res.status(201).json(data);
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong, please try again!' });
   }
@@ -152,18 +152,17 @@ exports.createToon = async (req, res, next) => {
 
 exports.updateUserToon = async (req, res) => {
   try {
-    const findToon = await Santoon.findOne({
+    const validate = await Santoon.findOne({
       where: { id: req.params.santoonId },
     });
-    if (findToon.createdBy !== req.authorize_user.id) {
-      return res
-        .status(401)
-        .json({ error: 'Permission denied!' });
+    // validate createdBy with user ID who's currently login
+    if (validate.createdBy !== req.authorize_user.id) {
+      return res.status(401).json({ error: 'Access Denied!' });
     }
     const toon = {
       title: req.body.title,
       genre: req.body.genre,
-      image: req.file ? req.file.path : findToon.image,
+      image: req.file ? req.file.path : validate.image,
       createdBy: req.authorize_user.id,
     };
     await Santoon.update(toon, {
@@ -172,10 +171,7 @@ exports.updateUserToon = async (req, res) => {
     const updatedToon = await Santoon.findOne({
       where: { id: req.params.santoonId },
     });
-    res.json({
-      success: `Toon's updated!`,
-      data: updatedToon,
-    });
+    res.json(updatedToon);
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong, please try again!' });
   }
@@ -183,21 +179,17 @@ exports.updateUserToon = async (req, res) => {
 
 exports.deleteUserToon = async (req, res) => {
   try {
-    const findToon = await Santoon.findOne({
+    const validate = await Santoon.findOne({
       where: { id: req.params.santoonId },
     });
-    if (findToon.createdBy !== req.authorize_user.id) {
-      return res
-        .status(401)
-        .json({ error: 'Permission denied!' });
+    // validate createdBy with user ID who's currently login
+    if (validate.createdBy !== req.authorize_user.id) {
+      return res.status(401).json({ error: 'Access Denied!' });
     }
     await Santoon.destroy({
       where: { id: req.params.santoonId },
     });
-    res.json({
-      id: req.params.santoonId,
-      success: `Toon's deleted!`
-    });
+    res.json({ id: req.params.santoonId });
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong, please try again!' });
   }

@@ -1,4 +1,6 @@
-const { Sanstoon, Episode, Page } = require('../models');
+const { Santoon, Episode, Page, User } = require('../models');
+const noImage =
+  'https://smart-akis.com/SFCPPortal/app/img/picture-not-available.jpg';
 
 exports.findAllPages = async (req, res) => {
   try {
@@ -10,9 +12,9 @@ exports.findAllPages = async (req, res) => {
           where: { id: req.params.episodeId },
           include: [
             {
-              model: Sanstoon,
+              model: Santoon,
               attributes: ['id', 'title', 'genre'],
-              where: { id: req.params.sanstoonId },
+              where: { id: req.params.santoonId },
             },
           ],
         },
@@ -24,6 +26,8 @@ exports.findAllPages = async (req, res) => {
         id: item.id,
         page: item.page,
         image: item.image,
+        episodeTitle: item.Episode.title,
+        toonTitle: item.Episode.Santoon.title,
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
       };
@@ -31,7 +35,7 @@ exports.findAllPages = async (req, res) => {
     });
     res.json(pages);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ error: 'Something went wrong, please try again!' });
   }
 };
 
@@ -45,42 +49,103 @@ exports.findAllUserPages = async (req, res) => {
           where: { id: req.params.episodeId },
           include: [
             {
-              model: Sanstoon,
-              attributes: ['id', 'title', 'genre'],
-              where: { id: req.params.sanstoonId },
+              model: Santoon,
+              where: {
+                id: req.params.santoonId,
+                createdBy: req.authorize_user.id,
+              },
             },
           ],
         },
       ],
     });
-    res.send(data);
+    const pages = data.map(item => {
+      const objPages = {
+        id: item.id,
+        page: item.page,
+        image: item.image,
+        episodeTitle: item.Episode.title,
+        toonTitle: item.Episode.Santoon.title,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt,
+      };
+      return objPages;
+    });
+    res.send(pages);
   } catch (error) {
     res.status(500).json(error);
   }
 };
 
 exports.createPage = async (req, res) => {
+  const imageUrl = req.file ? req.file.path : noImage;
   try {
+    const validate = await Page.findOne({
+      where: {
+        episodeId: req.params.episodeId,
+      },
+      include: {
+        model: Episode,
+        where: {
+          santoonId: req.params.santoonId,
+        },
+        include: {
+          model: Santoon,
+          where: {
+            createdBy: req.authorize_user.id,
+          },
+        },
+      },
+    });
+    if (!validate) {
+      return res.status(401).json({ error: 'Access Denied!' });
+    }
     const page = {
       page: req.body.page,
-      image:
-        'https://swebtoon-phinf.pstatic.net/20140617_248/1403004901360ABk5x_JPEG/tower_000.jpg',
-      episode_id: req.params.episodeId,
+      image: imageUrl,
+      episodeId: req.params.episodeId,
     };
     const data = await Page.create(page);
-    res.json(data);
+    res.status(201).json({
+      success: 'Page created!',
+      data,
+    });
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ error: 'Something went wrong, please try again!' });
   }
 };
 
 exports.deletePage = async (req, res) => {
   try {
-    await Page.destroy({
-      where: { episode_id: req.params.episodeId, id: req.params.im },
+    const validate = await Page.findOne({
+      where: {
+        id: req.params.imageId,
+        episodeId: req.params.episodeId,
+      },
+      include: {
+        model: Episode,
+        where: {
+          santoonId: req.params.santoonId,
+        },
+        include: {
+          model: Santoon,
+          where: {
+            createdBy: req.authorize_user.id,
+          },
+        },
+      },
     });
-    res.json({ id: req.params.imageId });
+    if (!validate) {
+      return res.status(401).json({ error: 'Access Denied!' });
+    }
+    await Page.destroy({
+      where: { id: req.params.imageId },
+    });
+    res.json({
+      success: 'Page deleted!',
+      id: req.params.imageId,
+    });
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ error: 'Something went wrong, please try again!' });
   }
 };

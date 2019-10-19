@@ -94,6 +94,7 @@ routes.post(
   '/:userId/santoon/:santoonId/episode/:episodeId/image',
   authenticate,
   authorize,
+  images.upload.single('img'),
   createPage,
 );
 routes.delete(
