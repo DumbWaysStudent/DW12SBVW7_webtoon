@@ -52,6 +52,7 @@ exports.findAllUserEpisode = async (req, res) => {
     });
     const episodes = data.map(item => {
       const objEpisode = {
+        id: item.id,
         title: item.title,
         image: item.image,
         createdAt: item.createdAt,
@@ -67,50 +68,108 @@ exports.findAllUserEpisode = async (req, res) => {
 };
 
 exports.createEpisode = async (req, res) => {
+  const imageUrl = req.file ? req.file.path : noImage;
   try {
-    const imageUrl = req.file.path ? req.file.path : noImage;
-    const validateToon = await Santoon.findAll({
-      // where: { id: req.params.santoonId }
-    })
-    // const episode = {
-    //   title: req.body.title,
-    //   image: imageUrl,
-    //   santoonId: req.params.santoonId,
-    // };
-    // const data = await Episode.create(episode);
-    res.json({msg:'oke'});
+    const validateToon = await Santoon.findOne({
+      where: { id: req.params.santoonId },
+    });
+    if (validateToon.createdBy !== req.authorize_user.id) {
+      return res.status(401).json({ error: 'Permission denied!' });
+    }
+    const episode = {
+      title: req.body.title,
+      image: imageUrl,
+      santoonId: req.params.santoonId,
+    };
+    const data = await Episode.create(episode);
+    res.status(201).json({
+      success: 'Episode created!',
+      data,
+    });
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ error: 'Something went wrong, please try again!' });
   }
 };
 
 exports.updateEpisode = async (req, res) => {
+  const imageUrl = req.file ? req.file.path : noImage;
   try {
+    const validateEpisode = await Episode.findOne({
+      where: { id: req.params.episodeId },
+      include: {
+        model: Santoon,
+        where: {
+          id: req.params.santoonId,
+          createdBy: req.authorize_user.id,
+        },
+      },
+    });
+    if (!validateEpisode) {
+      return res.status(400).json({ error: 'Invalid' });
+    }
+    
     const episode = {
       title: req.body.title,
-      image:
-        'https://i.pinimg.com/originals/1b/33/19/1b33195fbe69f9cfbe74585e97ff6eb4.jpg',
-      sanstoon_id: req.params.sanstoonId,
+      image: imageUrl,
+      santoonId: req.params.santoonId,
     };
-    const data = await Episode.update(episode, {
+
+    await Episode.update(episode, {
+      where: { id: req.params.episodeId },
+      include: {
+        model: Santoon,
+        where: {
+          id: req.params.santoonId,
+          createdBy: req.authorize_user.id,
+        },
+      },
+    });
+    const returnUpdated = await Episode.findOne({
       where: { id: req.params.episodeId },
     });
-    if (data) {
-      const updatedData = await Episode.findOne({
-        where: { id: req.params.episodeId },
+    if (!returnUpdated) {
+      return res.status(400).json({ error: 'Not found!' });
+    } else {
+      return res.json({
+        success: 'Episode updated!',
+        returnUpdated,
       });
-      res.json(updatedData);
     }
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ error: 'Something went wrong, please try again!' });
   }
 };
 
 exports.deleteEpisode = async (req, res) => {
   try {
-    await Episode.destroy({ where: { id: req.params.episodeId } });
-    res.json({ id: req.params.episodeId });
+    const validateEpisode = await Episode.findOne({
+      where: { id: req.params.episodeId },
+      include: {
+        model: Santoon,
+        where: {
+          id: req.params.santoonId,
+          createdBy: req.authorize_user.id,
+        },
+      },
+    });
+    if (!validateEpisode) {
+      return res.status(400).json({ error: 'Invalid' });
+    }
+    await Episode.destroy({
+      where: { id: req.params.episodeId },
+      include: {
+        model: Santoon,
+        where: {
+          id: req.params.santoonId,
+          createdBy: req.authorize_user.id,
+        },
+      },
+    });
+    res.json({
+      id: req.params.episodeId,
+      success: 'Episode deleted!',
+    });
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ error: 'Something went wrong, please try again!' });
   }
 };

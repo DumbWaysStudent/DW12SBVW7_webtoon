@@ -73,6 +73,7 @@ routes.put(
   '/:userId/santoon/:santoonId/episode/:episodeId',
   authenticate,
   authorize,
+  images.upload.single('img'),
   updateEpisode,
 );
 routes.delete(

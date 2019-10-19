@@ -196,6 +196,7 @@ exports.deleteUserToon = async (req, res) => {
     });
     res.json({
       id: req.params.santoonId,
+      success: `Toon's deleted!`
     });
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong, please try again!' });
