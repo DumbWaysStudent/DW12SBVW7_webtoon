@@ -6,7 +6,7 @@ const port = process.env.PORT || 3000;
 
 // routes
 const indexRoutes = require('./routes/index');
-const sanstoonRoutes = require('./routes/sanstoon');
+const sanstoonRoutes = require('./routes/santoon');
 const userRoutes = require('./routes/user');
 
 app.use(express.json());
@@ -14,7 +14,7 @@ app.use('/uploads', express.static('uploads'));
 
 app.group('/api/v1', routes => {
   routes.use('/', indexRoutes);
-  routes.use('/sanstoons', sanstoonRoutes);
+  routes.use('/santoons', sanstoonRoutes);
   routes.use('/user', userRoutes);
 });
 

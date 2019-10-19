@@ -1,11 +1,11 @@
-const { Sanstoon, User, Favorite, Episode, Page } = require('../models');
+const { Santoon, User, Favorite, Episode } = require('../models');
 const noImage =
   'https://smart-akis.com/SFCPPortal/app/img/picture-not-available.jpg';
 
 exports.findAllToons = async (req, res) => {
   const isLogin = req.authorize_user ? true : false; // check status login
   try {
-    let data = await Sanstoon.findAll({
+    const data = await Santoon.findAll({
       include: [
         {
           model: User,
@@ -24,7 +24,7 @@ exports.findAllToons = async (req, res) => {
       ],
     });
 
-    const sanstoons = data
+    const santoons = data
       .map(item => {
         /**
          * CASE : LOGIN
@@ -81,15 +81,15 @@ exports.findAllToons = async (req, res) => {
           return item;
         }
       });
-    res.json(sanstoons);
+    res.json(santoons);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ error: 'Something went wrong, please try again!' });
   }
 };
 
 exports.findAllUserToon = async (req, res) => {
   try {
-    let data = await Sanstoon.findAll({
+    let data = await Santoon.findAll({
       include: [
         {
           model: User,
@@ -102,11 +102,11 @@ exports.findAllUserToon = async (req, res) => {
         },
         {
           model: Episode,
-          as: 'Episode',
+          as: 'Episodes',
         },
       ],
       where: {
-        created_by: req.authorize_user.id,
+        createdBy: req.authorize_user.id,
       },
     });
 
@@ -118,8 +118,8 @@ exports.findAllUserToon = async (req, res) => {
         image: item.image,
         isFavorite: item.isFavorite.some(v => v.id == req.authorize_user.id),
         favoriteCount: item.isFavorite.length,
-        episodes: item.Episode.length + '',
-        created_by: item.created_by,
+        episodes: item.Episodes.length + '',
+        createdBy: item.createdBy,
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
       };
@@ -127,56 +127,77 @@ exports.findAllUserToon = async (req, res) => {
     });
     res.json(userToons);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ error: 'Something went wrong, please try again!' });
   }
 };
 
-exports.createToon = async (req, res) => {
+exports.createToon = async (req, res, next) => {
+  const imageUrl = req.file ? req.file.path : noImage;
   try {
-    const imageUrl = req.file.path ? req.file.path : noImage;
-
     const toon = {
       title: req.body.title,
       genre: req.body.genre,
       image: imageUrl,
-      created_by: req.authorize_user.id,
+      createdBy: req.authorize_user.id,
     };
-    const data = await Sanstoon.create(toon);
-    res.status(201).json(data);
+    const data = await Santoon.create(toon);
+    res.status(201).json({
+      success: `Toon's created!`,
+      data,
+    });
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ error: 'Something went wrong, please try again!' });
   }
 };
 
 exports.updateUserToon = async (req, res) => {
   try {
+    const findToon = await Santoon.findOne({
+      where: { id: req.params.santoonId },
+    });
+    if (findToon.createdBy !== req.authorize_user.id) {
+      res
+        .status(401)
+        .json({ error: 'You dont have permission to access this link!' });
+    }
     const toon = {
       title: req.body.title,
       genre: req.body.genre,
-      image: req.file.path,
-      created_by: req.authorize_user.id,
+      image: req.file ? req.file.path : findToon.image,
+      createdBy: req.authorize_user.id,
     };
-    const data = await Sanstoon.update(toon, {
-      where: { id: req.params.sanstoonId },
+    await Santoon.update(toon, {
+      where: { id: req.params.santoonId },
     });
-    if (data) {
-      const updatedData = await Sanstoon.findOne({
-        where: { id: req.params.sanstoonId },
-      });
-      res.json(updatedData);
-    }
+    const updatedToon = await Santoon.findOne({
+      where: { id: req.params.santoonId },
+    });
+    res.json({
+      success: `Toon's updated!`,
+      data: updatedToon,
+    });
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ error: 'Something went wrong, please try again!' });
   }
 };
 
 exports.deleteUserToon = async (req, res) => {
   try {
-    await Sanstoon.destroy({
-      where: { id: req.params.sanstoonId },
+    const findToon = await Santoon.findOne({
+      where: { id: req.params.santoonId },
     });
-    res.json({ id: req.params.sanstoonId });
+    if (findToon.createdBy !== req.authorize_user.id) {
+      res
+        .status(401)
+        .json({ error: 'You dont have permission to access this link!' });
+    }
+    await Santoon.destroy({
+      where: { id: req.params.santoonId },
+    });
+    res.json({
+      id: req.params.santoonId,
+    });
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ error: 'Something went wrong, please try again!' });
   }
 };

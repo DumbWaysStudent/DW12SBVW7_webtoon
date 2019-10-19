@@ -17,15 +17,15 @@ module.exports = {
       [
         {
           userId: 1,
-          sanstoonId: 1,
+          santoonId: 1,
         },
         {
           userId: 1,
-          sanstoonId: 2,
+          santoonId: 2,
         },
         {
           userId: 2,
-          sanstoonId: 1,
+          santoonId: 1,
         },
       ],
       {},

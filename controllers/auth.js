@@ -25,7 +25,7 @@ exports.register = (req, res) => {
       let objError = {};
       err.errors.forEach(error => {
         objError[error.path] = error.message;
-      });
+      });      
       res.status(400).json({ error: objError });
     });
 };
@@ -52,13 +52,13 @@ exports.login = (req, res) => {
             dataUser,
           });
         } else {
-          res.status(400).json({ message: 'Wrong email/password' });
+          res.status(400).json({ error: 'Wrong email/password' });
         }
       } else {
-        res.status(400).json({ message: 'Wrong email/password' });
+        res.status(400).json({ error: 'Wrong email/password' });
       }
     })
     .catch(error => {
-      res.status(500).json({ error });
+      res.status(500).json({ error: 'Something went wrong, please try again!' });
     });
 };

@@ -17,10 +17,10 @@ module.exports = {
         onDelete: 'cascade',
         onUpdate: 'cascade',
       },
-      sanstoonId: {
+      santoonId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Sanstoons',
+          model: 'Santoons',
           key: 'id',
         },
         onDelete: 'cascade',

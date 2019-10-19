@@ -19,19 +19,19 @@ module.exports = {
           page: 1,
           image:
             'https://swebtoon-phinf.pstatic.net/20141216_300/14186577318388F1Hj_JPEG/14186577317869515.jpg',
-          episode_id: 1,
+          episodeId: 1,
         },
         {
           page: 2,
           image:
             'https://swebtoon-phinf.pstatic.net/20141216_297/1418657731844vhrIu_JPEG/14186577317939513.jpg',
-          episode_id: 1,
+          episodeId: 1,
         },
         {
           page: 3,
           image:
             'https://swebtoon-phinf.pstatic.net/20141216_199/1418657731838lN86V_JPEG/14186577317859517.jpg',
-          episode_id: 1,
+          episodeId: 1,
         },
       ],
       {},

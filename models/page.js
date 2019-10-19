@@ -5,14 +5,14 @@ module.exports = (sequelize, DataTypes) => {
     {
       page: DataTypes.STRING,
       image: DataTypes.STRING,
-      episode_id: DataTypes.INTEGER,
+      episodeId: DataTypes.INTEGER,
     },
     {},
   );
   Page.associate = function(models) {
     // associations can be defined here
     Page.belongsTo(models.Episode, {
-      foreignKey: 'episode_id',
+      foreignKey: 'episodeId',
     });
   };
   return Page;

@@ -14,13 +14,10 @@ module.exports = {
       image: {
         type: Sequelize.STRING,
       },
-      sanstoon_id: {
-        type: Sequelize.INTEGER,
-      },
-      sanstoon_id: {
+      santoonId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Sanstoons',
+          model: 'Santoons',
           key: 'id',
         },
         onUpdate: 'cascade',

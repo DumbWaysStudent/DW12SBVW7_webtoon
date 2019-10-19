@@ -1,13 +1,15 @@
-const { Sanstoon, Episode } = require('../models');
+const { User, Santoon, Episode } = require('../models');
+const noImage =
+  'https://smart-akis.com/SFCPPortal/app/img/picture-not-available.jpg';
 
-exports.findAllEpisode = async (req, res) => {
+exports.findAllEpisodes = async (req, res) => {
   try {
     const data = await Episode.findAll({
       include: [
         {
-          model: Sanstoon,
+          model: Santoon,
           attributes: ['id', 'title', 'genre'],
-          where: { id: req.params.sanstoonId },
+          where: { id: req.params.santoonId },
         },
       ],
       order: [['id', 'DESC']],
@@ -16,7 +18,7 @@ exports.findAllEpisode = async (req, res) => {
     const episodes = data.map(item => {
       const objEpisode = {
         id: item.id,
-        sanstoon_title: item.Sanstoon.title,
+        santoonTitle: item.Santoon.title,
         title: item.title,
         image: item.image,
         createdAt: item.createdAt,
@@ -26,7 +28,7 @@ exports.findAllEpisode = async (req, res) => {
     });
     res.json(episodes);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ error: 'Something went wrong, please try again!' });
   }
 };
 
@@ -35,9 +37,15 @@ exports.findAllUserEpisode = async (req, res) => {
     const data = await Episode.findAll({
       include: [
         {
-          model: Sanstoon,
+          model: Santoon,
           attributes: ['id', 'title', 'genre'],
-          where: { id: req.params.sanstoonId },
+          where: { id: req.params.santoonId },
+          include: {
+            model: User,
+            as: 'author',
+            where: { id: req.authorize_user.id },
+            attributes: ['id', 'name'],
+          },
         },
       ],
       order: [['id', 'DESC']],
@@ -53,20 +61,24 @@ exports.findAllUserEpisode = async (req, res) => {
     });
     res.json(episodes);
   } catch (error) {
-    res.status(500).json(error);
+    console.error(error);
+    res.status(500).json({ error: 'Something went wrong, please try again!' });
   }
 };
 
 exports.createEpisode = async (req, res) => {
   try {
-    const episode = {
-      title: req.body.title,
-      image:
-        'https://swebtoon-phinf.pstatic.net/20140617_248/1403004901360ABk5x_JPEG/tower_000.jpg',
-      sanstoon_id: req.params.sanstoonId,
-    };
-    const data = await Episode.create(episode);
-    res.json(data);
+    const imageUrl = req.file.path ? req.file.path : noImage;
+    const validateToon = await Santoon.findAll({
+      // where: { id: req.params.santoonId }
+    })
+    // const episode = {
+    //   title: req.body.title,
+    //   image: imageUrl,
+    //   santoonId: req.params.santoonId,
+    // };
+    // const data = await Episode.create(episode);
+    res.json({msg:'oke'});
   } catch (error) {
     res.status(500).json(error);
   }
