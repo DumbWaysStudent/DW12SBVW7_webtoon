@@ -4,17 +4,17 @@ import {
   View,
   StyleSheet,
   TouchableWithoutFeedback,
-  AsyncStorage,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import axios from '../../helpers/axios';
 import {NavigationEvents} from 'react-navigation';
 
 import Picture from '../../components/Picture';
 import {dark, green} from '../../colorPallete';
+import {API} from 'react-native-dotenv';
 
-import { API } from 'react-native-dotenv';
-
+// Redux
+import {connect} from 'react-redux';
+import {logout} from '../../redux/actions/authActions';
 
 export class Profile extends Component {
   static navigationOptions = ({navigation}) => {
@@ -46,39 +46,36 @@ export class Profile extends Component {
   };
 
   async componentDidMount() {
-    const dataUser = await AsyncStorage.getItem('dataUser');
-    const user = JSON.parse(dataUser);
-    this.props.navigation.setParams({
-      name: user.name,
-      image: API + '/' + user.imageUrl,
-    });
-    this.setState({
-      name: user.name,
-      image: user.image,
-    });
+    // const dataUser = await AsyncStorage.getItem('dataUser');
+    // const user = JSON.parse(dataUser);
+    // this.props.navigation.setParams({
+    //   name: user.name,
+    //   image: API + '/' + user.imageUrl,
+    // });
+    // this.setState({
+    //   name: user.name,
+    //   image: user.image,
+    // });
   }
 
   fetchUser = async () => {
-    const dataUser = await AsyncStorage.getItem('dataUser');
-    const user = JSON.parse(dataUser);
-    const {data} = await axios({
-      method: 'GET',
-      url: `/api/v1/user/${user.id}/profile`,
-    });
-    const setImage = data.imageUrl ? API + '/' + data.imageUrl : '';
-    this.setState({
-      name: data.name,
-      image: setImage,
-    });
-    await AsyncStorage.setItem('dataUser', JSON.stringify(data.dataUser));
+    // const dataUser = await AsyncStorage.getItem('dataUser');
+    // const user = JSON.parse(dataUser);
+    // const {data} = await axios({
+    //   method: 'GET',
+    //   url: `/api/v1/user/${user.id}/profile`,
+    // });
+    // const setImage = data.imageUrl ? API + '/' + data.imageUrl : '';
+    // this.setState({
+    //   name: data.name,
+    //   image: setImage,
+    // });
+    // await AsyncStorage.setItem('dataUser', JSON.stringify(data.dataUser));
   };
 
-  handleLogout = async () => {
-    let token = await AsyncStorage.getItem('token');
-    if (token) {
-      await AsyncStorage.removeItem('token');
-      this.props.navigation.navigate('Login');
-    }
+  handleLogout = () => {
+    this.props.dispatch(logout());
+    this.props.navigation.navigate('Welcome');
   };
 
   render() {
@@ -146,4 +143,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Profile;
+export default connect()(Profile);

@@ -8,11 +8,11 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 
-import { green, dark, lightGrey } from '../colorPallete';
+import {green, dark, lightGrey} from '../colorPallete';
 
-function HorizontalCard({sanstoon, navigation, handleFavorite}) {
+function HorizontalCard({santoon, navigation, handleFavorite}) {
   const favouritedBtn = {
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
     borderColor: green,
   };
   const favouritedText = {
@@ -23,30 +23,30 @@ function HorizontalCard({sanstoon, navigation, handleFavorite}) {
     <TouchableWithoutFeedback
       onPress={() =>
         navigation.navigate('DetailWebtoon', {
-          id: sanstoon.id,
-          title: sanstoon.title,
-          image: sanstoon.image,
-          genre: sanstoon.genre,
+          id: santoon.id,
+          title: santoon.title,
+          image: santoon.image,
+          genre: santoon.genre,
         })
       }>
       <View style={styles.cardContainer}>
         <View style={styles.imageContainer}>
-          <Image style={styles.imageSize} source={{uri: sanstoon.image}} />
+          <Image style={styles.imageSize} source={{uri: santoon.image}} />
         </View>
         <View style={{marginLeft: 25}}>
-          <Text style={styles.titleCardText}>{sanstoon.title}</Text>
+          <Text style={styles.titleCardText}>{santoon.title}</Text>
           <TouchableOpacity
             style={[
               styles.favButton,
-              sanstoon.isFavorite ? favouritedBtn : null,
+              santoon.isFavorite ? favouritedBtn : null,
             ]}
-            onPress={() => handleFavorite(sanstoon.isFavorite, sanstoon.id)}>
+            onPress={() => handleFavorite(santoon.isFavorite, santoon.id)}>
             <Text
               style={[
                 styles.textFavourite,
-                sanstoon.isFavorite ? favouritedText : null,
+                santoon.isFavorite ? favouritedText : null,
               ]}>
-              {sanstoon.isFavorite ? '✓ Favorite' : '+ Favorite'}
+              {santoon.isFavorite ? '✓ Favorite' : '+ Favorite'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -55,23 +55,22 @@ function HorizontalCard({sanstoon, navigation, handleFavorite}) {
   );
 }
 
-class AllSanstoon extends Component {
+class AllToons extends Component {
   render() {
-    const {sanstoons} = this.props;
+    const {santoons} = this.props;
     return (
       <View style={styles.mainContainer}>
         <Text style={styles.textTitle}>All Mangas</Text>
-        {sanstoons &&
-          sanstoons.map(sanstoon => {
-            return (
-              <HorizontalCard
-                key={sanstoon.id}
-                handleFavorite={this.props.handleFavorite}
-                navigation={this.props.navigation}
-                sanstoon={sanstoon}
-              />
-            );
-          })}
+        {santoons.map(santoon => {
+          return (
+            <HorizontalCard
+              key={santoon.id}
+              handleFavorite={this.props.handleFavorite}
+              navigation={this.props.navigation}
+              santoon={santoon}
+            />
+          );
+        })}
       </View>
     );
   }
@@ -80,7 +79,7 @@ class AllSanstoon extends Component {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
     marginHorizontal: 10,
   },
   textTitle: {
@@ -125,4 +124,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AllSanstoon;
+export default AllToons;

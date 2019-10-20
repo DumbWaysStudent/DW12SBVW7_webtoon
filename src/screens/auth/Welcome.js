@@ -8,10 +8,16 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import WhiteLogo from '../../assets/images/white-logo.png';
-
 import {green, dark} from '../../colorPallete';
 
+import {connect} from 'react-redux';
+
 export class Welcome extends Component {
+  componentDidMount() {
+    if (this.props.isLogin) {
+      this.props.navigation.navigate('ForYou');
+    }
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -77,4 +83,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Welcome;
+const mapStateToProps = state => {
+  return {
+    isLogin: state.authReducer.isLogin,
+  };
+};
+
+export default connect(mapStateToProps)(Welcome);

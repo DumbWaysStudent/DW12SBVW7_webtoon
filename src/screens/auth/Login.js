@@ -28,7 +28,6 @@ export class Login extends Component {
     isValidEmail: false,
     isValidPassword: false,
     eyeColor: '#c3c3c3',
-    error: false,
     errorMsg: '',
   };
 

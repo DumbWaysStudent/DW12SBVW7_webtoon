@@ -3,7 +3,6 @@ import {
   ScrollView,
   StyleSheet,
   YellowBox,
-  AsyncStorage,
   ToastAndroid,
   ActivityIndicator,
 } from 'react-native';
@@ -12,16 +11,17 @@ import {NavigationEvents} from 'react-navigation';
 
 // Redux
 import {connect} from 'react-redux';
-import {findAllToons} from '../redux/actions/santoonAction';
+import {findAllToons, handleFavorite} from '../redux/actions/santoonAction';
 
 // Ignore Yellow Warnings
 YellowBox.ignoreWarnings(['Warning: ']);
 
 // Components
+import Loading from '../components/Loading';
 import SearchBar from '../components/SearchBar';
 import Banner from '../components/Banner';
 import Favorite from '../components/Favorite';
-import AllSanstoon from '../components/AllSanstoon';
+import AllToons from '../components/AllToons';
 
 import {dark, green} from '../colorPallete';
 
@@ -31,69 +31,39 @@ export class ForYou extends Component {
     favorites: [],
   };
 
-  // componentDidMount() {
-  //   this.fetchAllToons();
-  // }
-
   fetchAllToons = async () => {
-    // const token = await AsyncStorage.getItem('token');
-    
-    // const {data} = await axios({
-    //   method: 'GET',
-    //   url: '/api/v1/santoons',
-    //   headers: {
-    //     Authorization: token ? token : '',
-    //   },
-    // });
-    // console.log(data);
-    
-    // const favorites = data.filter(item => item.isFavorite);
-    
-    // this.setState({
-      //   sanstoons: data,
-      //   favorites,
-      // });
+    const token = this.props.token;
+    this.props.dispatch(findAllToons(token));
+  };
 
-      this.props.dispatch(findAllToons());
-    };
-
-  handleFavorite = async (status, id) => {
-    const token = await AsyncStorage.getItem('token');
-    const method = status ? 'DELETE' : 'POST';
+  handleFavorite = (status, id) => {
+    const request = status ? 'DELETE' : 'POST';
     const message = status
       ? 'Removed from My Favorite'
       : 'Added to My Favorite';
-    // const {data} = await axios({
-    //   method: method,
-    //   url: `/api/v1/sanstoons/${id}/favorite`,
-    //   headers: {
-    //     Authorization: token,
-    //   },
-    // });
-    // ToastAndroid.showWithGravity(
-    //   message,
-    //   ToastAndroid.SHORT,
-    //   ToastAndroid.CENTER,
-    // );
-    // const favorites = data.filter(item => item.isFavorite);
-    // this.setState({
-    //   sanstoons: data,
-    //   favorites,
-    // });
+    const token = this.props.token;
+
+    if (!token) {
+      return ToastAndroid.showWithGravity(
+        `You should be login first to use favorite.`,
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+    }
+    this.props.dispatch(handleFavorite(id, request, token));
+    ToastAndroid.showWithGravity(
+      message,
+      ToastAndroid.SHORT,
+      ToastAndroid.CENTER,
+    );
   };
 
-  handleSearch = title => {};
-
-  renderLoading() {
-    return (
-      <Container style={{flex: 1}}>
-        <ActivityIndicator size="large" color={green} />
-      </Container>
-    );
-  }
+  handleSearch = title => {
+    console.log(title);
+  };
 
   render() {
-    const {navigation, santoons, isLoading} = this.props;
+    const {navigation, santoons, isLoading, isLogin} = this.props;
     return (
       <Container style={{flex: 1, backgroundColor: '#fff'}}>
         <NavigationEvents
@@ -102,19 +72,22 @@ export class ForYou extends Component {
         />
         <ScrollView showsVerticalScrollIndicator={false}>
           <SearchBar handleSearch={this.handleSearch} />
+          {isLoading && <Loading />}
           <Content>
             <Text style={styles.recomended}>Recomended For You</Text>
             <Banner santoons={santoons} navigation={this.props.navigation} />
           </Content>
           <Content>
-            <Favorite
-              navigation={navigation}
-              favorites={this.state.favorites}
-            />
-            <AllSanstoon
+            {isLogin && (
+              <Favorite
+                navigation={navigation}
+                favorites={this.props.favorites}
+              />
+            )}
+            <AllToons
               navigation={navigation}
               handleFavorite={this.handleFavorite}
-              sanstoons={this.state.sanstoons}
+              santoons={santoons}
             />
           </Content>
         </ScrollView>
@@ -124,6 +97,11 @@ export class ForYou extends Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   recomended: {
     padding: 10,
     fontSize: 23,
@@ -136,7 +114,10 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
   return {
     santoons: state.santoonReducer.santoons,
+    favorites: state.santoonReducer.favorites,
     isLoading: state.santoonReducer.isLoading,
+    isLogin: state.authReducer.isLogin,
+    token: state.authReducer.token,
   };
 };
 
