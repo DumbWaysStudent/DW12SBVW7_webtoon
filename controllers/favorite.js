@@ -1,12 +1,12 @@
-const { Sanstoon, User, Favorite, Episode, Page } = require('../models');
+const { Santoon, User, Favorite } = require('../models');
 
 exports.createFavorite = async (req, res) => {
   try {
     await Favorite.create({
       userId: req.authorize_user.id,
-      sanstoonId: req.params.sanstoonId,
+      santoonId: req.params.santoonId,
     });
-    let data = await Sanstoon.findAll({
+    let data = await Santoon.findAll({
       include: [
         {
           model: User,
@@ -24,8 +24,8 @@ exports.createFavorite = async (req, res) => {
         },
       ],
     });
-    const sanstoons = data.map(item => {
-      const objSanstoon = {
+    const santoons = data.map(item => {
+      const objSantoon = {
         id: item.id,
         title: item.title,
         genre: item.genre,
@@ -36,11 +36,11 @@ exports.createFavorite = async (req, res) => {
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
       };
-      return objSanstoon;
+      return objSantoon;
     });
-    res.json(sanstoons);
+    res.json(santoons);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ error: 'Something went wrong, please try again!' });
   }
 };
 
@@ -49,10 +49,10 @@ exports.deleteFavorite = async (req, res) => {
     await Favorite.destroy({
       where: {
         userId: req.authorize_user.id,
-        sanstoonId: req.params.sanstoonId,
+        santoonId: req.params.santoonId,
       },
     });
-    let data = await Sanstoon.findAll({
+    let data = await Santoon.findAll({
       include: [
         {
           model: User,
@@ -70,8 +70,8 @@ exports.deleteFavorite = async (req, res) => {
         },
       ],
     });
-    const sanstoons = data.map(item => {
-      const objSanstoon = {
+    const santoons = data.map(item => {
+      const objSantoon = {
         id: item.id,
         title: item.title,
         genre: item.genre,
@@ -82,10 +82,10 @@ exports.deleteFavorite = async (req, res) => {
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
       };
-      return objSanstoon;
+      return objSantoon;
     });
-    res.json(sanstoons);
+    res.json(santoons);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ error: 'Something went wrong, please try again!' });
   }
 };

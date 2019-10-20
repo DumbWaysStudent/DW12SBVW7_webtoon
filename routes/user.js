@@ -21,6 +21,7 @@ const {
 } = require('../controllers/page');
 
 const { editProfile, findOne } = require('../controllers/user');
+const { createFavorite, deleteFavorite } = require('../controllers/favorite');
 
 // Profile
 routes.get('/:userId/profile', findOne);
@@ -32,7 +33,7 @@ routes.put(
   editProfile,
 );
 
-// Santoon (Done migration from Sanstoon to Santoon)
+// Santoon
 routes.get('/:userId/santoons', authenticate, authorize, findAllUserToon);
 routes.post(
   '/:userId/santoon',
@@ -103,5 +104,9 @@ routes.delete(
   authorize,
   deletePage,
 );
+
+// Favorite
+routes.post('/:santoonId/favorite', authenticate, createFavorite);
+routes.delete('/:santoonId/favorite', authenticate, deleteFavorite);
 
 module.exports = routes;
