@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, Image, AsyncStorage} from 'react-native';
+import {View, StyleSheet, Image} from 'react-native';
 import Logo from '../assets/images/logo.png';
 
 import {green} from '../colorPallete';
@@ -7,14 +7,9 @@ import {green} from '../colorPallete';
 export class SplashScreen extends Component {
   async componentDidMount() {
     const {navigate} = this.props.navigation;
-    try {
-      const token = await AsyncStorage.getItem('token');
-      setTimeout(() => {
-        token ? navigate('ForYou') : navigate('Welcome');
-      }, 2000);
-    } catch (error) {
-      console.error(error);
-    }
+    setTimeout(() => {
+      navigate('Welcome');
+    }, 2000);
   }
 
   render() {

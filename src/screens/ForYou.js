@@ -5,10 +5,14 @@ import {
   YellowBox,
   AsyncStorage,
   ToastAndroid,
+  ActivityIndicator,
 } from 'react-native';
 import {Content, Container, Text} from 'native-base';
 import {NavigationEvents} from 'react-navigation';
-import axios from '../helpers/axios';
+
+// Redux
+import {connect} from 'react-redux';
+import {findAllToons} from '../redux/actions/santoonAction';
 
 // Ignore Yellow Warnings
 YellowBox.ignoreWarnings(['Warning: ']);
@@ -19,36 +23,39 @@ import Banner from '../components/Banner';
 import Favorite from '../components/Favorite';
 import AllSanstoon from '../components/AllSanstoon';
 
-import {dark} from '../colorPallete';
+import {dark, green} from '../colorPallete';
 
 export class ForYou extends Component {
   state = {
-    sanstoons: null,
-    favorites: null,
+    sanstoons: [],
+    favorites: [],
   };
 
-  componentDidMount() {
-    this.fetchAllToons();
-  }
+  // componentDidMount() {
+  //   this.fetchAllToons();
+  // }
 
   fetchAllToons = async () => {
-    const token = await AsyncStorage.getItem('token');
+    // const token = await AsyncStorage.getItem('token');
+    
+    // const {data} = await axios({
+    //   method: 'GET',
+    //   url: '/api/v1/santoons',
+    //   headers: {
+    //     Authorization: token ? token : '',
+    //   },
+    // });
+    // console.log(data);
+    
+    // const favorites = data.filter(item => item.isFavorite);
+    
+    // this.setState({
+      //   sanstoons: data,
+      //   favorites,
+      // });
 
-    const {data} = await axios({
-      method: 'GET',
-      url: '/api/v1/sanstoons',
-      headers: {
-        Authorization: token,
-      },
-    });
-
-    const favorites = data.filter(item => item.isFavorite);
-
-    this.setState({
-      sanstoons: data,
-      favorites,
-    });
-  };
+      this.props.dispatch(findAllToons());
+    };
 
   handleFavorite = async (status, id) => {
     const token = await AsyncStorage.getItem('token');
@@ -56,43 +63,48 @@ export class ForYou extends Component {
     const message = status
       ? 'Removed from My Favorite'
       : 'Added to My Favorite';
-    const {data} = await axios({
-      method: method,
-      url: `/api/v1/sanstoons/${id}/favorite`,
-      headers: {
-        Authorization: token,
-      },
-    });
-    ToastAndroid.showWithGravity(
-      message,
-      ToastAndroid.SHORT,
-      ToastAndroid.CENTER,
-    );
-    const favorites = data.filter(item => item.isFavorite);
-    this.setState({
-      sanstoons: data,
-      favorites,
-    });
+    // const {data} = await axios({
+    //   method: method,
+    //   url: `/api/v1/sanstoons/${id}/favorite`,
+    //   headers: {
+    //     Authorization: token,
+    //   },
+    // });
+    // ToastAndroid.showWithGravity(
+    //   message,
+    //   ToastAndroid.SHORT,
+    //   ToastAndroid.CENTER,
+    // );
+    // const favorites = data.filter(item => item.isFavorite);
+    // this.setState({
+    //   sanstoons: data,
+    //   favorites,
+    // });
   };
 
   handleSearch = title => {};
 
+  renderLoading() {
+    return (
+      <Container style={{flex: 1}}>
+        <ActivityIndicator size="large" color={green} />
+      </Container>
+    );
+  }
+
   render() {
-    const {navigation} = this.props;
+    const {navigation, santoons, isLoading} = this.props;
     return (
       <Container style={{flex: 1, backgroundColor: '#fff'}}>
         <NavigationEvents
           onDidFocus={this.fetchAllToons}
-          onDidBlur={() => this.setState({sanstoons: null, favorites: null})}
+          onDidBlur={() => this.setState({sanstoons: [], favorites: []})}
         />
         <ScrollView showsVerticalScrollIndicator={false}>
+          <SearchBar handleSearch={this.handleSearch} />
           <Content>
-            <SearchBar handleSearch={this.handleSearch} />
             <Text style={styles.recomended}>Recomended For You</Text>
-            <Banner
-              sanstoons={this.state.sanstoons}
-              navigation={this.props.navigation}
-            />
+            <Banner santoons={santoons} navigation={this.props.navigation} />
           </Content>
           <Content>
             <Favorite
@@ -121,4 +133,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ForYou;
+const mapStateToProps = state => {
+  return {
+    santoons: state.santoonReducer.santoons,
+    isLoading: state.santoonReducer.isLoading,
+  };
+};
+
+export default connect(mapStateToProps)(ForYou);

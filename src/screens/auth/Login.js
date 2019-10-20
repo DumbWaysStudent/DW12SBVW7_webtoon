@@ -1,11 +1,24 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, AsyncStorage} from 'react-native';
-import {Container, Form, Item, Input, Text, Icon} from 'native-base';
+import {StyleSheet, View} from 'react-native';
+import {
+  Container,
+  Form,
+  Item,
+  Input,
+  Text,
+  Icon,
+  Toast,
+  Button,
+} from 'native-base';
 
 import axios from '../../helpers/axios';
 import {emailValidation} from '../../helpers/validation';
 
-import LoginButton from '../../components/LoginButton';
+// Redux
+import {connect} from 'react-redux';
+import {login} from '../../redux/actions/authActions';
+
+import {green, lightGrey} from '../../colorPallete';
 
 export class Login extends Component {
   state = {
@@ -15,25 +28,35 @@ export class Login extends Component {
     isValidEmail: false,
     isValidPassword: false,
     eyeColor: '#c3c3c3',
+    error: false,
+    errorMsg: '',
   };
 
-  handleSubmitLogin = async () => {
-    try {
-      const {data} = await axios({
-        method: 'POST',
-        url: '/api/v1/login',
-        data: {
-          email: this.state.email,
-          password: this.state.password,
-        },
-      });
-      await AsyncStorage.setItem('token', data.token);
-      await AsyncStorage.setItem('dataUser', JSON.stringify(data.dataUser));
+  handleLogin = () => {
+    const input = {
+      email: this.state.email,
+      password: this.state.password,
+    };
 
-      this.props.navigation.navigate('ForYou');
-    } catch (error) {
-      console.error(error);
-    }
+    axios({
+      method: 'POST',
+      url: '/login',
+      data: input,
+    })
+      .then(({data}) => {
+        this.props.dispatch(login(data));
+        this.props.navigation.navigate('ForYou');
+      })
+      .catch(error => {
+        const errorMsg = error.response.data.error;
+        Toast.show({
+          text: errorMsg,
+          buttonText: 'Okay',
+          position: 'bottom',
+          type: 'danger',
+          duration: 2000,
+        });
+      });
   };
 
   checkEmail(input) {
@@ -72,18 +95,18 @@ export class Login extends Component {
   }
 
   render() {
-    const dataLogin = {
-      email: this.state.isValidEmail,
-      password: this.state.isValidPassword,
-    };
+    let status = false;
+    if (this.state.isValidEmail && this.state.isValidPassword) {
+      status = true;
+    }
 
     return (
       <Container style={styles.container}>
-        <View style={styles.topWrapper}>
+        <View style={styles.topContainer}>
           <Text style={styles.title}>LOG IN</Text>
           <Text style={styles.subtitle}>Login with your account SANTOON</Text>
         </View>
-        <View style={styles.bottomWrapper}>
+        <View style={styles.bottomContainer}>
           <Form>
             <Item rounded style={styles.form}>
               <Input
@@ -106,7 +129,12 @@ export class Login extends Component {
               />
             </Item>
           </Form>
-          <LoginButton isValid={dataLogin} onPress={this.handleSubmitLogin} />
+          <Button
+            style={[styles.button, status && {backgroundColor: green}]}
+            onPress={this.handleLogin}
+            disabled={!status}>
+            <Text>Login</Text>
+          </Button>
         </View>
       </Container>
     );
@@ -115,34 +143,40 @@ export class Login extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fafafa',
+    flex: 3,
   },
   title: {
     fontSize: 30,
     letterSpacing: 1,
     fontWeight: 'bold',
-    color: '#00b900',
+    color: green,
   },
   subtitle: {
     fontSize: 15,
     letterSpacing: 1,
-    color: '#00b900',
+    color: green,
   },
   form: {
     marginVertical: 10,
     paddingLeft: 10,
     paddingRight: 10,
   },
-  topWrapper: {
+  topContainer: {
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
     marginBottom: '5%',
   },
-  bottomWrapper: {
+  bottomContainer: {
     flex: 2,
     paddingHorizontal: 20,
+    justifyContent: 'flex-start',
+  },
+  button: {
+    backgroundColor: lightGrey,
+    marginTop: 20,
+    justifyContent: 'center',
   },
 });
 
-export default Login;
+export default connect()(Login);
