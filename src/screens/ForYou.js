@@ -57,8 +57,7 @@ export class ForYou extends Component {
     return (
       <Container style={{flex: 1, backgroundColor: '#fff'}}>
         <NavigationEvents
-          onWillFocus={this.fetchAllToons}
-          onDidBlur={() => this.setState({sanstoons: [], favorites: []})}
+          onWillFocus={this.fetchAllToons}          
         />
         {isLoading ? (
           <Loading />

@@ -9,23 +9,20 @@ import {SmallHorizontalCard} from '../components/Card';
 
 // Redux
 import {connect} from 'react-redux';
-import {findMyCreation} from '../redux/actions/userCreationAction';
+import {findMyCreations} from '../redux/actions/userCreationAction';
 
 export class MyWebtoon extends Component {
-  state = {
-    myWebtoon: [],
-  };
 
-  fetchMyToons = () => {
+  fetchMyCreations = () => {
     const {user, token} = this.props;
-    this.props.dispatch(findMyCreation(user.id, token));
+    this.props.dispatch(findMyCreations(user.id, token));
   };
 
   render() {
-    const {navigation, myCreations} = this.props;
+    const {navigation, myCreations} = this.props;    
     return (
       <View style={{flex: 1}}>
-        <NavigationEvents onDidFocus={this.fetchMyToons} />
+        <NavigationEvents onWillFocus={this.fetchMyCreations} />
         <FlatList
           contentContainerStyle={{marginTop: 20}}
           data={myCreations}
@@ -34,17 +31,17 @@ export class MyWebtoon extends Component {
               data={item}
               navigation={navigation}
               text="Episode(s)"
-              route="EditWebtoon"
+              route="EditToon"
             />
           )}
-          keyExtractor={item => item.title}
+          keyExtractor={item => item.id}
         />
         <View style={styles.iconContainer}>
           <Icon
             name="plus-circle"
             size={60}
             color={green}
-            onPress={() => this.props.navigation.navigate('CreateWebtoon')}
+            onPress={() => this.props.navigation.navigate('CreateToon')}
           />
         </View>
       </View>

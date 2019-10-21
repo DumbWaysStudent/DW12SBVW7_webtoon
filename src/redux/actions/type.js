@@ -7,6 +7,7 @@ export const FETCH_TOONS = 'FETCH_TOONS';
 
 // Episodes
 export const FETCH_EPISODES = 'FETCH_EPISODES';
+export const FETCH_USER_CREATION_EPISODES = 'FETCH_USER_CREATION_EPISODES';
 
 // Favorite
 export const FETCH_MY_FAVORITES = 'FETCH_MY_FAVORITES';

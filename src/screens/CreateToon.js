@@ -4,9 +4,7 @@ import {
   Text,
   View,
   Image,
-  FlatList,
   TextInput,
-  TouchableHighlight,
   Dimensions,
   TouchableWithoutFeedback,
 } from 'react-native';
@@ -52,27 +50,26 @@ export class CreateWebtoon extends Component {
   handleUploadPhoto = () => {
     ImagePicker.showImagePicker(response => {
       if (response.uri) {
-        const source = {uri: response.uri};
         const dataImage = {
           uri: response.uri,
           type: response.type,
           name: response.fileName,
         };
 
-        this.setState({image: source, dataImage});
+        this.setState({image: response.uri, dataImage});
       }
     });
   };
 
   handleCreate = async () => {
+    const {user, token} = this.props;
+
+    const data = new FormData();
+    data.append('title', this.state.title);
+    data.append('genre', this.state.genre);
+    data.append('img', this.state.dataImage);
+
     try {
-      const {user, token} = this.props;
-
-      const data = new FormData();
-      data.append('title', this.state.title);
-      data.append('genre', this.state.genre);
-      data.append('img', this.state.dataImage);
-
       const response = await axios({
         method: 'POST',
         url: `/user/${user.id}/santoon`,
@@ -81,7 +78,7 @@ export class CreateWebtoon extends Component {
           Authorization: token,
           'Content-Type': 'multipart/form-data',
         },
-      });      
+      });
 
       if (response.status == 201) {
         this.props.navigation.pop();
@@ -123,7 +120,7 @@ export class CreateWebtoon extends Component {
               </>
             ) : (
               <Image
-                source={this.state.image}
+                source={{uri: this.state.image}}
                 style={{height: 200, width: dim.width}}
               />
             )}

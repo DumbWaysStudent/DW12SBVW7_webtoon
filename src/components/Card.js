@@ -18,6 +18,7 @@ export const SmallHorizontalCard = ({
   button,
   eventTrigger,
 }) => {
+  // console.log(data)
   const {title, name, id, genre} = data;
   const image = validateImageUrl(data.image);
 

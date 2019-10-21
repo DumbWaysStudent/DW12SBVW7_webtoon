@@ -1,14 +1,18 @@
-import {LOADING, FETCH_USER_CREATION} from './type';
+import {
+  LOADING,
+  FETCH_USER_CREATION,
+  FETCH_USER_CREATION_EPISODES,
+} from './type';
 import axios from '../../helpers/axios';
 
-export const findMyCreation = (id, token) => dispatch => {
+export const findMyCreations = (userId, token) => dispatch => {
   dispatch({
     type: LOADING,
   });
 
   axios({
     method: 'GET',
-    url: `/user/${id}/santoons`,
+    url: `/user/${userId}/santoons`,
     headers: {
       Authorization: token,
     },
@@ -20,4 +24,27 @@ export const findMyCreation = (id, token) => dispatch => {
       });
     })
     .catch(err => console.log(err.response));
+};
+
+export const findMyCreationEpisodes = (userId, toonId, token) => dispatch => {
+  dispatch({
+    type: LOADING,
+  });
+
+  axios({
+    method: 'GET',
+    url: `/user/${userId}/santoon/${toonId}/episodes`,
+    headers: {
+      Authorization: token,
+    },
+  })
+    .then(({data}) => {
+      dispatch({
+        type: FETCH_USER_CREATION_EPISODES,
+        payload: data,
+      });
+    })
+    .catch(err => {
+      console.log(err.response);
+    });
 };

@@ -1,13 +1,13 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {SkypeIndicator} from 'react-native-indicators';
+import {BarIndicator} from 'react-native-indicators';
 import {green, dark} from '../colorPallete';
 
 const Loading = props => {
   return (
-    <View style={styles.container}>
-      <SkypeIndicator style={{justifyContent: 'flex-end'}} color={green} />
-      <View style={{flex: 1}}>
+    <View style={{flex: 1}}>
+      <BarIndicator color={green} style={styles.indicator} />
+      <View style={{flex: 1, alignItems: 'center'}}>
         <Text style={styles.text}>Loading...</Text>
       </View>
     </View>
@@ -15,9 +15,9 @@ const Loading = props => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  indicator: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: 'flex-end',
   },
   text: {
     color: dark,

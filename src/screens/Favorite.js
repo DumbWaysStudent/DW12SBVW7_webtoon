@@ -88,7 +88,7 @@ export class Favourite extends PureComponent {
     }
     return (
       <View style={{flex: 1}}>
-        <NavigationEvents onDidFocus={this.fetchData} />
+        <NavigationEvents onWillFocus={this.fetchData} />
         <SearchBar handleSearch={this.handleSearch} />
         {renderContent}
       </View>

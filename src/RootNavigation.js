@@ -27,9 +27,9 @@ import EditProfile from './screens/profile/EditProfile';
 
 // Webtoon CRUD
 import MyCreation from './screens/MyCreation';
-import CreateWebtoon from './screens/CreateWebtoon';
+import CreateToon from './screens/CreateToon';
 import CreateEpisode from './screens/CreateEpisode';
-import EditWebtoon from './screens/EditWebtoon';
+import EditToon from './screens/EditToon';
 import EditEpisode from './screens/EditEpisode';
 
 const AuthStack = createStackNavigator({
@@ -127,10 +127,10 @@ const PrivateNavigation = createStackNavigator({
       title: 'My Creation',
     },
   },
-  CreateWebtoon: {
-    screen: CreateWebtoon,
+  CreateToon: {
+    screen: CreateToon,
     navigationOptions: {
-      title: 'Create Webtoon'
+      title: 'Create New Toon'
     }    
   },
   CreateEpisode: {
@@ -139,10 +139,10 @@ const PrivateNavigation = createStackNavigator({
       title: 'Create Episode',
     },
   },
-  EditWebtoon: {
-    screen: EditWebtoon,
+  EditToon: {
+    screen: EditToon,
     navigationOptions: {
-      title: 'Edit Webtoon',
+      title: 'Edit Toon',
     }
   },
   EditEpisode: {
