@@ -34,7 +34,7 @@ export class MyWebtoon extends Component {
               route="EditToon"
             />
           )}
-          keyExtractor={item => item.id}
+          keyExtractor={item => String(item.id)}
         />
         <View style={styles.iconContainer}>
           <Icon

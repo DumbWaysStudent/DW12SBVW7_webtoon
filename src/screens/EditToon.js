@@ -13,6 +13,7 @@ import {
 import {NavigationEvents} from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ImagePicker from 'react-native-image-picker';
+import Dialog from 'react-native-dialog';
 import axios from '../helpers/axios';
 
 // Component
@@ -42,19 +43,18 @@ export class EditWebtoon extends Component {
   };
 
   state = {
-    toonId: '',
     title: '',
     genre: '',
     image: '',
+    confirmDelete: false,
   };
 
   componentDidMount() {
     const {navigation} = this.props;
-    const toonId = this.props.navigation.getParam('id');
     const title = navigation.getParam('title');
     const genre = navigation.getParam('genre');
     const image = navigation.getParam('image');
-    this.setState({title, genre, image, toonId});
+    this.setState({title, genre, image});
 
     // throw method to header navigation
     this.props.navigation.setParams({
@@ -64,7 +64,7 @@ export class EditWebtoon extends Component {
 
   fetchEpisodes = () => {
     const {user, token} = this.props;
-    const toonId = this.state.toonId;
+    const toonId = this.props.navigation.getParam('id');
     this.props.dispatch(findMyCreationEpisodes(user.id, toonId, token));
   };
 
@@ -111,11 +111,28 @@ export class EditWebtoon extends Component {
     }
   };
 
-  handleDeleteToon = toonId => {
-    console.log(toonId)
-  }
+  handleDeleteToon = async toonId => {
+    const {user, token} = this.props;
+    
+    try {
+      const response = await axios({
+        method: 'DELETE',
+        url: `/user/${user.id}/santoon/${toonId}`,
+        headers: {
+          Authorization: token,
+        },
+      });
+      if (response.status == 200) {
+        this.setState({confirmDelete: false});
+        this.props.navigation.pop();
+      }
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
 
   renderHeader() {
+    const toonId = this.props.navigation.getParam('id');
     return (
       <View style={{flex: 1}}>
         <Text style={styles.textTitle}>Title</Text>
@@ -153,13 +170,28 @@ export class EditWebtoon extends Component {
         <Text style={[styles.textTitle, {marginBottom: 10}]}>
           List(s) Episode
         </Text>
+        <View>
+          <Dialog.Container visible={this.state.confirmDelete}>
+            <Dialog.Title>Manga delete</Dialog.Title>
+            <Dialog.Description>
+              Do you want to delete this manga? You cannot undo this action.
+            </Dialog.Description>
+            <Dialog.Button
+              label="Cancel"
+              onPress={() => this.setState({confirmDelete: false})}
+            />
+            <Dialog.Button
+              label="Delete"
+              onPress={() => this.handleDeleteToon(toonId)}
+            />
+          </Dialog.Container>
+        </View>
       </View>
     );
   }
 
   render() {
     const {navigation, myCreationEpisodes} = this.props;
-    const toonId = navigation.getParam('id');
     return (
       <View style={styles.mainContainer}>
         <NavigationEvents onWillFocus={this.fetchEpisodes} />
@@ -174,7 +206,7 @@ export class EditWebtoon extends Component {
               route="EditEpisode"
             />
           )}
-          keyExtractor={item => item.title}
+          keyExtractor={item => String(item.id)}
         />
         <View style={{flexDirection: 'row'}}>
           <TouchableHighlight
@@ -184,7 +216,7 @@ export class EditWebtoon extends Component {
           </TouchableHighlight>
           <TouchableHighlight
             style={[styles.addBtn, {flex: 1, backgroundColor: 'red'}]}
-            onPress={() => this.handleDeleteToon(toonId)}>
+            onPress={() => this.setState({confirmDelete: true})}>
             <Text style={styles.btnText}>Delete Webtoon</Text>
           </TouchableHighlight>
         </View>
