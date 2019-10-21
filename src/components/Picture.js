@@ -1,13 +1,20 @@
 import React, {Component} from 'react';
 import {Text, View, StyleSheet, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {dark} from '../colorPallete';
 
 export class Picture extends Component {
   render() {
     const {image} = this.props;
     let renderImage;
     if (image) {
-      renderImage = <Image source={{uri: image}} style={styles.profilePic} />;
+      renderImage = (
+        <Image
+          source={{uri: image}}
+          style={styles.profilePic}
+          resizeMode="cover"
+        />
+      );
     } else {
       renderImage = <Icon name="user" color="#ccc" size={140} />;
     }
@@ -36,11 +43,12 @@ const styles = StyleSheet.create({
     height: 150,
   },
   profilePic: {
+    overflow: 'hidden',
     width: 150,
     height: 150,
     borderRadius: 100,
-    borderWidth: 2,
-    borderColor: 'gray',
+    borderWidth: 0.5,
+    borderColor: dark,
   },
 });
 

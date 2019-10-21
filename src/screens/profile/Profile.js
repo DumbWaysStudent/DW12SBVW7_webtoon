@@ -1,16 +1,12 @@
 import React, {Component} from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import {Text, View, StyleSheet, TouchableWithoutFeedback} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {NavigationEvents} from 'react-navigation';
-
-import Picture from '../../components/Picture';
 import {dark, green} from '../../colorPallete';
-import {API} from 'react-native-dotenv';
+import {URI} from 'react-native-dotenv';
+
+// Component
+import Picture from '../../components/Picture';
 
 // Redux
 import {connect} from 'react-redux';
@@ -40,12 +36,7 @@ export class Profile extends Component {
     };
   };
 
-  state = {
-    name: '',
-    image: '',
-  };
-
-  async componentDidMount() {
+  componentDidMount() {
     // const dataUser = await AsyncStorage.getItem('dataUser');
     // const user = JSON.parse(dataUser);
     // this.props.navigation.setParams({
@@ -58,7 +49,7 @@ export class Profile extends Component {
     // });
   }
 
-  fetchUser = async () => {
+  fetchUser = () => {
     // const dataUser = await AsyncStorage.getItem('dataUser');
     // const user = JSON.parse(dataUser);
     // const {data} = await axios({
@@ -75,19 +66,24 @@ export class Profile extends Component {
 
   handleLogout = () => {
     this.props.dispatch(logout());
-    this.props.navigation.navigate('Welcome');
+    if (this.props.isLogin) {
+      this.props.navigation.navigate('Welcome');
+    } else {
+      this.props.navigation.navigate('Login');
+    }
   };
 
   render() {
+    const {user, isLogin} = this.props;
     return (
       <View style={{flex: 1}}>
         <NavigationEvents onDidFocus={this.fetchUser} />
         <View style={styles.profile}>
-          <Picture image={this.state.image} />
-          <Text style={styles.yourName}>{this.state.name}</Text>
+          <Picture image={user.imageUrl ? URI + user.imageUrl : ''} />
+          <Text style={styles.yourName}>{user.name}</Text>
         </View>
         <TouchableWithoutFeedback
-          onPress={() => this.props.navigation.navigate('MyWebtoon')}>
+          onPress={() => this.props.navigation.navigate('MyCreation')}>
           <View
             style={[
               styles.content,
@@ -103,7 +99,9 @@ export class Profile extends Component {
               styles.content,
               {flexDirection: 'row', justifyContent: 'space-between'},
             ]}>
-            <Text style={[styles.textContent]}>Log Out</Text>
+            <Text style={[styles.textContent]}>
+              {isLogin ? 'Logout' : 'Login'}
+            </Text>
             <Icon name="chevron-right" color="#ccc" size={25} />
           </View>
         </TouchableWithoutFeedback>
@@ -114,13 +112,14 @@ export class Profile extends Component {
 
 const styles = StyleSheet.create({
   yourName: {
-    color: dark,
-    fontSize: 25,
-    marginTop: 20,
+    color: 'white',
+    fontSize: 20,
+    marginTop: 10,
   },
   profile: {
     paddingVertical: 40,
     alignItems: 'center',
+    backgroundColor: dark,
   },
   profileImage: {
     width: 150,
@@ -143,4 +142,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(Profile);
+const mapStateToProps = state => {
+  return {
+    isLogin: state.authReducer.isLogin,
+    user: state.authReducer.user,
+  };
+};
+
+export default connect(mapStateToProps)(Profile);

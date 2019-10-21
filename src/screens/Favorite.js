@@ -1,36 +1,25 @@
-import React, {Component} from 'react';
-import {Text, View, FlatList, StyleSheet, AsyncStorage} from 'react-native';
+import React, {PureComponent} from 'react';
+import {Text, View, FlatList, StyleSheet} from 'react-native';
 import {NavigationEvents} from 'react-navigation';
-import axios from '../helpers/axios';
-import {BallIndicator} from 'react-native-indicators';
-
+import {SkypeIndicator} from 'react-native-indicators';
 import {green} from '../colorPallete';
+
+// Redux
+import {connect} from 'react-redux';
+import {findMyFavorites} from '../redux/actions/toonAction';
 
 // Components
 import SearchBar from '../components/SearchBar';
 import {SmallHorizontalCard} from '../components/Card';
 
-export class Favourite extends Component {
+export class Favourite extends PureComponent {
   state = {
     favorites: null,
   };
 
-  componentDidMount() {
-    this.fetchData();
-  }
-
-  fetchData = async () => {
-    const token = await AsyncStorage.getItem('token');
-
-    const {data} = await axios({
-      method: 'GET',
-      url: `/api/v1/sanstoons?is_favorite=true`,
-      headers: {
-        Authorization: token,
-      },
-    });
-
-    this.setState({favorites: data});
+  fetchData = () => {
+    const token = this.props.token;
+    this.props.dispatch(findMyFavorites(token));
   };
 
   renderLoading() {
@@ -40,44 +29,41 @@ export class Favourite extends Component {
           flex: 1,
           alignItems: 'center',
         }}>
-        <BallIndicator color={green} />
+        <SkypeIndicator color={green} />
       </View>
     );
   }
 
   handleSearch = async title => {
-    const token = await AsyncStorage.getItem('token');
-
-    const {data} = await axios({
-      method: 'GET',
-      url: `/api/v1/sanstoons?is_favorite=true&title=${title}`,
-      headers: {
-        Authorization: token,
-      },
-    });
-
-    this.setState({favorites: data});
+    // const token = await AsyncStorage.getItem('token');
+    // const {data} = await axios({
+    //   method: 'GET',
+    //   url: `/santoons?is_favorite=true&title=${title}`,
+    //   headers: {
+    //     Authorization: token,
+    //   },
+    // });
+    // this.setState({favorites: data});
   };
 
   render() {
-    const {navigation} = this.props;
-    const {favorites} = this.state;
+    const {navigation, favorites, isLoading, isLogin} = this.props;
 
     let renderContent;
-    if (favorites == null) {
+    if (isLoading) {
       renderContent = (
         <View
           style={{
             flex: 1,
             alignItems: 'center',
           }}>
-          <BallIndicator color={green} />
+          <SkypeIndicator color={green} />
         </View>
       );
     } else if (favorites.length) {
       renderContent = (
         <FlatList
-          data={this.state.favorites}
+          data={favorites}
           renderItem={({item}) => (
             <SmallHorizontalCard
               data={item}
@@ -93,17 +79,16 @@ export class Favourite extends Component {
       renderContent = (
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyText}>
-            You don't have any favorited comic.
+            {isLogin
+              ? `You don't have any favorited comic.`
+              : `You should login first to list your favorite manga.`}
           </Text>
         </View>
       );
     }
     return (
       <View style={{flex: 1}}>
-        <NavigationEvents
-          onDidFocus={this.fetchData}
-          onDidBlur={() => this.setState({favorites: null})}
-        />
+        <NavigationEvents onDidFocus={this.fetchData} />
         <SearchBar handleSearch={this.handleSearch} />
         {renderContent}
       </View>
@@ -125,4 +110,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Favourite;
+const mapStateToProps = state => {
+  return {
+    token: state.authReducer.token,
+    isLogin: state.authReducer.isLogin,
+    favorites: state.toonReducer.favorites,
+    isLoading: state.toonReducer.isLoading,
+  };
+};
+
+export default connect(mapStateToProps)(Favourite);

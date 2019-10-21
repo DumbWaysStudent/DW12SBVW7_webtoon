@@ -7,17 +7,16 @@ import {
   FlatList,
   TextInput,
   TouchableHighlight,
-  AsyncStorage,
   Dimensions,
   TouchableWithoutFeedback,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ImagePicker from 'react-native-image-picker';
 import axios from '../helpers/axios';
-
-// import {SmallHorizontalCard} from '../components/Card';
-
 import {green, lightGrey, dark} from '../colorPallete';
+
+// Redux
+import {connect} from 'react-redux';
 
 const dim = Dimensions.get('window');
 
@@ -38,7 +37,6 @@ export class CreateWebtoon extends Component {
   };
 
   state = {
-    data: [],
     title: '',
     genre: '',
     image: '',
@@ -68,9 +66,7 @@ export class CreateWebtoon extends Component {
 
   handleCreate = async () => {
     try {
-      const token = await AsyncStorage.getItem('token');
-      const dataUser = await AsyncStorage.getItem('dataUser');
-      const user = JSON.parse(dataUser);
+      const {user, token} = this.props;
 
       const data = new FormData();
       data.append('title', this.state.title);
@@ -79,14 +75,13 @@ export class CreateWebtoon extends Component {
 
       const response = await axios({
         method: 'POST',
-        url: `/api/v1/user/${user.id}/sanstoon`,
+        url: `/user/${user.id}/santoon`,
         data,
         headers: {
           Authorization: token,
           'Content-Type': 'multipart/form-data',
         },
-      });
-      console.log(data);
+      });      
 
       if (response.status == 201) {
         this.props.navigation.pop();
@@ -97,12 +92,11 @@ export class CreateWebtoon extends Component {
         });
       }
     } catch (error) {
-      console.error(error);
+      console.log(error.response);
     }
   };
 
   render() {
-    // const {navigation} = this.props;
     return (
       <View style={styles.mainContainer}>
         <Text style={styles.textTitle}>Title</Text>
@@ -181,4 +175,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateWebtoon;
+const mapStateToProps = state => {
+  return {
+    token: state.authReducer.token,
+    user: state.authReducer.user,
+  };
+};
+
+export default connect(mapStateToProps)(CreateWebtoon);

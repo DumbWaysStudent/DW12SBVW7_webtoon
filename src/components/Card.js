@@ -7,8 +7,8 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
 } from 'react-native';
-
 import {dark, lightGrey} from '../colorPallete';
+import {validateImageUrl} from '../helpers/validation';
 
 export const SmallHorizontalCard = ({
   data,
@@ -18,7 +18,9 @@ export const SmallHorizontalCard = ({
   button,
   eventTrigger,
 }) => {
-  const {image, title, name, id, genre} = data;  
+  const {title, name, id, genre} = data;
+  const image = validateImageUrl(data.image);
+
   const navigate = () => navigation.navigate(route, {title, image, name, id, genre});
   let subTitle;
 

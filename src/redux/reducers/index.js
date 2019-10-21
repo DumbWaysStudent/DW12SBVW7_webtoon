@@ -1,12 +1,14 @@
 import {combineReducers} from 'redux';
 
 // Reducers
-import santoonReducer from './santoonReducer';
 import authReducer from './authReducer';
+import toonReducer from './toonReducer';
+import userCreationReducer from './userCreationReducer';
 
 const rootReducers = combineReducers({
   authReducer: authReducer,
-  santoonReducer: santoonReducer,
+  toonReducer: toonReducer,
+  userCreationReducer: userCreationReducer,
 });
 
 export default rootReducers;

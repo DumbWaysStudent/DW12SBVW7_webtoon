@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from 'react-native';
-
 import {green, dark, lightGrey} from '../colorPallete';
+import {validateImageUrl} from '../helpers/validation';
 
 function HorizontalCard({santoon, navigation, handleFavorite}) {
   const favouritedBtn = {
@@ -19,19 +19,21 @@ function HorizontalCard({santoon, navigation, handleFavorite}) {
     color: green,
   };
 
+  const image = validateImageUrl(santoon.image);
+
   return (
     <TouchableWithoutFeedback
       onPress={() =>
         navigation.navigate('DetailWebtoon', {
           id: santoon.id,
           title: santoon.title,
-          image: santoon.image,
+          image: image,
           genre: santoon.genre,
         })
       }>
       <View style={styles.cardContainer}>
         <View style={styles.imageContainer}>
-          <Image style={styles.imageSize} source={{uri: santoon.image}} />
+          <Image style={styles.imageSize} source={{uri: image}} />
         </View>
         <View style={{marginLeft: 25}}>
           <Text style={styles.titleCardText}>{santoon.title}</Text>

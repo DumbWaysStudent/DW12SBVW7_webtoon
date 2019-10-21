@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import Carousel from 'react-native-banner-carousel';
+import {validateImageUrl} from '../helpers/validation';
 
 const dim = Dimensions.get('window');
 
@@ -17,13 +18,14 @@ export class Banner extends Component {
   };
 
   renderImage(santoon, index) {
+    const image = validateImageUrl(santoon.image);
     return (
       <TouchableWithoutFeedback
         onPress={() =>
           this.props.navigation.navigate('DetailWebtoon', {
             id: santoon.id,
             title: santoon.title,
-            image: santoon.image,
+            image,
             genre: santoon.genre,
           })
         }
@@ -34,7 +36,7 @@ export class Banner extends Component {
               width: this.state.bannerWidth,
               height: this.state.bannerHeight,
             }}
-            source={{uri: santoon.image}}
+            source={{uri: image}}
           />
         </View>
       </TouchableWithoutFeedback>

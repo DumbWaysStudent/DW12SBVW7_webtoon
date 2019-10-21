@@ -1,8 +1,9 @@
-import {LOGGED_IN, LOGGED_OUT} from '../actions/type';
+import {LOADING, LOGGED_IN, LOGGED_OUT, UPDATE_USER} from '../actions/type';
 const initialState = {
   user: {},
   token: '',
   isLogin: false,
+  isLoading: false,
 };
 
 export default (state = initialState, {type, payload}) => {
@@ -19,6 +20,19 @@ export default (state = initialState, {type, payload}) => {
         user: {},
         token: '',
         isLogin: false,
+      };
+
+    case UPDATE_USER:
+      return {
+        ...state,
+        user: payload,
+        isLoading: false,
+      };
+
+    case LOADING:
+      return {
+        ...state,
+        isLoading: true,
       };
 
     default:

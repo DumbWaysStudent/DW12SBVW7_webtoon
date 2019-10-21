@@ -10,16 +10,16 @@ import rootReducer from './reducers/index';
 // Middleware: Handle Async
 const middleware = [thunk];
 
-// if (process.env.NODE_ENV !== 'production') {
-//   middleware.push(createLogger());
-// }
+if (process.env.NODE_ENV !== 'production') {
+  middleware.push(createLogger());
+}
 
 // Middleware: Redux Persist Config
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
   whitelist: ['authReducer'],
-  blacklist: ['santoonReducer'],
+  blacklist: ['toonReducer', 'userCreationReducer'],
 };
 
 // Middleware: Redux Persist Persisted Reducer

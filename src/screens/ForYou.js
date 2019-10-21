@@ -1,20 +1,7 @@
 import React, {Component} from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  YellowBox,
-  ToastAndroid,
-  ActivityIndicator,
-} from 'react-native';
+import {ScrollView, StyleSheet, YellowBox, ToastAndroid} from 'react-native';
 import {Content, Container, Text} from 'native-base';
 import {NavigationEvents} from 'react-navigation';
-
-// Redux
-import {connect} from 'react-redux';
-import {findAllToons, handleFavorite} from '../redux/actions/santoonAction';
-
-// Ignore Yellow Warnings
-YellowBox.ignoreWarnings(['Warning: ']);
 
 // Components
 import Loading from '../components/Loading';
@@ -23,14 +10,17 @@ import Banner from '../components/Banner';
 import Favorite from '../components/Favorite';
 import AllToons from '../components/AllToons';
 
-import {dark, green} from '../colorPallete';
+// Redux
+import {connect} from 'react-redux';
+import {findAllToons, handleFavorite} from '../redux/actions/toonAction';
+
+// Ignore Yellow Warnings
+YellowBox.ignoreWarnings(['Warning: ']);
+
+import {dark} from '../colorPallete';
 
 export class ForYou extends Component {
-  state = {
-    sanstoons: [],
-    favorites: [],
-  };
-
+  
   fetchAllToons = async () => {
     const token = this.props.token;
     this.props.dispatch(findAllToons(token));
@@ -45,7 +35,7 @@ export class ForYou extends Component {
 
     if (!token) {
       return ToastAndroid.showWithGravity(
-        `You should be login first to use favorite.`,
+        `Please login first to add this manga.`,
         ToastAndroid.SHORT,
         ToastAndroid.CENTER,
       );
@@ -59,7 +49,7 @@ export class ForYou extends Component {
   };
 
   handleSearch = title => {
-    console.log(title);
+    console.log(title, 'title');
   };
 
   render() {
@@ -67,30 +57,33 @@ export class ForYou extends Component {
     return (
       <Container style={{flex: 1, backgroundColor: '#fff'}}>
         <NavigationEvents
-          onDidFocus={this.fetchAllToons}
+          onWillFocus={this.fetchAllToons}
           onDidBlur={() => this.setState({sanstoons: [], favorites: []})}
         />
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <SearchBar handleSearch={this.handleSearch} />
-          {isLoading && <Loading />}
-          <Content>
-            <Text style={styles.recomended}>Recomended For You</Text>
-            <Banner santoons={santoons} navigation={this.props.navigation} />
-          </Content>
-          <Content>
-            {isLogin && (
-              <Favorite
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <SearchBar handleSearch={this.handleSearch} />
+            <Content>
+              <Text style={styles.recomended}>Recomended For You</Text>
+              <Banner santoons={santoons} navigation={this.props.navigation} />
+            </Content>
+            <Content>
+              {isLogin && (
+                <Favorite
+                  navigation={navigation}
+                  favorites={this.props.favorites}
+                />
+              )}
+              <AllToons
                 navigation={navigation}
-                favorites={this.props.favorites}
+                handleFavorite={this.handleFavorite}
+                santoons={santoons}
               />
-            )}
-            <AllToons
-              navigation={navigation}
-              handleFavorite={this.handleFavorite}
-              santoons={santoons}
-            />
-          </Content>
-        </ScrollView>
+            </Content>
+          </ScrollView>
+        )}
       </Container>
     );
   }
@@ -113,9 +106,9 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    santoons: state.santoonReducer.santoons,
-    favorites: state.santoonReducer.favorites,
-    isLoading: state.santoonReducer.isLoading,
+    santoons: state.toonReducer.santoons,
+    favorites: state.toonReducer.favorites,
+    isLoading: state.toonReducer.isLoading,
     isLogin: state.authReducer.isLogin,
     token: state.authReducer.token,
   };

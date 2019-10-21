@@ -5,11 +5,6 @@ import axios from '../helpers/axios';
 
 const Width = Dimensions.get('window').width;
 const Height = Dimensions.get('window').height;
-const images = [
-  'https://swebtoon-phinf.pstatic.net/20190123_235/1548235775159edGIC_JPEG/1548235775138143615.jpg?type=q90',
-  'https://swebtoon-phinf.pstatic.net/20190123_171/1548235775143U20lA_JPEG/1548235775124143615.jpg?type=q90',
-  'https://swebtoon-phinf.pstatic.net/20190123_144/1548235775143HBeD2_JPEG/1548235775096143617.jpg?type=q90',
-];
 
 function Item({images, width, height}) {
   return (
@@ -58,13 +53,13 @@ export class DetailEpisode extends Component {
     const santoonId = this.props.navigation.getParam('santoonId');
 
     // LOG
-    console.log('Printed from DetailEpisode.js');
-    console.log('episodeId:', episodeId);
-    console.log('santoonId:', santoonId, '\n');
+    // console.log('Printed from DetailEpisode.js');
+    // console.log('episodeId:', episodeId);
+    // console.log('santoonId:', santoonId, '\n');
 
     const {data} = await axios({
       method: 'GET',
-      url: `/api/v1/sanstoons/${santoonId}/episode/${episodeId}`,
+      url: `/santoons/${santoonId}/episode/${episodeId}`,
     });
 
     this.setState({pages: data});

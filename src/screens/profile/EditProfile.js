@@ -1,10 +1,15 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, TextInput, AsyncStorage} from 'react-native';
+import {Text, View, StyleSheet, TextInput} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ImagePicker from 'react-native-image-picker';
-import axios from '../../helpers/axios';
+import {URI} from 'react-native-dotenv';
 
+// Component
 import Picture from '../../components/Picture';
+
+// Redux
+import {connect} from 'react-redux';
+import {updateUser} from '../../redux/actions/authActions';
 
 export class EditProfile extends Component {
   state = {
@@ -14,11 +19,10 @@ export class EditProfile extends Component {
   };
 
   componentDidMount() {
-    const name = this.props.navigation.getParam('name');
-    const image = this.props.navigation.getParam('image');
+    const {user} = this.props;
     this.setState({
-      name,
-      image,
+      name: user.name,
+      image: URI + user.imageUrl,
     });
   }
 
@@ -36,31 +40,20 @@ export class EditProfile extends Component {
     });
   };
 
-  handleUpload = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      const dataUser = await AsyncStorage.getItem('dataUser');
-      const user = JSON.parse(dataUser);
+  handleUpload = () => {
+    const token = this.props.token;
+    const userId = this.props.user.id;
 
-      const data = new FormData();
-      data.append('name', this.state.name);
-      if (this.state.dataImage) data.append('img', this.state.dataImage);
+    // Data to be Upload
+    const data = new FormData();
+    data.append('name', this.state.name);
+    if (this.state.dataImage) data.append('img', this.state.dataImage);
 
-      const response = await axios({
-        method: 'PUT',
-        url: `/api/v1/user/${user.id}/profile`,
-        data,
-        headers: {
-          Authorization: token,
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      if (response.status == 200) {
-          this.props.navigation.pop();
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    // Dispatch event to userAction
+    this.props.dispatch(updateUser(userId, token, data));
+
+    // If request success, go back in the stack
+    this.props.navigation.pop();
   };
 
   render() {
@@ -127,4 +120,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditProfile;
+const mapStateToProps = state => {
+  return {
+    user: state.authReducer.user,
+    token: state.authReducer.token,
+  };
+};
+
+export default connect(mapStateToProps)(EditProfile);

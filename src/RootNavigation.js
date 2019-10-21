@@ -26,7 +26,7 @@ import Profile from './screens/profile/Profile';
 import EditProfile from './screens/profile/EditProfile';
 
 // Webtoon CRUD
-import MyWebtoon from './screens/MyWebtoon';
+import MyCreation from './screens/MyCreation';
 import CreateWebtoon from './screens/CreateWebtoon';
 import CreateEpisode from './screens/CreateEpisode';
 import EditWebtoon from './screens/EditWebtoon';
@@ -121,10 +121,10 @@ const PrivateNavigation = createStackNavigator({
   DetailEpisode: {
     screen: DetailEpisode,
   },
-  MyWebtoon: {
-    screen: MyWebtoon,
+  MyCreation: {
+    screen: MyCreation,
     navigationOptions: {
-      title: 'My Webtoon',
+      title: 'My Creation',
     },
   },
   CreateWebtoon: {

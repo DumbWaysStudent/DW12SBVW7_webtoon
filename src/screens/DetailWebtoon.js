@@ -10,12 +10,15 @@ import {
   TouchableWithoutFeedback,
   Dimensions,
 } from 'react-native';
-import axios from '../helpers/axios';
 import convertDate from '../helpers/date';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {BallIndicator} from 'react-native-indicators';
+import {SkypeIndicator} from 'react-native-indicators';
 
 import {green} from '../colorPallete';
+
+// Redux
+import {connect} from 'react-redux';
+import {findToonEpisodes} from '../redux/actions/toonAction';
 
 const HEADER_MAX_HEIGHT = 250;
 const HEADER_MIN_HEIGHT = 50;
@@ -24,27 +27,21 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 export class DetailWebtoon extends Component {
   state = {
     scrollY: new Animated.Value(0),
-    episodes: null,
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     const id = this.props.navigation.getParam('id');
-    const {data} = await axios({
-      method: 'GET',
-      url: `api/v1/sanstoons/${id}/episodes`,
-    });
-
-    this.setState({episodes: data});
+    this.props.dispatch(findToonEpisodes(id));
   }
 
-  renderEpisode = () => {
-    const {episodes} = this.state;
+  renderEpisodes = () => {
+    const {episodes, isLoading} = this.props;
 
     let renderContent;
-    if (episodes == null) {
+    if (isLoading) {
       renderContent = (
         <View style={styles.bottomContainer}>
-          <BallIndicator color={green} />
+          <SkypeIndicator color={green} />
         </View>
       );
     } else if (episodes.length) {
@@ -110,7 +107,7 @@ export class DetailWebtoon extends Component {
           onScroll={Animated.event([
             {nativeEvent: {contentOffset: {y: this.state.scrollY}}},
           ])}>
-          {this.renderEpisode()}
+          {this.renderEpisodes()}
         </ScrollView>
         <Animated.View style={[styles.header, {height: headerHeight}]}>
           <Animated.Image
@@ -208,4 +205,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DetailWebtoon;
+const mapStateToProps = state => {
+  return {
+    episodes: state.toonReducer.episodes,
+    isLoading: state.toonReducer.isLoading,
+  };
+};
+
+export default connect(mapStateToProps)(DetailWebtoon);

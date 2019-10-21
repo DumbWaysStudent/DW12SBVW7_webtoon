@@ -8,24 +8,25 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {BallIndicator} from 'react-native-indicators';
-
 import {lightGrey, dark, green} from '../colorPallete';
 import trunc from '../helpers/trunc';
+import {validateImageUrl} from '../helpers/validation';
 
 function VerticalCard({navigation, favorite, checker}) {
   let rightMargin = checker.index == checker.length - 1 ? 10 : 0;
+  const image = validateImageUrl(favorite.image);
   return (
     <TouchableWithoutFeedback
       onPress={() =>
         navigation.navigate('DetailWebtoon', {
           id: favorite.id,
           title: favorite.title,
-          image: favorite.image,
+          image: image,
           genre: favorite.genre,
         })
       }>
       <View style={[styles.favCard, {marginRight: rightMargin}]}>
-        <Image source={{uri: favorite.image}} style={styles.imageSize} />
+        <Image source={{uri: image}} style={styles.imageSize} />
         <Text style={styles.favTitleText}>{trunc(favorite.title)}</Text>
         <Text style={styles.favSubText}>{favorite.author}</Text>
       </View>

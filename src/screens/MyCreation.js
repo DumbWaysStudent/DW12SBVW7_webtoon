@@ -1,54 +1,34 @@
 import React, {Component} from 'react';
-import {
-  Text,
-  View,
-  FlatList,
-  Image,
-  StyleSheet,
-  AsyncStorage,
-} from 'react-native';
+import {View, FlatList, StyleSheet} from 'react-native';
 import {NavigationEvents} from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import axios from '../helpers/axios';
-
 import {green} from '../colorPallete';
 
-// Components
+// Component
 import {SmallHorizontalCard} from '../components/Card';
+
+// Redux
+import {connect} from 'react-redux';
+import {findMyCreation} from '../redux/actions/userCreationAction';
 
 export class MyWebtoon extends Component {
   state = {
     myWebtoon: [],
   };
 
-  componentDidMount() {
-    this.fetchMyToons();
-  }
-
-  fetchMyToons = async () => {
-    const token = await AsyncStorage.getItem('token');
-    const dataUser = await AsyncStorage.getItem('dataUser');
-    const user = JSON.parse(dataUser);
-
-    const {data} = await axios({
-      method: 'GET',
-      url: `/api/v1/user/${user.id}/sanstoons`,
-      headers: {
-        Authorization: token,
-      },
-    });
-
-    this.setState({myWebtoon: data});
+  fetchMyToons = () => {
+    const {user, token} = this.props;
+    this.props.dispatch(findMyCreation(user.id, token));
   };
 
   render() {
-    const {navigation} = this.props;
+    const {navigation, myCreations} = this.props;
     return (
       <View style={{flex: 1}}>
         <NavigationEvents onDidFocus={this.fetchMyToons} />
         <FlatList
           contentContainerStyle={{marginTop: 20}}
-          data={this.state.myWebtoon}
+          data={myCreations}
           renderItem={({item}) => (
             <SmallHorizontalCard
               data={item}
@@ -82,4 +62,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyWebtoon;
+const mapStateToProps = state => {
+  return {
+    token: state.authReducer.token,
+    user: state.authReducer.user,
+    myCreations: state.userCreationReducer.myCreations,
+  };
+};
+
+export default connect(mapStateToProps)(MyWebtoon);
