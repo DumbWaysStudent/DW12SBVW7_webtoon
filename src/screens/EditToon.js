@@ -113,7 +113,7 @@ export class EditWebtoon extends Component {
 
   handleDeleteToon = async toonId => {
     const {user, token} = this.props;
-    
+
     try {
       const response = await axios({
         method: 'DELETE',
@@ -215,7 +215,7 @@ export class EditWebtoon extends Component {
             <Text style={styles.btnText}>+ Add Episode</Text>
           </TouchableHighlight>
           <TouchableHighlight
-            style={[styles.addBtn, {flex: 1, backgroundColor: 'red'}]}
+            style={[styles.addBtn, {flex: 1, backgroundColor: dark}]}
             onPress={() => this.setState({confirmDelete: true})}>
             <Text style={styles.btnText}>Delete Webtoon</Text>
           </TouchableHighlight>
@@ -257,13 +257,13 @@ const styles = StyleSheet.create({
   addBtn: {
     backgroundColor: green,
     padding: 10,
-    marginVertical: 5,
+    marginVertical: 10,
     marginHorizontal: 10,
     borderRadius: 5,
   },
   btnText: {
     textAlign: 'center',
-    fontSize: 17,
+    fontSize: 15,
     color: 'white',
   },
 });
@@ -273,6 +273,7 @@ const mapStateToProps = state => {
     token: state.authReducer.token,
     user: state.authReducer.user,
     myCreationEpisodes: state.userCreationReducer.myCreationEpisodes,
+    isLoading: state.userCreationReducer.isLoading,
   };
 };
 

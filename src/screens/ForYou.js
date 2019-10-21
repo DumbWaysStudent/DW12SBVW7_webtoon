@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {ScrollView, StyleSheet, YellowBox, ToastAndroid} from 'react-native';
 import {Content, Container, Text} from 'native-base';
 import {NavigationEvents} from 'react-navigation';
-import {BarIndicator} from 'react-native-indicators';
 
 // Components
 import SearchBar from '../components/SearchBar';
@@ -36,7 +35,7 @@ export class ForYou extends Component {
 
     if (!token) {
       return ToastAndroid.showWithGravity(
-        `Please login first to add this manga.`,
+        `Please login to add to your favorite lists.`,
         ToastAndroid.SHORT,
         ToastAndroid.CENTER,
       );
@@ -54,7 +53,7 @@ export class ForYou extends Component {
   };
 
   render() {
-    const {navigation, santoons, isLoading, isLogin} = this.props;
+    const {navigation, santoons, isLogin} = this.props;
     return (
       <Container style={{flex: 1, backgroundColor: '#fff'}}>
         <NavigationEvents onWillFocus={this.fetchAllToons} />

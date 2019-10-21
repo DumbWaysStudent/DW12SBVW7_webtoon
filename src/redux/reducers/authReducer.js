@@ -3,7 +3,6 @@ const initialState = {
   user: {},
   token: '',
   isLogin: false,
-  isLoading: false,
 };
 
 export default (state = initialState, {type, payload}) => {
@@ -26,13 +25,6 @@ export default (state = initialState, {type, payload}) => {
       return {
         ...state,
         user: payload,
-        isLoading: false,
-      };
-
-    case LOADING:
-      return {
-        ...state,
-        isLoading: true,
       };
 
     default:

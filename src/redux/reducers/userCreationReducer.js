@@ -1,5 +1,5 @@
 import {
-  LOADING,
+  LOADING_CREATION,
   FETCH_USER_CREATION,
   FETCH_USER_CREATION_EPISODES,
 } from '../actions/type';
@@ -26,7 +26,7 @@ export default (state = initialState, {type, payload}) => {
         isLoading: false,
       };
 
-    case LOADING:
+    case LOADING_CREATION:
       return {
         ...state,
         isLoading: true,

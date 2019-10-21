@@ -1,14 +1,16 @@
 import React, {PureComponent} from 'react';
 import {Text, View, FlatList, StyleSheet} from 'react-native';
 import {NavigationEvents} from 'react-navigation';
-import {SkypeIndicator} from 'react-native-indicators';
+import {BarIndicator} from 'react-native-indicators';
 import {green} from '../colorPallete';
 
 // Redux
+import {compose} from 'redux';
 import {connect} from 'react-redux';
 import {findMyFavorites} from '../redux/actions/toonAction';
 
 // Components
+import Loading from '../hoc/Loading';
 import SearchBar from '../components/SearchBar';
 import {SmallHorizontalCard} from '../components/Card';
 
@@ -29,7 +31,7 @@ export class Favourite extends PureComponent {
           flex: 1,
           alignItems: 'center',
         }}>
-        <SkypeIndicator color={green} />
+        <BarIndicator color={green} />
       </View>
     );
   }
@@ -47,20 +49,10 @@ export class Favourite extends PureComponent {
   };
 
   render() {
-    const {navigation, favorites, isLoading, isLogin} = this.props;
+    const {navigation, favorites, isLogin} = this.props;
 
     let renderContent;
-    if (isLoading) {
-      renderContent = (
-        <View
-          style={{
-            flex: 1,
-            alignItems: 'center',
-          }}>
-          <SkypeIndicator color={green} />
-        </View>
-      );
-    } else if (favorites.length) {
+    if (favorites.length) {
       renderContent = (
         <FlatList
           data={favorites}
@@ -75,7 +67,7 @@ export class Favourite extends PureComponent {
           keyExtractor={item => item.title}
         />
       );
-    } else if (!favorites.length) {
+    } else {
       renderContent = (
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyText}>
@@ -86,6 +78,7 @@ export class Favourite extends PureComponent {
         </View>
       );
     }
+
     return (
       <View style={{flex: 1}}>
         <NavigationEvents onWillFocus={this.fetchData} />
@@ -112,11 +105,14 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    token: state.authReducer.token,
     isLogin: state.authReducer.isLogin,
+    token: state.authReducer.token,
     favorites: state.toonReducer.favorites,
     isLoading: state.toonReducer.isLoading,
   };
 };
 
-export default connect(mapStateToProps)(Favourite);
+export default compose(
+  connect(mapStateToProps),
+  Loading,
+)(Favourite);

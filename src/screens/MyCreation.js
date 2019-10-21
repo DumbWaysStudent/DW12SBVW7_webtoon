@@ -6,20 +6,21 @@ import {green} from '../colorPallete';
 
 // Component
 import {SmallHorizontalCard} from '../components/Card';
+import Loading from '../hoc/Loading';
 
 // Redux
+import {compose} from 'redux';
 import {connect} from 'react-redux';
 import {findMyCreations} from '../redux/actions/userCreationAction';
 
 export class MyWebtoon extends Component {
-
   fetchMyCreations = () => {
     const {user, token} = this.props;
     this.props.dispatch(findMyCreations(user.id, token));
   };
 
   render() {
-    const {navigation, myCreations} = this.props;    
+    const {navigation, myCreations} = this.props;
     return (
       <View style={{flex: 1}}>
         <NavigationEvents onWillFocus={this.fetchMyCreations} />
@@ -64,7 +65,11 @@ const mapStateToProps = state => {
     token: state.authReducer.token,
     user: state.authReducer.user,
     myCreations: state.userCreationReducer.myCreations,
+    isLoading: state.userCreationReducer.isLoading,
   };
 };
 
-export default connect(mapStateToProps)(MyWebtoon);
+export default compose(
+  connect(mapStateToProps),
+  Loading,
+)(MyWebtoon);

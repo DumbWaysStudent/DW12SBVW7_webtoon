@@ -3,9 +3,6 @@ import {StyleSheet, Text, View} from 'react-native';
 import {BarIndicator} from 'react-native-indicators';
 import {green, dark} from '../colorPallete';
 
-// Redux
-import {connect} from 'react-redux';
-
 const LoadingComponent = WrappedComponent => {
   return class LoadingScreen extends PureComponent {
     _renderLoading() {

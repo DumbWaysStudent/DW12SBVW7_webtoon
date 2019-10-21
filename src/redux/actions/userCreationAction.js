@@ -1,5 +1,5 @@
 import {
-  LOADING,
+  LOADING_CREATION,
   FETCH_USER_CREATION,
   FETCH_USER_CREATION_EPISODES,
 } from './type';
@@ -7,7 +7,7 @@ import axios from '../../helpers/axios';
 
 export const findMyCreations = (userId, token) => dispatch => {
   dispatch({
-    type: LOADING,
+    type: LOADING_CREATION,
   });
 
   axios({
@@ -28,7 +28,7 @@ export const findMyCreations = (userId, token) => dispatch => {
 
 export const findMyCreationEpisodes = (userId, toonId, token) => dispatch => {
   dispatch({
-    type: LOADING,
+    type: LOADING_CREATION,
   });
 
   axios({

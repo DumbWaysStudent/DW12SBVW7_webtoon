@@ -1,4 +1,3 @@
-// General
 export const LOADING = 'LOADING';
 export const ERROR = 'ERROR';
 
@@ -20,3 +19,4 @@ export const UPDATE_USER = 'UPDATE_USER';
 
 // User (Creation)
 export const FETCH_USER_CREATION = 'FETCH_USER_CREATION';
+export const LOADING_CREATION = 'LOADING_CREATION';

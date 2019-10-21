@@ -8,13 +8,7 @@ export class Picture extends Component {
     const {image} = this.props;
     let renderImage;
     if (image) {
-      renderImage = (
-        <Image
-          source={{uri: image}}
-          style={styles.profilePic}
-          resizeMode="cover"
-        />
-      );
+      renderImage = <Image source={{uri: image}} style={styles.profilePic} />;
     } else {
       renderImage = <Icon name="user" color="#ccc" size={140} />;
     }

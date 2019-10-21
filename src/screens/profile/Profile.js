@@ -1,7 +1,12 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, TouchableWithoutFeedback} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  ToastAndroid,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {NavigationEvents} from 'react-navigation';
 import {dark, green} from '../../colorPallete';
 import {URI} from 'react-native-dotenv';
 
@@ -36,34 +41,6 @@ export class Profile extends Component {
     };
   };
 
-  componentDidMount() {
-    // const dataUser = await AsyncStorage.getItem('dataUser');
-    // const user = JSON.parse(dataUser);
-    // this.props.navigation.setParams({
-    //   name: user.name,
-    //   image: API + '/' + user.imageUrl,
-    // });
-    // this.setState({
-    //   name: user.name,
-    //   image: user.image,
-    // });
-  }
-
-  fetchUser = () => {
-    // const dataUser = await AsyncStorage.getItem('dataUser');
-    // const user = JSON.parse(dataUser);
-    // const {data} = await axios({
-    //   method: 'GET',
-    //   url: `/api/v1/user/${user.id}/profile`,
-    // });
-    // const setImage = data.imageUrl ? API + '/' + data.imageUrl : '';
-    // this.setState({
-    //   name: data.name,
-    //   image: setImage,
-    // });
-    // await AsyncStorage.setItem('dataUser', JSON.stringify(data.dataUser));
-  };
-
   handleLogout = () => {
     this.props.dispatch(logout());
     if (this.props.isLogin) {
@@ -73,38 +50,47 @@ export class Profile extends Component {
     }
   };
 
+  validationLogin() {
+    if (this.props.isLogin) {
+      this.props.navigation.navigate('MyCreation');
+    } else {
+      return ToastAndroid.showWithGravity(
+        `You should login to create your own manga.`,
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+    }
+  }
+
   render() {
     const {user, isLogin} = this.props;
     return (
       <View style={{flex: 1}}>
-        <NavigationEvents onDidFocus={this.fetchUser} />
         <View style={styles.profile}>
-          <Picture image={user.imageUrl ? URI + user.imageUrl : ''} />
-          <Text style={styles.yourName}>{user.name}</Text>
+          <Picture
+            image={user.imageUrl ? URI + user.imageUrl : user.imageUrl}
+          />
+          <Text style={styles.yourName}>
+            {isLogin ? user.name : 'No Account'}
+          </Text>
         </View>
-        <TouchableWithoutFeedback
-          onPress={() => this.props.navigation.navigate('MyCreation')}>
-          <View
-            style={[
-              styles.content,
-              {flexDirection: 'row', justifyContent: 'space-between'},
-            ]}>
-            <Text style={styles.textContent}>My Webtoon Creation</Text>
-            <Icon name="chevron-right" color="#ccc" size={25} />
-          </View>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => this.handleLogout()}>
-          <View
-            style={[
-              styles.content,
-              {flexDirection: 'row', justifyContent: 'space-between'},
-            ]}>
-            <Text style={[styles.textContent]}>
-              {isLogin ? 'Logout' : 'Login'}
-            </Text>
-            <Icon name="chevron-right" color="#ccc" size={25} />
-          </View>
-        </TouchableWithoutFeedback>
+
+        <View style={{flex: 1, alignItems: 'center', paddingTop: 50}}>
+          <TouchableWithoutFeedback onPress={() => this.validationLogin()}>
+            <View style={[styles.content]}>
+              <Icon name="book" color={dark} size={25} />
+              <Text style={styles.textContent}>My Webtoon Creation</Text>
+            </View>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={() => this.handleLogout()}>
+            <View style={[styles.content]}>
+              <Icon name="user" color={dark} size={25} />
+              <Text style={[styles.textContent]}>
+                {isLogin ? 'Logout' : 'Login'}
+              </Text>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
       </View>
     );
   }
@@ -112,14 +98,22 @@ export class Profile extends Component {
 
 const styles = StyleSheet.create({
   yourName: {
-    color: 'white',
+    color: dark,
     fontSize: 20,
     marginTop: 10,
   },
   profile: {
     paddingVertical: 40,
     alignItems: 'center',
-    backgroundColor: dark,
+    backgroundColor: 'white',
+    borderColor: '#ddd',
+    borderTopWidth: 0,
+    borderBottomWidth: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 1,
   },
   profileImage: {
     width: 150,
@@ -133,12 +127,17 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 10,
+    height: 50,
+    flexDirection: 'row',
+    width: '80%',
     borderColor: '#d3d3d3',
     borderWidth: 1,
-    marginVertical: 5,
+    borderRadius: 5,
+    marginVertical: 10,
   },
   textContent: {
     fontSize: 18,
+    marginLeft: 20,
   },
 });
 
