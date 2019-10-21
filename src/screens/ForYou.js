@@ -2,25 +2,26 @@ import React, {Component} from 'react';
 import {ScrollView, StyleSheet, YellowBox, ToastAndroid} from 'react-native';
 import {Content, Container, Text} from 'native-base';
 import {NavigationEvents} from 'react-navigation';
+import {BarIndicator} from 'react-native-indicators';
 
 // Components
-import Loading from '../components/Loading';
 import SearchBar from '../components/SearchBar';
 import Banner from '../components/Banner';
 import Favorite from '../components/Favorite';
 import AllToons from '../components/AllToons';
+import Loading from '../hoc/Loading';
 
 // Redux
+import {compose} from 'redux';
 import {connect} from 'react-redux';
 import {findAllToons, handleFavorite} from '../redux/actions/toonAction';
 
 // Ignore Yellow Warnings
 YellowBox.ignoreWarnings(['Warning: ']);
 
-import {dark} from '../colorPallete';
+import {dark, green} from '../colorPallete';
 
 export class ForYou extends Component {
-  
   fetchAllToons = async () => {
     const token = this.props.token;
     this.props.dispatch(findAllToons(token));
@@ -56,33 +57,27 @@ export class ForYou extends Component {
     const {navigation, santoons, isLoading, isLogin} = this.props;
     return (
       <Container style={{flex: 1, backgroundColor: '#fff'}}>
-        <NavigationEvents
-          onWillFocus={this.fetchAllToons}          
-        />
-        {isLoading ? (
-          <Loading />
-        ) : (
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <SearchBar handleSearch={this.handleSearch} />
-            <Content>
-              <Text style={styles.recomended}>Recomended For You</Text>
-              <Banner santoons={santoons} navigation={this.props.navigation} />
-            </Content>
-            <Content>
-              {isLogin && (
-                <Favorite
-                  navigation={navigation}
-                  favorites={this.props.favorites}
-                />
-              )}
-              <AllToons
+        <NavigationEvents onWillFocus={this.fetchAllToons} />
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <SearchBar handleSearch={this.handleSearch} />
+          <Content>
+            <Text style={styles.recomended}>Recomended For You</Text>
+            <Banner santoons={santoons} navigation={this.props.navigation} />
+          </Content>
+          <Content>
+            {isLogin && (
+              <Favorite
                 navigation={navigation}
-                handleFavorite={this.handleFavorite}
-                santoons={santoons}
+                favorites={this.props.favorites}
               />
-            </Content>
-          </ScrollView>
-        )}
+            )}
+            <AllToons
+              navigation={navigation}
+              handleFavorite={this.handleFavorite}
+              santoons={santoons}
+            />
+          </Content>
+        </ScrollView>
       </Container>
     );
   }
@@ -105,12 +100,15 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
+    isLogin: state.authReducer.isLogin,
+    token: state.authReducer.token,
     santoons: state.toonReducer.santoons,
     favorites: state.toonReducer.favorites,
     isLoading: state.toonReducer.isLoading,
-    isLogin: state.authReducer.isLogin,
-    token: state.authReducer.token,
   };
 };
 
-export default connect(mapStateToProps)(ForYou);
+export default compose(
+  connect(mapStateToProps),
+  Loading,
+)(ForYou);
