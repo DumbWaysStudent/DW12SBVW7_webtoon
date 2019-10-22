@@ -12,7 +12,8 @@ import {
 } from 'react-native';
 import convertDate from '../helpers/date';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {SkypeIndicator} from 'react-native-indicators';
+import {BarIndicator} from 'react-native-indicators';
+import {robotoWeights, iOSColors} from 'react-native-typography';
 import {validateImageUrl} from '../helpers/validation';
 
 import {green} from '../colorPallete';
@@ -21,7 +22,8 @@ import {green} from '../colorPallete';
 import {connect} from 'react-redux';
 import {findToonEpisodes} from '../redux/actions/toon';
 
-const HEADER_MAX_HEIGHT = 250;
+const dim = Dimensions.get('window');
+const HEADER_MAX_HEIGHT = dim.height * 0.3;
 const HEADER_MIN_HEIGHT = 50;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
@@ -42,7 +44,7 @@ export class DetailWebtoon extends Component {
     if (isLoading) {
       renderContent = (
         <View style={styles.bottomContainer}>
-          <SkypeIndicator color={green} />
+          <BarIndicator color={green} />
         </View>
       );
     } else if (episodes.length) {
@@ -63,7 +65,7 @@ export class DetailWebtoon extends Component {
                   style={{height: 80, width: 80}}
                 />
                 <View style={{marginLeft: 15, justifyContent: 'space-evenly'}}>
-                  <Text style={{fontSize: 16}}>{episode.title}</Text>
+                  <Text style={robotoWeights.regular}>{episode.title}</Text>
                   <Text style={{fontSize: 12, color: '#bbb'}}>
                     {convertDate(new Date(episode.createdAt))}
                   </Text>
@@ -76,7 +78,7 @@ export class DetailWebtoon extends Component {
     } else if (!episodes.length) {
       renderContent = (
         <View style={styles.bottomContainer}>
-          <Text style={{fontSize: 13}}>
+          <Text style={{fontSize: 13, color: iOSColors.midGray}}>
             The creator not yet published any episode.
           </Text>
         </View>
@@ -166,10 +168,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   title: {
-    backgroundColor: 'transparent',
-    color: 'white',
+    ...robotoWeights.medium,
+    color: iOSColors.white,
     fontSize: 20,
-    fontWeight: 'bold',
   },
   scrollViewContent: {
     marginTop: HEADER_MAX_HEIGHT,
@@ -177,8 +178,8 @@ const styles = StyleSheet.create({
   card: {
     height: 80,
     flexDirection: 'row',
-    borderWidth: 0.5,
-    borderColor: '#ccc',
+    borderBottomWidth: 0.5,
+    borderColor: iOSColors.lightGray2,
   },
   row: {
     height: 40,
@@ -194,13 +195,11 @@ const styles = StyleSheet.create({
     right: 0,
     width: null,
     height: HEADER_MAX_HEIGHT,
-    resizeMode: 'cover',
   },
   bottomContainer: {
     flex: 1,
-    width: Dimensions.get('window').width,
-    height:
-      Dimensions.get('window').height - (HEADER_MAX_HEIGHT + HEADER_MIN_HEIGHT),
+    width: dim.width,
+    height: dim.height - (HEADER_MAX_HEIGHT + HEADER_MIN_HEIGHT),
     justifyContent: 'center',
     alignItems: 'center',
   },

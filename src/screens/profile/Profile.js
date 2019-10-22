@@ -7,8 +7,9 @@ import {
   ToastAndroid,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {dark, green} from '../../colorPallete';
+import {robotoWeights, iOSColors} from 'react-native-typography';
 import {URI} from 'react-native-dotenv';
+import {dark} from '../../colorPallete';
 
 // Component
 import Picture from '../../components/Picture';
@@ -18,26 +19,10 @@ import {connect} from 'react-redux';
 import {logout} from '../../redux/actions/auth';
 
 export class Profile extends Component {
-  static navigationOptions = ({navigation}) => {
-    const name = navigation.getParam('name');
-    const image = navigation.getParam('image');
+  static navigationOptions = () => {
     return {
       title: 'Profile',
       headerTintColor: dark,
-      headerRight: (
-        <Icon
-          name="pencil"
-          size={25}
-          color={green}
-          style={{marginRight: 20}}
-          onPress={() =>
-            navigation.navigate('EditProfile', {
-              name,
-              image,
-            })
-          }
-        />
-      ),
     };
   };
 
@@ -63,7 +48,9 @@ export class Profile extends Component {
   }
 
   render() {
-    const {user, isLogin} = this.props;
+    const {user, isLogin, navigation} = this.props;
+    const name = navigation.getParam('name');
+    const image = navigation.getParam('image');
     return (
       <View style={{flex: 1}}>
         <View style={styles.profile}>
@@ -75,15 +62,30 @@ export class Profile extends Component {
           </Text>
         </View>
 
-        <View style={{flex: 1, alignItems: 'center', paddingTop: 50}}>
+        <View style={styles.bottomContainer}>
+          {isLogin && (
+            <TouchableWithoutFeedback
+              onPress={() =>
+                navigation.navigate('EditProfile', {
+                  name,
+                  image,
+                })
+              }>
+              <View style={styles.content}>
+                <Icon name="gear" color={dark} size={25} />
+                <Text style={styles.textContent}>Edit Profile</Text>
+              </View>
+            </TouchableWithoutFeedback>
+          )}
           <TouchableWithoutFeedback onPress={() => this.validationLogin()}>
-            <View style={[styles.content]}>
+            <View
+              style={styles.content}>
               <Icon name="book" color={dark} size={25} />
               <Text style={styles.textContent}>My Webtoon Creation</Text>
             </View>
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback onPress={() => this.handleLogout()}>
-            <View style={[styles.content]}>
+            <View style={styles.content}>
               <Icon name="user" color={dark} size={25} />
               <Text style={[styles.textContent]}>
                 {isLogin ? 'Logout' : 'Login'}
@@ -98,19 +100,21 @@ export class Profile extends Component {
 
 const styles = StyleSheet.create({
   yourName: {
+    ...robotoWeights.light,
     color: dark,
     fontSize: 20,
-    marginTop: 10,
+    marginTop: 20,
+    fontWeight: 'bold',
   },
   profile: {
     paddingVertical: 40,
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: iOSColors.white,
     borderColor: '#ddd',
     borderTopWidth: 0,
     borderBottomWidth: 1,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 1,
@@ -125,19 +129,27 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     marginBottom: 20,
   },
+  bottomContainer: {
+    flex: 1,
+    alignItems: 'center',
+    paddingTop: 50,
+  },
   content: {
     padding: 10,
     height: 50,
     flexDirection: 'row',
     width: '80%',
-    borderColor: '#d3d3d3',
+    borderColor: iOSColors.midGray,
     borderWidth: 1,
     borderRadius: 5,
     marginVertical: 10,
   },
   textContent: {
-    fontSize: 18,
+    ...robotoWeights.light,
+    alignSelf: 'center',
     marginLeft: 20,
+    fontWeight: 'bold',
+    color: dark,
   },
 });
 

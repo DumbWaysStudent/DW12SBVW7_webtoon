@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {BarIndicator} from 'react-native-indicators';
+import {robotoWeights, iOSColors} from 'react-native-typography';
 import {green, dark} from '../colorPallete';
 
 const LoadingComponent = WrappedComponent => {
@@ -8,7 +9,7 @@ const LoadingComponent = WrappedComponent => {
     _renderLoading() {
       return (
         <View style={{flex: 1}}>
-          <BarIndicator color={green} style={styles.indicator} />
+          <BarIndicator color={iOSColors.green} style={styles.indicator} />
           <View style={{flex: 1, alignItems: 'center'}}>
             <Text style={styles.text}>Loading...</Text>
           </View>
@@ -28,6 +29,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   text: {
+    ...robotoWeights.light,
     color: dark,
   },
 });

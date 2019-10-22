@@ -6,7 +6,8 @@ import {
   createStackNavigator,
   createSwitchNavigator,
 } from 'react-navigation';
-import { green, lightGrey } from './colorPallete';
+import {lightGrey} from './colorPallete';
+import {iOSColors} from 'react-native-typography';
 
 // Splash Screen
 import SplashScreen from './screens/SplashScreen';
@@ -15,17 +16,18 @@ import SplashScreen from './screens/SplashScreen';
 import Welcome from './screens/auth/Welcome';
 import Login from './screens/auth/Login';
 
-// Private Route
+// Public Route
 import ForYou from './screens/ForYou';
 import Favorite from './screens/Favorite';
-import DetailWebtoon from './screens/DetailWebtoon';
+import DetailToon from './screens/DetailToon';
 import DetailEpisode from './screens/DetailEpisode';
+import Search from './screens/Search';
 
 // Profile Stack
 import Profile from './screens/profile/Profile';
 import EditProfile from './screens/profile/EditProfile';
 
-// Webtoon CRUD
+// User Creation
 import MyCreation from './screens/MyCreation';
 import CreateToon from './screens/CreateToon';
 import CreateEpisode from './screens/CreateEpisode';
@@ -37,7 +39,7 @@ const AuthStack = createStackNavigator({
     screen: Welcome,
     navigationOptions: {
       header: null,
-    }
+    },
   },
   Login: {
     screen: Login,
@@ -89,7 +91,7 @@ const BottomNavigation = createBottomTabNavigator(
   },
   {
     tabBarOptions: {
-      activeTintColor: green,
+      activeTintColor: iOSColors.green,
       inactiveTintColor: lightGrey,
       labelStyle: {
         fontSize: 12,
@@ -105,21 +107,27 @@ const BottomNavigation = createBottomTabNavigator(
   },
 );
 
-const PrivateNavigation = createStackNavigator({
+const StackNavigation = createStackNavigator({
   BottomNavigation: {
     screen: BottomNavigation,
     navigationOptions: {
       header: null,
     },
   },
-  DetailWebtoon: {
-    screen: DetailWebtoon,
+  Search: {
+    screen: Search,
+  },
+  DetailToon: {
+    screen: DetailToon,
     navigationOptions: {
       header: null,
-    }
+    },
   },
   DetailEpisode: {
     screen: DetailEpisode,
+  },
+  Search: {
+    screen: Search,
   },
   MyCreation: {
     screen: MyCreation,
@@ -130,8 +138,8 @@ const PrivateNavigation = createStackNavigator({
   CreateToon: {
     screen: CreateToon,
     navigationOptions: {
-      title: 'Create New Toon'
-    }    
+      title: 'Create New Toon',
+    },
   },
   CreateEpisode: {
     screen: CreateEpisode,
@@ -143,20 +151,20 @@ const PrivateNavigation = createStackNavigator({
     screen: EditToon,
     navigationOptions: {
       title: 'Edit Toon',
-    }
+    },
   },
   EditEpisode: {
     screen: EditEpisode,
     navigationOptions: {
       title: 'Edit Episode',
-    }
-  }
+    },
+  },
 });
 
-const RootNav = createSwitchNavigator({
+const RootNavigation = createSwitchNavigator({
   SplashScreen: SplashScreen,
   AuthStack: AuthStack,
-  PrivateNavigation: PrivateNavigation,
+  StackNavigation: StackNavigation,
 });
 
-export default createAppContainer(RootNav);
+export default createAppContainer(RootNavigation);

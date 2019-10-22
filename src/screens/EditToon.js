@@ -76,6 +76,7 @@ export class EditWebtoon extends Component {
           type: response.type,
           name: response.fileName,
         };
+        console.log(dataImage)
 
         this.setState({image: response.uri, dataImage});
       }
@@ -101,13 +102,14 @@ export class EditWebtoon extends Component {
           'Content-Type': 'multipart/form-data',
         },
       });
+      console.log(response);
 
       if (response.status == 200) {
         this.props.navigation.pop();
       }
     } catch (error) {
       // feedback error
-      console.log(error.response);
+      console.log(error.response, '=> error update toon');
     }
   };
 

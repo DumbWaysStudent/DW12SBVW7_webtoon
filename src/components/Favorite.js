@@ -7,10 +7,9 @@ import {
   Text,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {BallIndicator} from 'react-native-indicators';
-import {lightGrey, dark, green} from '../colorPallete';
 import trunc from '../helpers/trunc';
 import {validateImageUrl} from '../helpers/validation';
+import {robotoWeights, iOSColors} from 'react-native-typography';
 
 function VerticalCard({navigation, favorite, checker}) {
   let rightMargin = checker.index == checker.length - 1 ? 10 : 0;
@@ -18,7 +17,7 @@ function VerticalCard({navigation, favorite, checker}) {
   return (
     <TouchableWithoutFeedback
       onPress={() =>
-        navigation.navigate('DetailWebtoon', {
+        navigation.navigate('DetailToon', {
           id: favorite.id,
           title: favorite.title,
           image: image,
@@ -45,13 +44,7 @@ class Favourite extends Component {
 
     let renderContent;
 
-    if (favorites == null) {
-      renderContent = (
-        <View style={{height: 190, alignSelf: 'center'}}>
-          <BallIndicator color={green} />
-        </View>
-      );
-    } else if (favorites.length) {
+    if (favorites.length) {
       renderContent = (
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {favorites
@@ -66,7 +59,7 @@ class Favourite extends Component {
             : null}
         </ScrollView>
       );
-    } else if (!favorites.length) {
+    } else {
       renderContent = (
         <View
           style={[
@@ -74,7 +67,7 @@ class Favourite extends Component {
             {justifyContent: 'center', alignItems: 'center'},
           ]}>
           <Text style={[styles.favSubText, {textAlign: 'center'}]}>
-            You don't have any favorited comic.
+            You don't have any favorited toon.
           </Text>
         </View>
       );
@@ -91,10 +84,9 @@ class Favourite extends Component {
 
 const styles = StyleSheet.create({
   textTitle: {
+    ...robotoWeights.medium,
     fontSize: 18,
     padding: 10,
-    fontWeight: 'bold',
-    color: dark,
   },
   imageSize: {
     width: 140,
@@ -105,21 +97,21 @@ const styles = StyleSheet.create({
     width: 140,
     height: 190,
     borderWidth: 0.5,
-    borderColor: lightGrey,
+    borderColor: iOSColors.lightGray,
     borderRadius: 5,
     overflow: 'hidden',
   },
   favTitleText: {
-    color: dark,
-    fontSize: 14,
-    fontWeight: 'bold',
+    ...robotoWeights.bold,
     marginTop: 5,
     paddingHorizontal: 10,
   },
   favSubText: {
+    ...robotoWeights.light,
     fontSize: 12,
+    marginTop: 5,
     paddingHorizontal: 10,
-    color: '#b0b0b0',
+    color: iOSColors.gray,
   },
 });
 

@@ -58,9 +58,9 @@ export class ForYou extends Component {
       <Container style={{flex: 1, backgroundColor: '#fff'}}>
         <NavigationEvents onWillFocus={this.fetchAllToons} />
         <ScrollView showsVerticalScrollIndicator={false}>
-          <SearchBar handleSearch={this.handleSearch} />
+          {/* <SearchBar handleSearch={this.handleSearch} /> */}
           <Content>
-            <Text style={styles.recomended}>Recomended For You</Text>
+            {/* <Text style={styles.recomended}>Recomended For You</Text> */}
             <Banner santoons={santoons} navigation={this.props.navigation} />
           </Content>
           <Content>

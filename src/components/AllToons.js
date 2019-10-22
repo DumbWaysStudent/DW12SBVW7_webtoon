@@ -7,16 +7,17 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {green, dark, lightGrey} from '../colorPallete';
+import {robotoWeights, iOSColors} from 'react-native-typography';
+import {dark} from '../colorPallete';
 import {validateImageUrl} from '../helpers/validation';
 
 function HorizontalCard({santoon, navigation, handleFavorite}) {
   const favouritedBtn = {
     backgroundColor: 'white',
-    borderColor: green,
+    borderColor: iOSColors.green,
   };
   const favouritedText = {
-    color: green,
+    color: iOSColors.green,
   };
 
   const image = validateImageUrl(santoon.image);
@@ -24,7 +25,7 @@ function HorizontalCard({santoon, navigation, handleFavorite}) {
   return (
     <TouchableWithoutFeedback
       onPress={() =>
-        navigation.navigate('DetailWebtoon', {
+        navigation.navigate('DetailToon', {
           id: santoon.id,
           title: santoon.title,
           image: image,
@@ -35,22 +36,24 @@ function HorizontalCard({santoon, navigation, handleFavorite}) {
         <View style={styles.imageContainer}>
           <Image style={styles.imageSize} source={{uri: image}} />
         </View>
-        <View style={{marginLeft: 25}}>
-          <Text style={styles.titleCardText}>{santoon.title}</Text>
-          <TouchableOpacity
-            style={[
-              styles.favButton,
-              santoon.isFavorite ? favouritedBtn : null,
-            ]}
-            onPress={() => handleFavorite(santoon.isFavorite, santoon.id)}>
-            <Text
+        <View style={{flex: 1, marginLeft: 25, flexDirection: 'row'}}>
+          <View style={{flex: 2, flexDirection: 'column'}}>
+            <Text style={styles.titleCardText}>{santoon.title}</Text>
+            <TouchableOpacity
               style={[
-                styles.textFavourite,
-                santoon.isFavorite ? favouritedText : null,
-              ]}>
-              {santoon.isFavorite ? '✓ Favorite' : '+ Favorite'}
-            </Text>
-          </TouchableOpacity>
+                styles.favButton,
+                santoon.isFavorite ? favouritedBtn : null,
+              ]}
+              onPress={() => handleFavorite(santoon.isFavorite, santoon.id)}>
+              <Text
+                style={[
+                  styles.textFavourite,
+                  santoon.isFavorite ? favouritedText : null,
+                ]}>
+                {santoon.isFavorite ? '✓   Favorite' : '+   Favorite'}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -62,7 +65,7 @@ class AllToons extends Component {
     const {santoons} = this.props;
     return (
       <View style={styles.mainContainer}>
-        <Text style={styles.textTitle}>All Mangas</Text>
+        <Text style={styles.textTitle}>All</Text>
         {santoons.map(santoon => {
           return (
             <HorizontalCard
@@ -85,9 +88,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   textTitle: {
-    marginVertical: 10,
+    ...robotoWeights.bold,
     fontSize: 18,
-    fontWeight: 'bold',
+    marginVertical: 10,
+    color: dark,
   },
   imageSize: {
     width: 100,
@@ -101,26 +105,26 @@ const styles = StyleSheet.create({
   imageContainer: {
     borderRadius: 5,
     borderWidth: 0.5,
-    borderColor: lightGrey,
+    borderColor: iOSColors.lightGray,
     overflow: 'hidden',
   },
   favButton: {
-    backgroundColor: green,
+    backgroundColor: iOSColors.green,
     marginVertical: 10,
     alignItems: 'center',
     width: 100,
     borderRadius: 5,
-    borderWidth: 2,
-    borderColor: green,
+    borderWidth: 1.5,
+    borderColor: iOSColors.green,
   },
   titleCardText: {
+    ...robotoWeights.bold,
     color: dark,
-    fontWeight: 'bold',
-    fontSize: 14,
   },
   textFavourite: {
+    ...robotoWeights.thin,
     padding: 6,
-    color: '#fff',
+    color: iOSColors.white,
     fontSize: 11,
     fontWeight: 'bold',
   },

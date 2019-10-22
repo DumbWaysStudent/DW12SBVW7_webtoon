@@ -1,8 +1,7 @@
 import React, {PureComponent} from 'react';
-import {Text, View, FlatList, StyleSheet} from 'react-native';
+import {Text, View, FlatList, StyleSheet, Image} from 'react-native';
 import {NavigationEvents} from 'react-navigation';
-import {BarIndicator} from 'react-native-indicators';
-import {green} from '../colorPallete';
+import {iOSColors, systemWeights} from 'react-native-typography';
 
 // Redux
 import {compose} from 'redux';
@@ -15,28 +14,13 @@ import SearchBar from '../components/SearchBar';
 import {SmallHorizontalCard} from '../components/Card';
 
 export class Favourite extends PureComponent {
-  state = {
-    favorites: null,
-  };
-
   fetchData = () => {
     const token = this.props.token;
     this.props.dispatch(findMyFavorites(token));
   };
 
-  renderLoading() {
-    return (
-      <View
-        style={{
-          flex: 1,
-          alignItems: 'center',
-        }}>
-        <BarIndicator color={green} />
-      </View>
-    );
-  }
-
   handleSearch = async title => {
+    console.log(title);
     // const token = await AsyncStorage.getItem('token');
     // const {data} = await axios({
     //   method: 'GET',
@@ -68,11 +52,21 @@ export class Favourite extends PureComponent {
         />
       );
     } else {
+      let uri = isLogin
+        ? 'https://i-love-png.com/images/719591.png'
+        : 'https://media.giphy.com/media/yfEnQ0yTIXXiM/giphy.gif';
       renderContent = (
         <View style={styles.emptyContainer}>
+          <Image
+            source={{uri}}
+            style={{
+              width: 250,
+              height: 250,
+            }}
+          />
           <Text style={styles.emptyText}>
             {isLogin
-              ? `You don't have any favorited comic.`
+              ? `You don't have any favorited toon.`
               : `You should login first to list your favorite manga.`}
           </Text>
         </View>
@@ -95,11 +89,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginHorizontal: 10,
-    marginBottom: 15,
+    marginBottom: 25,
   },
   emptyText: {
-    fontSize: 14,
-    color: '#b0b0b0',
+    ...systemWeights.light,
+    marginTop: 15,
+    color: iOSColors.midGray,
   },
 });
 
