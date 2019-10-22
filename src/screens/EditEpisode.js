@@ -426,8 +426,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    token: state.authReducer.token,
-    user: state.authReducer.user,
+    token: state.auth.token,
+    user: state.auth.user,
     pages: state.userCreationReducer.myCreationPages,
     isLoading: state.userCreationReducer.isLoading,
   };

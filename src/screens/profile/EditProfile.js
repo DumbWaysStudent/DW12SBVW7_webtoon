@@ -9,7 +9,7 @@ import Picture from '../../components/Picture';
 
 // Redux
 import {connect} from 'react-redux';
-import {updateUser} from '../../redux/actions/authActions';
+import {updateUser} from '../../redux/actions/auth';
 
 export class EditProfile extends Component {
   state = {
@@ -122,8 +122,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    user: state.authReducer.user,
-    token: state.authReducer.token,
+    user: state.auth.user,
+    token: state.auth.token,
   };
 };
 

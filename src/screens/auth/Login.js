@@ -16,7 +16,7 @@ import {emailValidation} from '../../helpers/validation';
 
 // Redux
 import {connect} from 'react-redux';
-import {login} from '../../redux/actions/authActions';
+import {login} from '../../redux/actions/auth';
 
 import {green, lightGrey} from '../../colorPallete';
 

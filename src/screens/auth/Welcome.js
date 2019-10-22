@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    isLogin: state.authReducer.isLogin,
+    isLogin: state.auth.isLogin,
   };
 };
 

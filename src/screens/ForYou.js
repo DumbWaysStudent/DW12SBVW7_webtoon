@@ -13,15 +13,15 @@ import Loading from '../hoc/Loading';
 // Redux
 import {compose} from 'redux';
 import {connect} from 'react-redux';
-import {findAllToons, handleFavorite} from '../redux/actions/toonAction';
+import {findAllToons, handleFavorite} from '../redux/actions/toon';
 
 // Ignore Yellow Warnings
 YellowBox.ignoreWarnings(['Warning: ']);
 
-import {dark, green} from '../colorPallete';
+import {dark} from '../colorPallete';
 
 export class ForYou extends Component {
-  fetchAllToons = async () => {
+  fetchAllToons = () => {
     const token = this.props.token;
     this.props.dispatch(findAllToons(token));
   };
@@ -99,8 +99,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    isLogin: state.authReducer.isLogin,
-    token: state.authReducer.token,
+    isLogin: state.auth.isLogin,
+    token: state.auth.token,
     santoons: state.toonReducer.santoons,
     favorites: state.toonReducer.favorites,
     isLoading: state.toonReducer.isLoading,

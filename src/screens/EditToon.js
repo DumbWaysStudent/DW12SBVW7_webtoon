@@ -280,8 +280,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    token: state.authReducer.token,
-    user: state.authReducer.user,
+    token: state.auth.token,
+    user: state.auth.user,
     myCreationEpisodes: state.userCreationReducer.myCreationEpisodes,
     isLoading: state.userCreationReducer.isLoading,
   };

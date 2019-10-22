@@ -18,7 +18,7 @@ if (process.env.NODE_ENV !== 'production') {
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['authReducer'],
+  whitelist: ['auth'],
   blacklist: ['toonReducer', 'userCreationReducer'],
 };
 

@@ -1,12 +1,12 @@
 import {combineReducers} from 'redux';
 
 // Reducers
-import authReducer from './authReducer';
+import auth from './auth';
 import toonReducer from './toonReducer';
 import userCreationReducer from './userCreationReducer';
 
 const appReducers = combineReducers({
-  authReducer: authReducer,
+  auth: auth,
   toonReducer: toonReducer,
   userCreationReducer: userCreationReducer,
 });

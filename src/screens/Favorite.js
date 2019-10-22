@@ -7,7 +7,7 @@ import {green} from '../colorPallete';
 // Redux
 import {compose} from 'redux';
 import {connect} from 'react-redux';
-import {findMyFavorites} from '../redux/actions/toonAction';
+import {findMyFavorites} from '../redux/actions/toon';
 
 // Components
 import Loading from '../hoc/Loading';
@@ -105,8 +105,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    isLogin: state.authReducer.isLogin,
-    token: state.authReducer.token,
+    isLogin: state.auth.isLogin,
+    token: state.auth.token,
     favorites: state.toonReducer.favorites,
     isLoading: state.toonReducer.isLoading,
   };

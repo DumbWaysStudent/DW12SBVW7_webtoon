@@ -19,7 +19,7 @@ import {green} from '../colorPallete';
 
 // Redux
 import {connect} from 'react-redux';
-import {findToonEpisodes} from '../redux/actions/toonAction';
+import {findToonEpisodes} from '../redux/actions/toon';
 
 const HEADER_MAX_HEIGHT = 250;
 const HEADER_MIN_HEIGHT = 50;

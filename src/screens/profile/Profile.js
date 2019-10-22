@@ -15,7 +15,7 @@ import Picture from '../../components/Picture';
 
 // Redux
 import {connect} from 'react-redux';
-import {logout} from '../../redux/actions/authActions';
+import {logout} from '../../redux/actions/auth';
 
 export class Profile extends Component {
   static navigationOptions = ({navigation}) => {
@@ -143,8 +143,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    isLogin: state.authReducer.isLogin,
-    user: state.authReducer.user,
+    isLogin: state.auth.isLogin,
+    user: state.auth.user,
   };
 };
 
