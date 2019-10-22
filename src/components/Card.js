@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {dark, lightGrey} from '../colorPallete';
 import {validateImageUrl} from '../helpers/validation';
+import convertDate from '../helpers/date';
 
 export const SmallHorizontalCard = ({
   data,
@@ -16,13 +17,13 @@ export const SmallHorizontalCard = ({
   text,
   route,
   button,
+  toonId,
   eventTrigger,
 }) => {
-  // console.log(data)
   const {title, name, id, genre} = data;
   const image = validateImageUrl(data.image);
 
-  const navigate = () => navigation.navigate(route, {title, image, name, id, genre});
+  const navigate = () => navigation.navigate(route, {title, image, name, id, genre, toonId});
   let subTitle;
 
   const renderDeleteButton = (
@@ -37,6 +38,8 @@ export const SmallHorizontalCard = ({
     subTitle = data.favoriteCount;
   } else if (text == 'Episode(s)') {
     subTitle = data.episodes;
+  } else {
+    subTitle = convertDate(new Date(data.createdAt))
   }
 
   // if (data.favoriteCount) {

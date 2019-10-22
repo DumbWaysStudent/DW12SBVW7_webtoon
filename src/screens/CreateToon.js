@@ -28,7 +28,7 @@ export class CreateWebtoon extends Component {
           size={25}
           color={green}
           style={{marginRight: 15}}
-          onPress={params.handleCreate}
+          onPress={params.handleCreateToon}
         />
       ),
     };
@@ -43,11 +43,11 @@ export class CreateWebtoon extends Component {
 
   componentDidMount() {
     this.props.navigation.setParams({
-      handleCreate: this.handleCreate,
+      handleCreateToon: this.handleCreateToon,
     });
   }
 
-  handleUploadPhoto = () => {
+  handleUploadImage = () => {
     ImagePicker.showImagePicker(response => {
       if (response.uri) {
         const dataImage = {
@@ -61,7 +61,7 @@ export class CreateWebtoon extends Component {
     });
   };
 
-  handleCreate = async () => {
+  handleCreateToon = async () => {
     const {user, token} = this.props;
 
     const data = new FormData();
@@ -108,8 +108,8 @@ export class CreateWebtoon extends Component {
           onChangeText={input => this.setState({genre: input})}
         />
 
-        <Text style={styles.textTitle}>Cover Image</Text>
-        <TouchableWithoutFeedback onPress={this.handleUploadPhoto}>
+        <Text style={styles.textTitle}>Banner Image</Text>
+        <TouchableWithoutFeedback onPress={this.handleUploadImage}>
           <View style={styles.coverContainer}>
             {!this.state.image ? (
               <>

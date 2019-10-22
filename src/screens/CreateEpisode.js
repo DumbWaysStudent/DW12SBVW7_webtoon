@@ -4,23 +4,23 @@ import {
   View,
   StyleSheet,
   TextInput,
-  FlatList,
-  TouchableHighlight,
+  Image,
+  Dimensions,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ImagePicker from 'react-native-image-picker';
+import axios from '../helpers/axios';
+import {green, dark, lightGrey} from '../colorPallete';
 
-import { green, lightGrey } from '../colorPallete';
+// Redux
+import {connect} from 'react-redux';
 
-// Components
-// import Item from '../components/Item';
-import { SmallHorizontalCard } from '../components/Card';
-
-// Dummy Data
-import { episodes } from '../__dummy__/data';
+const dim = Dimensions.get('window');
 
 export class CreateEpisode extends Component {
-  static navigationOptions = ({ navigation }) => {
+  static navigationOptions = ({navigation}) => {
+    const {params = {}} = navigation.state;
     return {
       headerRight: (
         <Icon
@@ -28,65 +28,97 @@ export class CreateEpisode extends Component {
           size={25}
           color="#009b00"
           style={{marginRight: 20}}
-          onPress={() => console.log('add episode')}
+          onPress={params.handleCreateEpisode}
         />
       ),
     };
   };
 
   state = {
-    episodes: episodes,
-    imgSource: null,
+    title: '',
+    image: '',
+    dataImage: null,
   };
+
+  componentDidMount() {
+    // throw method to header navigation
+    this.props.navigation.setParams({
+      handleCreateEpisode: this.handleCreateEpisode,
+    });
+  }
 
   handleUploadImage = () => {
     ImagePicker.showImagePicker(response => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        const source = {uri: response.uri};
-        this.setState({
-          imgSource: source,
-        });
+      if (response.uri) {
+        const dataImage = {
+          uri: response.uri,
+          type: response.type,
+          name: response.fileName,
+        };
+
+        this.setState({image: response.uri, dataImage});
       }
     });
   };
 
-  handleDeleteImage = id => {
-    console.log('delete image with id ' + id);
+  handleCreateEpisode = async () => {
+    const {user, token} = this.props;
+    const toonId = this.props.navigation.getParam('toonId');
+
+    const data = new FormData();
+    data.append('title', this.state.title);
+    data.append('img', this.state.dataImage);
+
+    try {
+      const response = await axios({
+        method: 'POST',
+        url: `/user/${user.id}/santoon/${toonId}/episode`,
+        data,
+        headers: {
+          Authorization: token,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.status == 201) {
+        this.props.navigation.pop();
+        this.setState({
+          title: '',
+          image: '',
+        });
+      }
+    } catch (error) {
+      console.log(error.response);
+    }
   };
 
   render() {
-    const { navigation } = this.props;
     return (
       <View style={styles.mainContainer}>
-        <Text style={styles.textTitle}>Name</Text>
-        <TextInput style={styles.titleInput} />
-        <View style={{flex: 1}}>
-          <Text style={styles.textTitle}>Add Images</Text>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            data={this.state.episodes}
-            renderItem={({ item }) => (
-              <SmallHorizontalCard
-                data={item}
-                navigation={navigation}
-                button={true}
-                eventTrigger={this.handleDeleteImage}
+        <Text style={styles.textTitle}>Title</Text>
+        <TextInput
+          style={styles.textInput}
+          onChangeText={input => this.setState({title: input})}
+        />
+
+        <Text style={styles.textTitle}>Cover Image</Text>
+        <TouchableWithoutFeedback onPress={this.handleUploadImage}>
+          <View style={styles.coverContainer}>
+            {!this.state.image ? (
+              <>
+                <Icon name="photo" size={40} color={dark} />
+                <Text style={{fontSize: 13, color: dark, marginTop: 10}}>
+                  Select Image
+                </Text>
+              </>
+            ) : (
+              <Image
+                source={{uri: this.state.image}}
+                style={{height: 200, width: dim.width}}
               />
             )}
-            keyExtractor={item => item.name}
-          />
-          <TouchableHighlight
-            style={styles.button}
-            onPress={this.handleUploadImage}>
-            <Text style={styles.btnText}> + Image </Text>
-          </TouchableHighlight>
-        </View>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
     );
   }
@@ -97,16 +129,29 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   textTitle: {
-    fontSize: 17,
+    fontSize: 15,
     marginTop: 20,
     paddingHorizontal: 10,
   },
-  titleInput: {
-    paddingHorizontal: 10,
+  textInput: {
+    paddingHorizontal: 5,
     marginHorizontal: 10,
     marginTop: 10,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: lightGrey,
+    height: 40,
+  },
+  coverContainer: {
+    marginTop: 10,
+    marginHorizontal: 10,
+    borderWidth: 0.5,
+    borderRadius: 5,
+    borderColor: '#bbb',
+    height: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f0f0f0',
+    overflow: 'hidden',
   },
   button: {
     backgroundColor: green,
@@ -122,4 +167,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateEpisode;
+const mapStateToProps = state => {
+  return {
+    token: state.authReducer.token,
+    user: state.authReducer.user,
+  };
+};
+
+export default connect(mapStateToProps)(CreateEpisode);

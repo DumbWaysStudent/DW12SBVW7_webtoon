@@ -36,7 +36,7 @@ export class EditWebtoon extends Component {
           size={25}
           color="#009b00"
           style={{marginRight: 20}}
-          onPress={params.handleUpdate}
+          onPress={params.handleUpdateToon}
         />
       ),
     };
@@ -58,17 +58,17 @@ export class EditWebtoon extends Component {
 
     // throw method to header navigation
     this.props.navigation.setParams({
-      handleUpdate: this.handleUpdate,
+      handleUpdateToon: this.handleUpdateToon,
     });
   }
 
-  fetchEpisodes = () => {
+  fetchMyEpisodes = () => {
     const {user, token} = this.props;
     const toonId = this.props.navigation.getParam('id');
     this.props.dispatch(findMyCreationEpisodes(user.id, toonId, token));
   };
 
-  handleUploadPhoto = () => {
+  handleUploadImage = () => {
     ImagePicker.showImagePicker(response => {
       if (response.uri) {
         const dataImage = {
@@ -82,7 +82,7 @@ export class EditWebtoon extends Component {
     });
   };
 
-  handleUpdate = async () => {
+  handleUpdateToon = async () => {
     const toonId = this.props.navigation.getParam('id');
     const {user, token} = this.props;
 
@@ -131,6 +131,13 @@ export class EditWebtoon extends Component {
     }
   };
 
+  navigateAddEpisode = () => {
+    const toonId = this.props.navigation.getParam('id');
+    this.props.navigation.navigate('CreateEpisode', {
+      toonId: toonId
+    })
+  }
+
   renderHeader() {
     const toonId = this.props.navigation.getParam('id');
     return (
@@ -150,7 +157,7 @@ export class EditWebtoon extends Component {
         />
 
         <Text style={styles.textTitle}>Cover Image</Text>
-        <TouchableWithoutFeedback onPress={this.handleUploadPhoto}>
+        <TouchableWithoutFeedback onPress={this.handleUploadImage}>
           <View style={styles.coverContainer}>
             {!this.state.image ? (
               <>
@@ -192,9 +199,10 @@ export class EditWebtoon extends Component {
 
   render() {
     const {navigation, myCreationEpisodes} = this.props;
+    const toonId = this.props.navigation.getParam('id');
     return (
       <View style={styles.mainContainer}>
-        <NavigationEvents onWillFocus={this.fetchEpisodes} />
+        <NavigationEvents onWillFocus={this.fetchMyEpisodes} />
         <FlatList
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={this.renderHeader()}
@@ -204,18 +212,20 @@ export class EditWebtoon extends Component {
               data={item}
               navigation={navigation}
               route="EditEpisode"
+              text=""
+              toonId={toonId}
             />
           )}
           keyExtractor={item => String(item.id)}
         />
         <View style={{flexDirection: 'row'}}>
           <TouchableHighlight
-            style={[styles.addBtn, {flex: 1}]}
-            onPress={() => this.props.navigation.navigate('CreateEpisode')}>
+            style={[styles.button, {flex: 1}]}
+            onPress={this.navigateAddEpisode}>
             <Text style={styles.btnText}>+ Add Episode</Text>
           </TouchableHighlight>
           <TouchableHighlight
-            style={[styles.addBtn, {flex: 1, backgroundColor: dark}]}
+            style={[styles.button, {flex: 1, backgroundColor: dark}]}
             onPress={() => this.setState({confirmDelete: true})}>
             <Text style={styles.btnText}>Delete Webtoon</Text>
           </TouchableHighlight>
@@ -254,7 +264,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     overflow: 'hidden',
   },
-  addBtn: {
+  button: {
     backgroundColor: green,
     padding: 10,
     marginVertical: 10,

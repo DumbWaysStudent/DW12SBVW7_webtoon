@@ -13,10 +13,10 @@ const appReducers = combineReducers({
 
 const rootReducers = (state, action) => {
   if (action.type === 'LOGGED_OUT') {
-    state = undefined
+    state = undefined;
   }
 
-  return appReducers(state, action)
-}
+  return appReducers(state, action);
+};
 
 export default rootReducers;

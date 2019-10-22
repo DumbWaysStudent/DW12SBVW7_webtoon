@@ -13,6 +13,7 @@ import {
 import convertDate from '../helpers/date';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {SkypeIndicator} from 'react-native-indicators';
+import {validateImageUrl} from '../helpers/validation';
 
 import {green} from '../colorPallete';
 
@@ -58,7 +59,7 @@ export class DetailWebtoon extends Component {
               }>
               <View key={i} style={styles.card}>
                 <Image
-                  source={{uri: episode.image}}
+                  source={{uri: validateImageUrl(episode.image)}}
                   style={{height: 80, width: 80}}
                 />
                 <View style={{marginLeft: 15, justifyContent: 'space-evenly'}}>
