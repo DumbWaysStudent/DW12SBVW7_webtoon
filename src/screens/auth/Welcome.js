@@ -8,7 +8,8 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import WhiteLogo from '../../assets/images/white-logo.png';
-import {green, dark} from '../../colorPallete';
+import {robotoWeights, iOSColors} from 'react-native-typography';
+import {dark} from '../../colorPallete';
 
 import {connect} from 'react-redux';
 
@@ -23,7 +24,7 @@ export class Welcome extends Component {
       <View style={styles.container}>
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <Image source={WhiteLogo} style={{width: 250, height: 200}} />
-          <Text style={styles.title}>Your New Manga Reader</Text>
+          <Text style={styles.title}>Your Manga Reader</Text>
         </View>
         <View style={styles.bottomContainer}>
           <TouchableOpacity
@@ -53,7 +54,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: 23,
+    ...robotoWeights.medium,
+    fontSize: 22,
     color: dark,
     marginVertical: 10,
   },
@@ -65,21 +67,27 @@ const styles = StyleSheet.create({
     padding: 15,
     width: 250,
     marginVertical: 20,
-    backgroundColor: green,
+    backgroundColor: iOSColors.green,
     borderRadius: 5,
   },
   buttonText: {
+    ...robotoWeights.thin,
+    fontWeight: 'bold',
     textAlign: 'center',
     color: 'white',
     fontSize: 17,
   },
   divider: {
-    color: '#a0a0a0',
+    ...robotoWeights.thin,
+    fontWeight: 'bold',
+    color: iOSColors.gray,
   },
   skipText: {
+    ...robotoWeights.thin,
     marginTop: 50,
+    fontWeight: 'bold',
     fontSize: 18,
-    color: '#a0a0a0',
+    color: iOSColors.gray,
   },
 });
 

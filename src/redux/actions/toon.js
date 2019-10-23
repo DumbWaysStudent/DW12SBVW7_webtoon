@@ -1,9 +1,9 @@
 import {
   LOADING,
   FETCH_TOONS,
-  HANDLE_FAVORITE,
   FETCH_EPISODES,
   FETCH_MY_FAVORITES,
+  HANDLE_FAVORITE,
 } from './type';
 import axios from '../../helpers/axios';
 
@@ -29,7 +29,9 @@ export const findAllToons = token => dispatch => {
         },
       });
     })
-    .catch(err => console.log(err.response));
+    .catch(err => {
+      console.log(err.response);
+    });
 };
 
 export const findToonEpisodes = id => dispatch => {
@@ -46,7 +48,9 @@ export const findToonEpisodes = id => dispatch => {
         payload: data,
       });
     })
-    .catch(err => console.log(err.response));
+    .catch(err => {
+      console.log(err.response);
+    });
 };
 
 export const findMyFavorites = token => dispatch => {
@@ -67,7 +71,9 @@ export const findMyFavorites = token => dispatch => {
         payload: data,
       });
     })
-    .catch(err => console.log(err.response));
+    .catch(err => {
+      console.log(err.response);
+    });
 };
 
 export const handleFavorite = (id, request, token) => dispatch => {
@@ -88,5 +94,7 @@ export const handleFavorite = (id, request, token) => dispatch => {
         },
       });
     })
-    .catch(err => console.log(err.response));
+    .catch(err => {
+      console.log(err.response);
+    });
 };

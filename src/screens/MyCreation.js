@@ -11,7 +11,7 @@ import Loading from '../hoc/Loading';
 // Redux
 import {compose} from 'redux';
 import {connect} from 'react-redux';
-import {findMyCreations} from '../redux/actions/userCreationAction';
+import {findMyCreations} from '../redux/actions/creation';
 
 export class MyWebtoon extends Component {
   fetchMyCreations = () => {
@@ -64,8 +64,8 @@ const mapStateToProps = state => {
   return {
     token: state.auth.token,
     user: state.auth.user,
-    myCreations: state.userCreationReducer.myCreations,
-    isLoading: state.userCreationReducer.isLoading,
+    myCreations: state.creation.myCreations,
+    isLoading: state.creation.isLoading,
   };
 };
 

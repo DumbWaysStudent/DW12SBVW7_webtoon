@@ -19,7 +19,7 @@ const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
   whitelist: ['auth'],
-  blacklist: ['toonReducer', 'userCreationReducer'],
+  blacklist: ['toon', 'creation'],
 };
 
 // Middleware: Redux Persist Persisted Reducer

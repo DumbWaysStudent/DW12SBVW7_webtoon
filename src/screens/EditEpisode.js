@@ -28,7 +28,7 @@ import {
   findCreationPages,
   addEpisodePage,
   removePage,
-} from '../redux/actions/userCreationAction';
+} from '../redux/actions/creation';
 
 const dim = Dimensions.get('window');
 
@@ -428,8 +428,8 @@ const mapStateToProps = state => {
   return {
     token: state.auth.token,
     user: state.auth.user,
-    pages: state.userCreationReducer.myCreationPages,
-    isLoading: state.userCreationReducer.isLoading,
+    pages: state.creation.myCreationPages,
+    isLoading: state.creation.isLoading,
   };
 };
 

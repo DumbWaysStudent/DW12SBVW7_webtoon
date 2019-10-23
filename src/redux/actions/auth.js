@@ -1,4 +1,10 @@
-import {LOADING, LOGGED_IN, LOGGED_OUT, UPDATE_USER} from './type';
+import {
+  AUTH_LOADING,
+  AUTH_ERROR,
+  LOGGED_IN,
+  LOGGED_OUT,
+  UPDATE_USER,
+} from '../constant/auth';
 import axios from '../../helpers/axios';
 
 export const login = data => dispatch => {
@@ -16,7 +22,7 @@ export const logout = () => dispatch => {
 
 export const updateUser = (id, token, data) => dispatch => {
   dispatch({
-    type: LOADING,
+    type: AUTH_LOADING,
   });
 
   axios({
@@ -29,11 +35,15 @@ export const updateUser = (id, token, data) => dispatch => {
     },
   })
     .then(({data}) => {
-      console.log(data);
       dispatch({
         type: UPDATE_USER,
         payload: data,
       });
     })
-    .catch(err => console.log(err.response));
+    .catch(err => {
+      dispatch({
+        type: AUTH_ERROR,
+        error: err.response,
+      });
+    });
 };

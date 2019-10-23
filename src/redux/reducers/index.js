@@ -2,13 +2,13 @@ import {combineReducers} from 'redux';
 
 // Reducers
 import auth from './auth';
-import toonReducer from './toonReducer';
-import userCreationReducer from './userCreationReducer';
+import toon from './toon';
+import creation from './creation';
 
 const appReducers = combineReducers({
   auth: auth,
-  toonReducer: toonReducer,
-  userCreationReducer: userCreationReducer,
+  toon: toon,
+  creation: creation,
 });
 
 const rootReducers = (state, action) => {

@@ -22,7 +22,7 @@ import {green, dark, lightGrey} from '../colorPallete';
 
 // Redux
 import {connect} from 'react-redux';
-import {findMyCreationEpisodes} from '../redux/actions/userCreationAction';
+import {findMyCreationEpisodes} from '../redux/actions/creation';
 
 const dim = Dimensions.get('window');
 
@@ -229,7 +229,7 @@ export class EditWebtoon extends Component {
           <TouchableHighlight
             style={[styles.button, {flex: 1, backgroundColor: dark}]}
             onPress={() => this.setState({confirmDelete: true})}>
-            <Text style={styles.btnText}>Delete Webtoon</Text>
+            <Text style={styles.btnText}>Delete Manga</Text>
           </TouchableHighlight>
         </View>
       </View>
@@ -284,8 +284,8 @@ const mapStateToProps = state => {
   return {
     token: state.auth.token,
     user: state.auth.user,
-    myCreationEpisodes: state.userCreationReducer.myCreationEpisodes,
-    isLoading: state.userCreationReducer.isLoading,
+    myCreationEpisodes: state.creation.myCreationEpisodes,
+    isLoading: state.creation.isLoading,
   };
 };
 

@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import {Text, View, FlatList, StyleSheet, Image} from 'react-native';
 import {NavigationEvents} from 'react-navigation';
-import {iOSColors, systemWeights} from 'react-native-typography';
+import {iOSColors, robotoWeights} from 'react-native-typography';
 
 // Redux
 import {compose} from 'redux';
@@ -92,9 +92,9 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   emptyText: {
-    ...systemWeights.light,
+    ...robotoWeights.light,
     marginTop: 15,
-    color: iOSColors.midGray,
+    color: iOSColors.gray,
   },
 });
 
@@ -102,8 +102,8 @@ const mapStateToProps = state => {
   return {
     isLogin: state.auth.isLogin,
     token: state.auth.token,
-    favorites: state.toonReducer.favorites,
-    isLoading: state.toonReducer.isLoading,
+    favorites: state.toon.favorites,
+    isLoading: state.toon.isLoading,
   };
 };
 

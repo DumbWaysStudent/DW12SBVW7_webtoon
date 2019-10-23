@@ -16,11 +16,6 @@ export const FETCH_MY_FAVORITES = 'FETCH_MY_FAVORITES';
 export const HANDLE_FAVORITE = 'HANDLE_FAVORITE';
 
 
-// User (Auth)
-export const LOGGED_IN = 'LOGGED_IN';
-export const LOGGED_OUT = 'LOGGED_OUT';
-export const UPDATE_USER = 'UPDATE_USER';
-
 // User (Creation)
 export const LOADING_CREATION = 'LOADING_CREATION';
 export const FETCH_USER_CREATION = 'FETCH_USER_CREATION';

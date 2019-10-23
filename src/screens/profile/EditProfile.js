@@ -112,9 +112,10 @@ const styles = StyleSheet.create({
   },
   nameInput: {
     width: 300,
-    paddingHorizontal: 16,
+    height: 40,
+    paddingHorizontal: 15,
     marginVertical: 40,
-    borderWidth: 2,
+    borderWidth: 1,
     borderRadius: 5,
     borderColor: '#ccc',
   },

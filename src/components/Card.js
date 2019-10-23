@@ -7,6 +7,8 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
 } from 'react-native';
+import {robotoWeights, iOSColors} from 'react-native-typography';
+
 import {dark, lightGrey} from '../colorPallete';
 import {validateImageUrl} from '../helpers/validation';
 import convertDate from '../helpers/date';
@@ -85,13 +87,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   mainTitleText: {
-    marginBottom: 10,
+    ...robotoWeights.light,
     fontWeight: 'bold',
+    marginBottom: 10,
     fontSize: 15,
     color: dark,
   },
   subTitleText: {
-    color: '#aaa',
+    ...robotoWeights.light,
+    color: iOSColors.gray,
     fontSize: 12,
   },
   deleteBtn: {

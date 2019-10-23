@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import axios from '../helpers/axios';
 import {FlatGrid} from 'react-native-super-grid';
+import {iOSColors, robotoWeights} from 'react-native-typography';
 import {validateImageUrl} from '../helpers/validation';
 
 const dim = Dimensions.get('window');
@@ -65,6 +66,7 @@ export class Search extends Component {
             }}
             style={{width: 200, height: 200}}
           />
+          <Text style={styles.textSearch}>You can search any toons by title.</Text>
         </View>
       );
     return (
@@ -109,6 +111,11 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: '600',
   },
+  textSearch: {
+    ...robotoWeights.light,
+    marginTop: 10,
+    color: iOSColors.gray
+  }
 });
 
 export default Search;

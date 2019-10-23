@@ -207,8 +207,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    episodes: state.toonReducer.episodes,
-    isLoading: state.toonReducer.isLoading,
+    episodes: state.toon.episodes,
+    isLoading: state.toon.isLoading,
   };
 };
 

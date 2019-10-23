@@ -1,4 +1,4 @@
-import {LOADING, LOGGED_IN, LOGGED_OUT, UPDATE_USER} from '../actions/type';
+import {LOGGED_IN, LOGGED_OUT, UPDATE_USER} from '../constant/auth';
 const initialState = {
   user: {},
   token: '',

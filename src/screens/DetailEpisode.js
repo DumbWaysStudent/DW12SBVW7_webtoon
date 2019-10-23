@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Image, Dimensions, FlatList, Share} from 'react-native';
 import {Icon} from 'native-base';
 import axios from '../helpers/axios';
+import {validateImageUrl} from '../helpers/validation';
 
 const Width = Dimensions.get('window').width;
 const Height = Dimensions.get('window').height;
@@ -10,8 +11,7 @@ function Item({images, width, height}) {
   return (
     <Image
       source={{uri: images}}
-      style={{width, height, alignSelf: 'center'}}
-      resizeMode="stretch"
+      style={{width, height}}
       // resizeMode={width < height ? 'stretch' : 'center'}
     />
   );
@@ -87,7 +87,7 @@ export class DetailEpisode extends Component {
         showsVerticalScrollIndicator={false}
         renderItem={({item}) => (
           <Item
-            images={item.image}
+            images={validateImageUrl(item.image)}
             width={this.state.screenWidth}
             height={this.state.screenHeight}
           />

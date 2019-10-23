@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {BarIndicator} from 'react-native-indicators';
 import {robotoWeights, iOSColors} from 'react-native-typography';
-import {green, dark} from '../colorPallete';
+import {dark} from '../colorPallete';
 
 const LoadingComponent = WrappedComponent => {
   return class LoadingScreen extends PureComponent {
