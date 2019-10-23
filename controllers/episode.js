@@ -53,6 +53,7 @@ exports.findAllUserEpisode = async (req, res) => {
     const episodes = data.map(item => {
       const objEpisode = {
         id: item.id,
+        toonId: item.Santoon.id,
         title: item.title,
         image: item.image,
         createdAt: item.createdAt,

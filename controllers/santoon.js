@@ -151,6 +151,7 @@ exports.createToon = async (req, res, next) => {
 };
 
 exports.updateUserToon = async (req, res) => {
+  console.log(req.params.santoonId);
   try {
     const validate = await Santoon.findOne({
       where: { id: req.params.santoonId },

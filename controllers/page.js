@@ -80,26 +80,6 @@ exports.findAllUserPages = async (req, res) => {
 exports.createPage = async (req, res) => {
   const imageUrl = req.file ? req.file.path : noImage;
   try {
-    const validate = await Page.findOne({
-      where: {
-        episodeId: req.params.episodeId,
-      },
-      include: {
-        model: Episode,
-        where: {
-          santoonId: req.params.santoonId,
-        },
-        include: {
-          model: Santoon,
-          where: {
-            createdBy: req.authorize_user.id,
-          },
-        },
-      },
-    });
-    if (!validate) {
-      return res.status(401).json({ error: 'Access Denied!' });
-    }
     const page = {
       page: req.body.page,
       image: imageUrl,
@@ -110,6 +90,7 @@ exports.createPage = async (req, res) => {
       success: 'Page created!',
       data,
     });
+    res.json(validate)
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong, please try again!' });
   }
