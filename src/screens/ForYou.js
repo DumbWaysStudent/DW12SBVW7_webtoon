@@ -28,7 +28,7 @@ export class ForYou extends Component {
     const message = status
       ? 'Removed from Favorite list.'
       : 'Added to Favorite list.';
-    const {token, isLogin} = this.props.token;
+    const {token, isLogin} = this.props;
 
     if (!isLogin) {
       return ToastAndroid.showWithGravity(
@@ -43,10 +43,6 @@ export class ForYou extends Component {
       ToastAndroid.SHORT,
       ToastAndroid.CENTER,
     );
-  };
-
-  handleSearch = title => {
-    console.log(title, 'title');
   };
 
   render() {
