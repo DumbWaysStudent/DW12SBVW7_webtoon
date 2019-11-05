@@ -7,9 +7,9 @@ import {
   Input,
   Text,
   Icon,
-  Toast,
   Button,
 } from 'native-base';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 
 import axios from '../../helpers/axios';
 import {emailValidation} from '../../helpers/validation';
@@ -48,12 +48,9 @@ export class Login extends Component {
       })
       .catch(error => {
         const errorMsg = error.response.data.error;
-        Toast.show({
-          text: errorMsg,
-          buttonText: 'Okay',
-          position: 'bottom',
+        showMessage({
+          message: errorMsg,
           type: 'danger',
-          duration: 2000,
         });
       });
   };

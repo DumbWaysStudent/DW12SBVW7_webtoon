@@ -189,6 +189,9 @@ export class CreateEpisode extends Component {
       episodeId,
     };
 
+    console.log(credentials, 'credentials ====>');
+    console.log(data, 'data to be uploaded ======>');
+
     this.props.dispatch(addEpisodePage(credentials, data));
     this.toggleModal();
   };
@@ -331,14 +334,17 @@ export class CreateEpisode extends Component {
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={this.renderHeader()}
           data={pages}
-          renderItem={({item}) => (
-            <SmallHorizontalCard
-              data={item}
-              navigation={navigation}
-              button={true}
-              eventTrigger={this.handleDeletePage}
-            />
-          )}
+          renderItem={({item}) => {
+            console.log(item);
+            return (
+              <SmallHorizontalCard
+                data={item}
+                navigation={navigation}
+                button={true}
+                eventTrigger={this.handleDeletePage}
+              />
+            );
+          }}
           keyExtractor={item => String(item.id)}
         />
         {this.renderModal()}

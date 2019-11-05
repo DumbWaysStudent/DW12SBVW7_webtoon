@@ -22,6 +22,7 @@ export const SmallHorizontalCard = ({
   toonId,
   eventTrigger,
 }) => {
+  console.log(data, '====> CARD COMPONENT')
   const {title, name, id, genre} = data;
   const image = validateImageUrl(data.image);
 
